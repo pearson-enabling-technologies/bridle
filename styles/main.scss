@@ -1,0 +1,44 @@
+@import "compass_twitter_bootstrap";
+
+text {
+  fill: #333;
+}
+
+.axis {
+  shape-rendering: crispEdges;
+}
+
+.x.axis line {
+  stroke: #fff;
+}
+
+.x.axis .minor {
+  stroke-opacity: .5;
+}
+
+.x.axis path {
+  fill: none;
+  stroke: #333;
+}
+
+.y.axis line, .y.axis path {
+  fill: none;
+  stroke: #333;
+}
+
+#bar-chart {
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #333;
+    shape-rendering: crispEdges;
+  }
+
+  .bar {
+    fill: steelblue;
+  }
+
+  .x.axis path {
+    display: none;
+  }
+}
