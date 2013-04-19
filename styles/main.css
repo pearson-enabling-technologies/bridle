@@ -1,0 +1,77 @@
+/*@import "compass_twitter_bootstrap";*/
+
+text {
+  fill: #333;
+}
+
+/* annoyingly crispEdges results in invisible tick lines */
+/*.axis {
+  shape-rendering: crispEdges;
+}*/
+
+.x.axis line {
+  stroke: #fff;
+  stroke: lightgrey;
+}
+
+.x.axis .minor {
+  stroke-opacity: .5;
+  stroke-width: 1px;
+}
+
+.x.axis .major {
+  stroke-opacity: .5;
+  stroke-width: 2px;
+}
+
+.x.axis path {
+  fill: none;
+  display: none;
+  stroke: #333;
+}
+
+.y.axis line, .y.axis path {
+  fill: none;
+  stroke: #000;
+}
+
+#bar-chart {
+  .axis path,
+  .axis line {
+    fill: none;
+    stroke: #333;
+    shape-rendering: crispEdges;
+  }
+
+  .bar {
+    fill: steelblue;
+  }
+
+  .x.axis path {
+    display: none;
+  }
+}
+
+
+
+
+#line-chart path {
+ stroke: steelblue;
+ stroke-width: 2;
+ fill: none;
+}
+
+
+.infobox {
+ border:2px solid steelblue;
+ border-radius:4px;
+ box-shadow:#333333 0px 0px 10px;
+ margin:200px auto;
+ padding:5px 10px;
+ background:rgba(255, 255, 255, 0.8);
+ position:absolute;
+ top:0px;
+ left:0px;
+ z-index:10500;
+ font-weight:bold;
+}

@@ -61,6 +61,7 @@ module.exports = function(grunt) {
             return [
               lrSnippet,
               mountFolder(connect, 'examples'),
+              mountFolder(connect, 'styles'),              
               mountFolder(connect, 'src')
             ];
           }
@@ -70,7 +71,8 @@ module.exports = function(grunt) {
         options: {
           middleware: function (connect) {
             return [
-              mountFolder(connect, '.tmp'),
+              mountFolder(connect, 'examples'),
+              mountFolder(connect, 'src'),
               mountFolder(connect, 'test')
             ];
           }
