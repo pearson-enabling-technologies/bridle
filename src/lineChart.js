@@ -1,12 +1,27 @@
 function lineChart() {
 
   // define dimensions of graph
-  var m = [20, 40, 20, 100]; // margins
-  var w = 700 - m[1] - m[3]; // width
-  var h = 360 - m[0] - m[2]; // height
+  var margin = {
+    top: 50,
+    bottom: 30,
+    left: 100,
+    right: 100
+  };
+  var height = 400;
+  var width = 1000;
+  var xValue = function(d) {
+    return d.date
+  };
+  var yValue = function(d) {
+    return d.y
+  };
   var title = 'Chart Title';
   var yAxisTitle = 'Axis Title';
   var duration = 1000;
+  var xScale = d3.time.scale.utc().nice();
+  var yScale = d3.scale.linear().nice();
+  var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+  var yAxis = d3.svg.axis().scale(yScale).orient("left");
 
   function getDate(d) {
     var dt = new Date(d.date);
@@ -52,61 +67,63 @@ function lineChart() {
       var minDate = getDate(data[0]),
         maxDate = getDate(data[data.length - 1]);
 
-      var x = d3.time.scale().domain([minDate, maxDate]).range([0, w]);
+
+      xScale.domain([minDate, maxDate]).range([0, width - margin.left - margin.right]);
+
 
       // X scale will fit all values from data[] within pixels 0-w
       //var x = d3.scale.linear().domain([0, data.length]).range([0, w]);
       // Y scale will fit values from 0-10 within pixels h-0 (Note the inverted domain for the y-scale: bigger is up!)
-      var y = d3.scale.linear().domain([0, d3.max(data, function(d) {
+      yScale.domain([0, d3.max(data, function(d) {
         return d.trendingValue;
-      })]).range([h, 0]);
+      })]).range([height - margin.top - margin.bottom, 0]);
 
       // create a line function that can convert data[] into x and y points
       var line = d3.svg.line()
-      // assign the X function to plot our line as we wish
-      .x(function(d, i) {
-        // return the X coordinate where we want to plot this datapoint
-        return x(getDate(d)); //x(i);
-      })
-        .y(function(d) {
-        // return the Y coordinate where we want to plot this datapoint
-        return y(d.trendingValue);
-      });
+        // assign the X function to plot our line as we wish
+        .x(function(d, i) {
+          // return the X coordinate where we want to plot this datapoint
+          return xScale(getDate(d)); //x(i);
+        })
+          .y(function(d) {
+          // return the Y coordinate where we want to plot this datapoint
+          return yScale(d.trendingValue);
+        });
 
 
       function xx(e) {
-        return x(getDate(e));
+        return xScale(getDate(e));
       };
 
       function yy(e) {
-        return y(e.trendingValue);
+        return yScale(e.trendingValue);
       };
 
 
       $("#line-chart").append("<p><small><em>Please move the mouse over data points to see details.</em></small></p>");
 
       // Add an SVG element with the desired dimensions and margin.
-      var graph = d3.select("#line-chart").append("svg:svg")
-        .attr("width", w + m[1] + m[3])
-        .attr("height", h + m[0] + m[2])
+      var graph = d3.select(this).append("svg:svg")
+        .attr("width", width)
+        .attr("height", height)
         .append("svg:g")
-        .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-      // create yAxis
-      var xAxis = d3.svg.axis().scale(x).ticks(d3.time.months, 1).tickSize(-h).tickSubdivide(true);
+      // create xAxis
+      xAxis.ticks(d3.time.months, 1).tickSize(- height + margin.top + margin.bottom).tickSubdivide(true);
       // Add the x-axis.
       graph.append("svg:g")
         .attr("class", "x axis")
-        .attr("transform", "translate(0," + h + ")")
+        .attr("transform", "translate(0," + (height - margin.bottom - margin.top) + ")")
         .call(xAxis);
 
       // create left yAxis
-      var yAxisLeft = d3.svg.axis().scale(y).ticks(10).orient("left"); //.tickFormat(formalLabel);
+      yAxis.ticks(10); //.tickFormat(formalLabel);
       // Add the y-axis to the left
       graph.append("svg:g")
         .attr("class", "y axis")
         .attr("transform", "translate(-25,0)")
-        .call(yAxisLeft);
+        .call(yAxis);
 
       // Add the line by appending an svg:path element with the data line we created above
       // do this AFTER the axes above so that the line is above the tick-lines

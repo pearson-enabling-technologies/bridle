@@ -67,6 +67,7 @@ function stackedChart() {
 
 
       // set up the scaffolding
+      // note: enter only fires if data is empty
       var svg = d3.select(this).selectAll("svg").data([data]);
       var gEnter = svg.enter().append("svg").append("g");
       gEnter.append("g").attr("class", "areas");
@@ -81,12 +82,12 @@ function stackedChart() {
       gEnter.append("svg:text").attr("class", "chartTitle label")
         .attr("text-anchor", "middle")
         .attr("dy", "1em")
-        .attr("transform", "translate(" + (width - margin.left - margin.right + 20) /2 + "," + (-margin.top) + ")");
+        .attr("transform", "translate(" + (width - margin.left - margin.right + 20) / 2 + "," + (-margin.top) + ")");
       gEnter.append("g")
         .attr("class","legend")
         .attr("transform","translate(" + (width - margin.left - margin.right + 20) + "," + margin.top + ")")
         .style("font-size","12px");
-        
+
 
       // update the outer dimensions
       svg 
@@ -173,9 +174,14 @@ function stackedChart() {
         //.attr("transform", "translate(")
         .transition()
         .duration(duration)
+                .attr("transform", "translate(-25,0)")
+
         .call(yAxis)
         
       g.select(".y.axis.label")
+        .attr("y", -45)
+        .attr("dy", ".1em")
+        .attr("transform", "rotate(-90)")
         .text(yAxisTitle);
 
       // update the legend
