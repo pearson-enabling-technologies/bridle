@@ -49,7 +49,6 @@ function stackedChart() {
 
 
       xScale.domain([d3.min(minDates), d3.max(maxDates)]);
-
       // y scale
       yScale.range([height - margin.top - margin.bottom, 0]);
 
@@ -78,7 +77,7 @@ function stackedChart() {
         .attr("y", 6)
         .attr("dy", ".72em")
         .attr("class", "y axis label")
-        .attr("text-anchor", "end");
+        .attr("text-anchor", "middle");
       gEnter.append("svg:text").attr("class", "chartTitle label")
         .attr("text-anchor", "middle")
         .attr("dy", "1em")
@@ -106,8 +105,14 @@ function stackedChart() {
       // add paths
       gAreaEnter.append("path")
         .attr("data-legend",function(d) { return d.name})
-        .attr("class", "area");
-
+        .attr("class", "area")
+          .attr("fill", function(d,i) {
+            return colors(i);
+          })
+          .attr("opacity", 0)
+          .attr("d", function(d) {
+            return area(d.values);
+          });
       gArea.exit()
         .remove();
 
@@ -135,30 +140,31 @@ function stackedChart() {
       var circlesEnter = gCircles.enter().append("g").attr("class", "circle");
 
       circlesEnter.append('circle')
-        .style("opacity", 0.1)
+        .attr("opacity", 0.1)
         .attr("class", "seriespoint")
-        .attr('r', 5)
-        .attr('cx', 0)
-        .attr('cy', 0);
+        .attr('r', 0)
+        .attr('cx', function (d) {
+          return X(d)
+        })
+        .attr('cy', function (d) {
+          return Y1(d)
+        });
 
       // update the areas
       g.selectAll('path.area')
-          .style("fill", function(d,i) {
+          .attr("fill", function(d,i) {
             return colors(i);
           })
           .transition()
-          .duration(duration)
-          .attr("d", function(d) {
-            return area(d.values);
-          });
+          .duration(duration/2)
+          .attr("opacity", 1)
       
       // update the circles
       g.selectAll('g.circle')
+          .select('circle')
           .transition()
           .duration(duration)
-          .attr("transform", function(d) {
-            return "translate(" + X(d) + ',' + Y1(d) + ')';
-          } )
+          .attr('r', 5)
 
        // update the title
       g.select("text.chartTitle")
@@ -180,8 +186,8 @@ function stackedChart() {
         
       g.select(".y.axis.label")
         .attr("y", -45)
+        .attr("x", (-height + margin.top + margin.bottom) / 2)        
         .attr("dy", ".1em")
-        .attr("transform", "rotate(-90)")
         .text(yAxisTitle);
 
       // update the legend

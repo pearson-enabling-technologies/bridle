@@ -16,23 +16,27 @@ text {
 
 .x.axis .minor {
   stroke-opacity: .5;
-  stroke-width: 1px;
+  stroke-width: 0.5px;
 }
 
 .x.axis .major {
   stroke-opacity: .5;
-  stroke-width: 2px;
+  stroke-width: 1px;
 }
 
 .x.axis path {
   fill: none;
   display: none;
-  stroke: #333;
 }
 
 .y.axis line, .y.axis path {
+  stroke: steelblue;
+  stroke-width: 2;
   fill: none;
-  stroke: #000;
+}
+
+.y.axis .tick line {
+  stroke-width: 1;
 }
 
 #bar-chart {
@@ -52,14 +56,6 @@ text {
   }
 }
 
-
-
-
-#line-chart path {
- stroke: steelblue;
- stroke-width: 2;
- fill: none;
-}
 
 
 .infobox {
