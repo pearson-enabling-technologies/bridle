@@ -11,11 +11,18 @@
       <script src="/vendor/d3.tooltip.js"></script>
       <script src="/lineChart.js"></script>
       <script src="/stackedChart.js"></script>
+      <script src="/barChart.js"></script>
       <link rel="stylesheet" href="/main.css"/>
   </head>
 
   <body>
-  	<!-- <h1> OH HAY HEY </h1> -->
+
+  <h2> Bar Chart </h2>
+  <div id="bar-chart">
+    <label><input type="radio" name="mode" value="grouped"> Grouped</label>
+    <label><input type="radio" name="mode" value="stacked" checked> Stacked</label>
+  </div>
+
 	<h2> Line Chart </h2>
   <div id="line-chart">
   </div>
@@ -31,9 +38,9 @@
 
 
 
-
-  <script src="ex_stacked.js" type="text/javascript"></script>
+  <script src="ex_bar.js" type="text/javascript"></script>
   <script src="ex_line.js" type="text/javascript"></script>
+  <script src="ex_stacked.js" type="text/javascript"></script>
 
 
   </body>

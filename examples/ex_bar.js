@@ -47,12 +47,10 @@
       }
     ];
 var time = 1000;
-var line = lineChart()
+var bar = barChart()
   .duration(time)
   .title("Apples or Oranges?")
   .yAxisTitle("Label your axes");
-d3.select('#line-chart')
+d3.select('#bar-chart')
   .datum(data)
-  .call(line);
-
-
+  .call(bar);
