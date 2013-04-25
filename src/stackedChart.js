@@ -131,11 +131,13 @@ function stackedChart() {
       // update entering points
       var gCircles = gPointsEnter.append("g").attr("class", "seriespoints")
           .selectAll('g.circle')
-          .data(function(d) { d.values.forEach(function(v) {v.name = d.name}); return d.values})      
+          .data(function(d) { d.values.forEach(function(v) {v.name = d.name}); 
+            return d.values})      
 
       // update chilling points
       gPoints.selectAll('g.circle')
-          .data(function(d) { d.values.forEach(function(v) {v.name = d.name}); return d.values})
+          .data(function(d) { d.values.forEach(function(v) {v.name = d.name}); 
+            return d.values})
 
       var circlesEnter = gCircles.enter().append("g").attr("class", "circle");
 
@@ -156,8 +158,11 @@ function stackedChart() {
             return colors(i);
           })
           .transition()
-          .duration(duration/2)
+          .duration(duration)
           .attr("opacity", 1)
+          .attr("d", function(d) {
+            return area(d.values);
+          });
       
       // update the circles
       g.selectAll('g.circle')
@@ -165,6 +170,12 @@ function stackedChart() {
           .transition()
           .duration(duration)
           .attr('r', 5)
+        .attr('cx', function (d) {
+          return X(d)
+        })
+        .attr('cy', function (d) {
+          return Y1(d)
+        });          
 
        // update the title
       g.select("text.chartTitle")

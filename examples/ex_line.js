@@ -14,7 +14,7 @@
 //   'date': "2012-06-01",
 //   'y': 1050
 // }];
-      var data = [
+      var lineData = [
       {
         "name": "apples",
         "values": [
@@ -52,7 +52,33 @@ var line = lineChart()
   .title("Apples or Oranges?")
   .yAxisTitle("Label your axes");
 d3.select('#line-chart')
-  .datum(data)
+  .datum(lineData)
   .call(line);
 
 
+setTimeout(function() { 
+
+  var data2 =
+  {  
+    "name": "pears",
+    "values": [
+      { "x": new Date('2012-01-01'), "y":  100*Math.random()},
+      { "x": new Date('2012-01-02'), "y":  100*Math.random()},
+      { "x": new Date('2012-01-03'), "y":  100*Math.random()},
+      { "x": new Date('2012-01-04'), "y":  100*Math.random()},
+      { "x": new Date('2012-01-05'), "y":  100*Math.random()},
+      { "x": new Date('2012-01-06'), "y":  100*Math.random()},
+      { "x": new Date('2012-01-07'), "y":  100*Math.random()},
+      { "x": new Date('2012-01-08'), "y":  100*Math.random()},
+      { "x": new Date('2012-01-09'), "y":  100*Math.random()},
+      { "x": new Date('2012-01-10'), "y":  100*Math.random()}
+    ]
+  };  
+  
+  lineData.push(data2)
+
+  d3.select('#line-chart')
+    .datum(lineData)
+    .call(line);
+
+}, 2000);

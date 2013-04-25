@@ -35,7 +35,7 @@
 
 
 
-    
+
     var stacked = stackedChart()
       .duration(time)
       .title("Are oranges more popular than apples?")
@@ -45,23 +45,33 @@
       .call(stacked);
 
 
-//       var data2 = [
-//       {  
-//         "name": "pears",
-//         "values": [
-//           { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-//           { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-//           { "x": new Date('2012-01-03'), "y":  100*Math.random()},
-//           { "x": new Date('2012-01-04'), "y":  100*Math.random()},
-//           { "x": new Date('2012-01-05'), "y":  100*Math.random()},
-//           { "x": new Date('2012-01-06'), "y":  100*Math.random()},
-//           { "x": new Date('2012-01-07'), "y":  100*Math.random()},
-//           { "x": new Date('2012-01-08'), "y":  100*Math.random()},
-//           { "x": new Date('2012-01-09'), "y":  100*Math.random()},
-//           { "x": new Date('2012-01-10'), "y":  100*Math.random()}
-//         ]
-//       }
-//     ];  
-// d3.select('#stacked-chart')
-//   .datum(data2)
-//   .call(stacked);
+
+setTimeout(function() { 
+
+
+
+
+
+
+      var data2 =
+      {  
+        "name": "pears",
+        "values": [
+          { "x": new Date('2012-01-01'), "y":  100*Math.random()},
+          { "x": new Date('2012-01-02'), "y":  100*Math.random()},
+          { "x": new Date('2012-01-03'), "y":  100*Math.random()},
+          { "x": new Date('2012-01-04'), "y":  100*Math.random()},
+          { "x": new Date('2012-01-05'), "y":  100*Math.random()},
+          { "x": new Date('2012-01-06'), "y":  100*Math.random()},
+          { "x": new Date('2012-01-07'), "y":  100*Math.random()},
+          { "x": new Date('2012-01-08'), "y":  100*Math.random()},
+          { "x": new Date('2012-01-09'), "y":  100*Math.random()},
+          { "x": new Date('2012-01-10'), "y":  100*Math.random()}
+        ]
+      };  
+      stackedData.push(data2)
+d3.select('#stacked-chart')
+  .datum(stackedData)
+  .call(stacked);
+
+}, 2000);

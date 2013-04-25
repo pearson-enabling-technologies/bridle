@@ -125,8 +125,10 @@ function lineChart() {
       // add paths
       gLineEnter.append("path")
         .attr("data-legend",function(d) { return d.name})
-        .attr("class", "line");
-
+        .attr("class", "line")
+          .attr("d", function(d) {
+            return line(d.values);
+          })
       gLine.exit()
         .remove();
 
@@ -167,14 +169,14 @@ function lineChart() {
           return yScale(d.y)
         });
 
-      // update the areas
+      // update the lines
       g.selectAll('path.line')
           .attr("stroke", function(d,i) {
             return colors(i);
           })
           .attr("fill", "none")
           .transition()
-          .duration(duration/2)
+          .duration(duration)
           .attr("d", function(d) {
             return line(d.values);
           })
@@ -186,6 +188,12 @@ function lineChart() {
           .transition()
           .duration(duration)
           .attr('r', 5)
+        .attr('cx', function (d) {
+          return xScale(d.x)
+        })
+        .attr('cy', function (d) {
+          return yScale(d.y)
+        });          
 
        // update the title
       g.select("text.chartTitle")
@@ -207,9 +215,8 @@ function lineChart() {
         
       g.select(".y.axis.label")
         .attr("y", -45)
-        .attr("x", (- height + margin.top + margin.bottom) / 2)
+        .attr("x", (-height + margin.top + margin.bottom) / 2)
         .attr("dy", ".1em")
-        // .attr("transform", "rotate(-90)")
         .text(yAxisTitle);
 
       // update the legend
