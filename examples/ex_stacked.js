@@ -38,6 +38,7 @@
 
     var stacked = stackedChart()
       .duration(time)
+      .width(700)
       .title("Are oranges more popular than apples?")
       .yAxisTitle("Fruit Impact (Millions of Gallons of Juice)");
     d3.select('#stacked-chart')
@@ -74,4 +75,4 @@ d3.select('#stacked-chart')
   .datum(stackedData)
   .call(stacked);
 
-}, 2000);
+}, 1000);

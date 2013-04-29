@@ -52,6 +52,7 @@ var barData = [
 var time = 1000;
 var bar = barChart()
   .duration(time)
+  .width(700)
   .title("Apples or Oranges?")
   .yAxisTitle("Label your axes");
 d3.select('#bar-chart')
@@ -83,7 +84,7 @@ setTimeout(function() {
       { "x": new Date('2012-01-16'), "y":  100*Math.random()},
       { "x": new Date('2012-01-17'), "y":  100*Math.random()},
       { "x": new Date('2012-01-18'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-10'), "y":  100*Math.random()}
+      { "x": new Date('2012-01-19'), "y":  100*Math.random()}
     ]
   };  
   
@@ -93,4 +94,4 @@ setTimeout(function() {
     .datum(barData)
     .call(bar);
 
-}, 2000);
+}, 1000);

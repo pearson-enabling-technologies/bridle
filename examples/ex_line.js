@@ -49,6 +49,7 @@
 var time = 1000;
 var line = lineChart()
   .duration(time)
+  .width(700)
   .title("Apples or Oranges?")
   .yAxisTitle("Label your axes");
 d3.select('#line-chart')
@@ -81,4 +82,4 @@ setTimeout(function() {
     .datum(lineData)
     .call(line);
 
-}, 2000);
+}, 1000);

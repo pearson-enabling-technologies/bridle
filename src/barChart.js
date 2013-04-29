@@ -1,15 +1,15 @@
-function barChart() {
+  function barChart() {
 
   var margin = {
     top: 50,
-    bottom: 30,
+    bottom: 100,
     left: 100,
     right: 100
   };
   var height = 400;
   var width = 1000;
   var xValue = function(d) {
-    return d.date
+    return d.x
   };
   var yValue = function(d) {
     return d.y
@@ -29,15 +29,41 @@ function barChart() {
   var xScale = d3.scale.ordinal()
   var xAxis = d3.svg.axis()
     .scale(xScale)
-    .tickFormat(d3.time.format.utc('%Y-%m-%d'))
-    .tickSize(2)
-    .tickPadding(6)
+    .tickSize(5)
     .orient("bottom");
 
+  var tickFormat = d3.time.format("%Y-%m-%d");
+  
+  var xAxisFontSize = 10;
+  var yAxisFontSize = 10;
+
+  function toDate(d) {
+      return new Date (d.x);
+  }
+
+  var sortByDateDesc = function(a,b){ 
+    // console.log(a, b)
+    return toDate(a) > toDate(b) ? 1 : -1; };
+  var sortByDateAsc = function(a,b){ return toDate(b) < toDate(a) ? 1 : -1; };
 
   function chart(selection) {
     selection.each(function(data) {
 
+      //sort the data points in each layer
+      data.forEach(function(layer) {
+        layer.values.sort(sortByDateDesc)
+      });
+
+      // how many data points are there in each layer on average 
+      var avgDataPoints = function () {
+        var sumPoints = 0;  
+        data.forEach(function(layer) {
+          sumPoints += layer.values.length;
+        });
+        // console.log("THIS", sumPoints, data.length, sumPoints / data.length)
+        return (sumPoints / data.length);
+      }
+      
 
       // convert the data to an appropriate representation
       data = d3.layout.stack()
@@ -63,10 +89,14 @@ function barChart() {
       var maxDate = new Date(d3.max(maxDates).setDate(d3.max(maxDates).getDate() + 1));
       // console.log(d3.time.seconds(d3.min(minDates), d3.max(maxDates)))
 
-      xScale.domain(d3.time.days(d3.min(minDates), maxDate))
+      xScale.domain(data[0].values.map(function(d) { return d.x; }))
         .rangeRoundBands([0, width - margin.left - margin.right], 0.1);
 
-
+      xAxis.tickFormat(tickFormat)
+        .tickValues(xScale.domain().filter(function(d, i) {
+        var nthLabel = Math.ceil(200 / (width / avgDataPoints()));
+        // console.log(nthLabel)
+          return !(i % nthLabel); }))
 
       yGroupMax = d3.max(data, function(layer) {
         return d3.max(layer.values, function(d) {
@@ -170,80 +200,79 @@ function barChart() {
       // update the x-axis
       g.select(".x.axis")
         .attr("transform", "translate(0," + yScale.range()[0] + ")")
-        .call(xAxis);
+        .call(xAxis)
+        // .selectAll("text") 
+        // .style("text-anchor", "end")
+        // .attr("dx", "-.8em")
+        // .attr("dy", ".15em")
+        // .attr("transform", function(d) {
+        //     return "rotate(-65)" 
+        //     });
 
       // update the y-axis
       g.select(".y.axis")
         //.attr("transform", "translate(")
         .transition()
         .duration(duration)
-                .attr("transform", "translate(-25,0)")
+        .attr("transform", "translate(-25,0)")
 
         .call(yAxis)   
 
 
 
 
-      // // handle change from/to stacked/grouped
-      // d3.selectAll("input").on("change", change);
+      // handle change from/to stacked/grouped
+      d3.selectAll("input").on("change", change);
       
-      // function change() {
-      //   if (this.value === "grouped") transitionGrouped();
-      //   else transitionStacked();
-      // }
+      function change() {
+        if (this.value === "grouped") transitionGrouped();
+        else transitionStacked();
+      }
 
-      // rect.transition()
-      //   .delay(function(d, i) {
-      //   return i * 10;
-      // })
-      //   .attr("y", function(d) {
-      //   return yScale(d.y0 + d.y);
-      // })
-      //   .attr("height", function(d) {
-      //   return yScale(d.y0) - yScale(d.y0 + d.y);
-      // });
+      function transitionGrouped() {
+        yScale.domain([0, yGroupMax]);
 
-      // function transitionGrouped() {
-      //   yScale.domain([0, yGroupMax]);
+        g.selectAll('g.layerrects').selectAll('rect')
+          .transition()
+          .duration(500)
+          .delay(function(d, i) {
+          return i * 10;
+        })
+          .attr("x", function(d, i, j) {
+            // console.log(d,i,j)
+          return xScale(d.x) + xScale.rangeBand() / numLayers * j;
+        })
+          .attr("width", xScale.rangeBand() / numLayers)
+          .transition()
+          .attr("y", function(d) {
+          return yScale(d.y);
+        })
+          .attr("height", function(d) {
+          return height - yScale(d.y) - margin.top - margin.bottom;
+        });
+      }
 
-      //   rect.transition()
-      //     .duration(500)
-      //     .delay(function(d, i) {
-      //     return i * 10;
-      //   })
-      //     .attr("x", function(d, i, j) {
-      //     return xScale(d.x) + xScale.rangeBand() / numLayers * j;
-      //   })
-      //     .attr("width", xScale.rangeBand() / numLayers)
-      //     .transition()
-      //     .attr("y", function(d) {
-      //     return yScale(d.y);
-      //   })
-      //     .attr("height", function(d) {
-      //     return height - yScale(d.y);
-      //   });
-      // }
+      function transitionStacked() {
+        yScale.domain([0, yStackMax]);
 
-      // function transitionStacked() {
-      //   yScale.domain([0, yStackMax]);
-
-      //   rect.transition()
-      //     .duration(500)
-      //     .delay(function(d, i) {
-      //     return i * 10;
-      //   })
-      //     .attr("y", function(d) {
-      //     return yScale(d.y0 + d.y);
-      //   })
-      //     .attr("height", function(d) {
-      //     return yScale(d.y0) - yScale(d.y0 + d.y);
-      //   })
-      //     .transition()
-      //     .attr("x", function(d) {
-      //     return xScale(d.x);
-      //   })
-      //     .attr("width", xScale.rangeBand());
-      // }
+        g.selectAll('g.layerrects').selectAll('rect')
+          .transition()
+          .duration(500)
+          .delay(function(d, i) {
+          return i * 10;
+        })
+          .attr("y", function(d) {
+          return yScale(d.y0 + d.y);
+        })
+          .attr("height", function(d) {
+          return yScale(d.y0) - yScale(d.y0 + d.y);
+        })
+          .transition()
+          .attr("x", function(d) {
+          return xScale(d.x);
+        })
+          .attr("width", xScale.rangeBand());
+      }
 
     })
   }
