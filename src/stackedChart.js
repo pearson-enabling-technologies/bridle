@@ -18,6 +18,7 @@ function stackedChart() {
   var title  = 'Chart Title';
   var yAxisTitle = 'Axis Title';
   var duration = 1000;
+  var legend = legendBox().nameAccessor( function(d) { return d.name} );
 
   function chart (selection) {
     selection.each(function(data) {
@@ -84,7 +85,7 @@ function stackedChart() {
         .attr("transform", "translate(" + (width - margin.left - margin.right + 20) / 2 + "," + (-margin.top) + ")");
       gEnter.append("g")
         .attr("class","legend")
-        .attr("transform","translate(" + (width - margin.left - margin.right + 20) + "," + margin.top + ")")
+        .attr("transform","translate(" + (width - margin.left - margin.right + 20) + "," + 0 + ")")
         .style("font-size","12px");
 
 
@@ -104,7 +105,6 @@ function stackedChart() {
       var gAreaEnter = gArea.enter();
       // add paths
       gAreaEnter.append("path")
-        .attr("data-legend",function(d) { return d.name})
         .attr("class", "area")
           .attr("fill", function(d,i) {
             return colors(i);
@@ -202,8 +202,9 @@ function stackedChart() {
         .text(yAxisTitle);
 
       // update the legend
-      g.select(".legend")
-        .call(d3.legend)
+      g.select('.legend')
+        .datum(data)
+        .call(legend);
 
       // add tooltips
       g.selectAll('g.circle')
@@ -237,17 +238,17 @@ function stackedChart() {
   // x accessor
   function X(d) {
     return xScale(d.x);
-  }
+  };
 
   // y-0 accessor
   function Y0(d) {
     return yScale(d.y0);
-  }
+  };
 
   // y-1 accessor
   function Y1(d) {
     return yScale(d.y0 + d.y);
-  }
+  };
 
   chart.margin = function(_) {
     if (!arguments.length) return margin;
@@ -289,13 +290,13 @@ function stackedChart() {
     if (!arguments.length) return xAxis;
     xAxis = _;
     return chart;
-  }
+  };
 
   chart.yAxis = function(_) {
     if (!arguments.length) return yAxis;
     yAxis = _;
     return chart;
-  }
+  };
 
   chart.yAxisTitle = function(_) {
     if (!arguments.length) return yAxisTitle;
@@ -307,8 +308,13 @@ function stackedChart() {
     if (!arguments.length) return duration;
     duration = _;
     return chart;
-  }
+  };
 
+  chart.legend = function(_) {
+    if (!arguments.length) return legend;
+    legend = _;
+    return chart;
+  };
 
   return chart;
 }
