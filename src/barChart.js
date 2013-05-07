@@ -54,7 +54,7 @@
       selection.each(function(rawData) {
 
 
-        data = rawData.filter(function(d) { return !d.disabled })
+        var data = rawData.filter(function(d) { return !d.disabled })
         //sort the data points in each layer
         data.forEach(function(layer) {
           layer.values.sort(sortByDateDesc)
@@ -95,18 +95,21 @@
           return !(i % nthLabel);
         }))
 
-        yGroupMax = d3.max(data, function(layer) {
+        var yGroupMax = d3.max(data, function(layer) {
           return d3.max(layer.values, function(d) {
             return d.y;
           });
-        }),
-        yStackMax = d3.max(data, function(layer) {
+        })
+
+        var yStackMax = d3.max(data, function(layer) {
           return d3.max(layer.values, function(d) {
             return d.y0 + d.y;
           });
         });
-        numLayers = data.length;
-        maxLayerLength = d3.max(data, function(layer) {
+
+        var numLayers = data.length;
+        
+        var maxLayerLength = d3.max(data, function(layer) {
           return layer.values.length
         });
 
@@ -157,10 +160,10 @@
             return d.hover })                     
 
         gLayer.exit()
-          .transition()
-          .duration(500)
-          .style('stroke-opacity', 1e-6)
-          .style('fill-opacity', 1e-6)
+          // .transition()
+          // .duration(500)
+          // .style('stroke-opacity', 1e-6)
+          // .style('fill-opacity', 1e-6)
           .remove();
 
         var gLayerEnter = gLayer.enter();
@@ -193,7 +196,6 @@
           .attr("width", xScale.rangeBand())
           .attr("height", 0)
           .on('mouseover', function(d, i, j) {
-            console.log(d, xValue(d))
             dispatch.pointMouseover({
               x: xValue(d),
               y: yValue(d),
@@ -448,6 +450,11 @@
     chart.nameValue = function(_) {
       if (!arguments.length) return nameValue;
       nameValue = _;
+      return chart;
+    };
+    chart.colors = function(_) {
+      if (!arguments.length) return colors;
+      colors = _;
       return chart;
     };
 

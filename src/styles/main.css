@@ -1,5 +1,4 @@
 /*@import "compass_twitter_bootstrap";*/
-
 text {
   fill: #333;
 }
@@ -27,6 +26,9 @@ text {
 .x.axis path {
   fill: none;
   display: none;
+}
+.x.axis text {
+  font-size: 10 !important;
 }
 
 .y.axis line, .y.axis path {
@@ -75,8 +77,37 @@ text {
 }
 
 .layerrects.hover rect {
-  /* stroke: steelblue; */
-  /* stroke-width: 1px; */
+  transition: opacity 250ms linear;
+  -moz-transition: opacity 250ms linear;
+  -webkit-transition: opacity 250ms linear;
+
+  transition-delay: 250ms
+  -moz-transition-delay: 250ms;
+  -webkit-transition-delay: 250ms;
+
+  opacity: 1;
+}
+.line.hover {
+  transition: stroke-width 250ms linear;
+  -moz-transition: stroke-width 250ms linear;
+  -webkit-transition: stroke-width 250ms linear;
+
+  transition-delay: 250ms
+  -moz-transition-delay: 250ms;
+  -webkit-transition-delay: 250ms;
+
+  stroke-width: 4;
+}
+
+.area.hover {
+  transition: opacity 250ms linear;
+  -moz-transition: opacity 250ms linear;
+  -webkit-transition: opacity 250ms linear;
+
+  transition-delay: 250ms
+  -moz-transition-delay: 250ms;
+  -webkit-transition-delay: 250ms;
+
   opacity: 1;
 }
 

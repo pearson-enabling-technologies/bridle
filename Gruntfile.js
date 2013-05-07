@@ -71,12 +71,13 @@ module.exports = function(grunt) {
         options: {
           middleware: function (connect) {
             return [
-              mountFolder(connect, 'examples'),
+              mountFolder(connect, '.tmp'),
               mountFolder(connect, 'src'),
-              mountFolder(connect, 'test')
+              mountFolder(connect, 'test'),
+              mountFolder(connect, 'node_modules')
             ];
           }
-        }
+        } 
       },
       dist: {
         options: {
@@ -92,6 +93,10 @@ module.exports = function(grunt) {
       server: {
         path: 'http://localhost:<%= connect.options.port %>'
       }
+    },
+    clean: {
+        dist: ['.tmp', 'dist/*'],
+        server: '.tmp'
     }
 
   });
@@ -103,7 +108,17 @@ module.exports = function(grunt) {
 
   grunt.registerTask('server', function (target) {
       if (target === 'dist') {
-          return grunt.task.run(['build', 'open', 'connect:dist:keepalive']);
+        return grunt.task.run(['build', 'open', 'connect:dist:keepalive']);
+      }
+ 
+      if (target === 'test') {
+        return grunt.task.run([
+          'clean:server',
+          'livereload-start',
+          'connect:test',
+          'open',
+          'watch'
+          ])
       }
 
       grunt.task.run([

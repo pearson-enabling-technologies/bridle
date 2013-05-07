@@ -3,33 +3,53 @@
 <html>
 
   <head>
-    <meta charset="utf-8" />    
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Mocha Spec Runner</title>
-    <link rel="stylesheet" href="lib/mocha/mocha.css">    
+    <link rel="stylesheet" href="/styles/main.css"/>
+    <link rel="stylesheet" href="mocha/mocha.css">    
   </head>
+
   <body>
-  <div id="mocha"></div>
-  <script src="lib/mocha/mocha.js"></script>
-  <script>mocha.setup('bdd')</script>
 
-  <!-- assertion framework -->
-  <script src="lib/chai.js"></script>
-  <script>expect = chai.expect</script>
-
-
-
-  <script src="../src/vendor/jquery.js"></script>
-  <script src="../src/vendor/d3.v3.js"></script>
-  <script src="../src/vendor/d3.legend.js"></script>
-  <script src="../src/vendor/d3.tooltip.js"></script>
-  <script src="../src/lineChart.js"></script>
-  <script src="../src/stackedChart.js"></script>
-  <script src="../src/barChart.js"></script>
-  <script src="../src/legend.js"></script>
+    <div id="mocha"></div>
+    <main id="main"></main>
+    <script src="vendor/jquery.js"></script>
+    <script src="mocha/mocha.js"></script>
+    <script src="lib/chai.js"></script>
+    <script> 
+      mocha.setup('bdd');
+      mocha.reporter('html');
+      // mocha.ignoreLeaks();
+      chai.should();
 
 
-  <!-- trigger the mocha runner -->  
-  <script src="runner/mocha.js"></script>
+    </script>
+    <script src="vendor/d3.v3.js"></script>
+    <script src="barChart.js"></script>
+    <script src="legend.js"></script>    
+    <script src="spec/barChartSpecs.js"></script>
+    <script>
+    //   window.onload = function() {
+    //        mocha.run()
+    //   };
+    </script>
+
+
+
+
+
+    <div id="bar-chart"></div>
+
+      <script>
+        if (window.mochaPhantomJS) { mochaPhantomJS.run(); }
+        else { mocha.run(); }
+      </script>
+
+    <!-- trigger the mocha runner -->  
+<!-- 
+    <script src="runner/mocha.js"></script>
+ -->
 
   </body>
 
