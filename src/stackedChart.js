@@ -5,6 +5,7 @@ function stackedChart() {
   var width  = 1000;
   var xValue = function(d) { return d.date };
   var yValue = function(d) { return d.y };
+  var nameValue = function(d) {return d.name}
   var style  = 'stack';
   var offset = 'zero';
   var order  = 'default';
@@ -14,14 +15,34 @@ function stackedChart() {
   var colors = d3.scale.category10();
   var xAxis  = d3.svg.axis().scale(xScale).orient("bottom");
   var yAxis  = d3.svg.axis().scale(yScale).orient("left");
+  xAxis.tickSize(-height + margin.top + margin.bottom, 0); // get/set?
+  xAxis.tickSubdivide(true); // get/set?
   var area   = d3.svg.area().interpolate(interpolate).x(X).y0(Y0).y1(Y1);
   var title  = 'Chart Title';
   var yAxisTitle = 'Axis Title';
   var duration = 1000;
   var legend = legendBox().nameAccessor( function(d) { return d.name} );
+  var dispatch = d3.dispatch('showTooltip', 'hideTooltip', "pointMouseover", "pointMouseout");
+
+  // x accessor
+  function X(d) {
+    return xScale(xValue(d));
+  };
+
+  // y-0 accessor
+  function Y0(d) {
+    return yScale(d.y0);
+  };
+
+  // y-1 accessor
+  function Y1(d) {
+    return yScale(d.y0 + d.y);
+  };
 
   function chart (selection) {
-    selection.each(function(data) {
+    selection.each(function(rawData) {
+
+      data = rawData.filter(function(d) { return !d.disabled })
 
       // convert the data to an appropriate representation
       data = d3.layout.stack()
@@ -37,14 +58,15 @@ function stackedChart() {
       // x scale
       xScale.range([0, width - margin.left - margin.right]);
 
+      // get max and min date(s)
       var maxDates = data.map(function(d) {
-        return d3.max(d.values, function(dt) {
-          return dt.x
+        return d3.max(d.values, function(e) {
+          return xValue(e)
         });
       });
       var minDates = data.map(function(d) {
-        return d3.min(d.values, function(dt) {
-          return dt.x
+        return d3.min(d.values, function(e) {
+          return xValue(e)
         });
       });
 
@@ -62,8 +84,8 @@ function stackedChart() {
 
       yScale.domain([0, d3.max(maxYs)]);
 
-      // x axis ticks
-      xAxis.ticks(data[0].values.length)
+      // // x axis ticks
+      // xAxis.ticks(data[0].values.length)
 
 
       // set up the scaffolding
@@ -100,21 +122,31 @@ function stackedChart() {
 
       // reasign the data to trigger addition/deletion
       var gArea = g.select('.areas').selectAll('.area')
-          .data(function(d) { return d });
+          .data(function(d) {
+          return d
+        },function(d) {
+          return nameValue(d)
+        } )
+          .classed('hover', function(d) { 
+            return d.hover })
 
       var gAreaEnter = gArea.enter();
       // add paths
       gAreaEnter.append("path")
         .attr("class", "area")
           .attr("fill", function(d,i) {
-            return colors(i);
+            return colors(nameValue(d));
           })
           .attr("opacity", 0)
           .attr("d", function(d) {
             return area(d.values);
           });
       gArea.exit()
-        .remove();
+          // .transition()
+          // .duration(1000)
+          // .style('stroke-opacity', 1e-6)
+          // .style('fill-opacity', 1e-6)
+          .remove();
 
 
       // reasign the data to trigger points
@@ -131,12 +163,12 @@ function stackedChart() {
       // update entering points
       var gCircles = gPointsEnter.append("g").attr("class", "seriespoints")
           .selectAll('g.circle')
-          .data(function(d) { d.values.forEach(function(v) {v.name = d.name}); 
+          .data(function(d) { d.values.forEach(function(v) {v.name = nameValue(d)}); 
             return d.values})      
 
       // update chilling points
       gPoints.selectAll('g.circle')
-          .data(function(d) { d.values.forEach(function(v) {v.name = d.name}); 
+          .data(function(d) { d.values.forEach(function(v) {v.name = nameValue(d)}); 
             return d.values})
 
       var circlesEnter = gCircles.enter().append("g").attr("class", "circle");
@@ -150,16 +182,34 @@ function stackedChart() {
         })
         .attr('cy', function (d) {
           return Y1(d)
-        });
+        })
+          .on('mouseover', function(d, i, j) {
+            dispatch.pointMouseover({
+              x: xValue(d),
+              y: yValue(d),
+              series: d.name,
+              pos: [xScale(xValue(d)), yScale(d.y0 + d.y)],
+              pointIndex: i,
+              seriesIndex: j
+            });
+          })
+          .on('mouseout', function(d) {
+            dispatch.pointMouseout({
+              // point: d,
+              // series: data[d.series],
+              // pointIndex: d.point,
+              // seriesIndex: d.series
+            });
+          });        
 
       // update the areas
       g.selectAll('path.area')
           .attr("fill", function(d,i) {
-            return colors(i);
+            return colors(nameValue(d));
           })
           .transition()
           .duration(duration)
-          .attr("opacity", 1)
+          .attr("opacity", 0.9)
           .attr("d", function(d) {
             return area(d.values);
           });
@@ -201,33 +251,52 @@ function stackedChart() {
         .attr("dy", ".1em")
         .text(yAxisTitle);
 
-      // update the legend
-      g.select('.legend')
-        .datum(data)
-        .call(legend);
+        if (legend.numData() != rawData.length) {
+          // update the legend
+          g.select('.legend')
+            .datum(data)
+            .call(legend);
+        }
 
-      // add tooltips
-      g.selectAll('g.circle')
-        .tooltip(function(d, i) {
-          var format = d3.format(',f');
-          var tformat = d3.time.format.utc('%Y-%m-%d')
-          var r, svg;
-          r = +d3.select(this).attr('r');
-          svg = d3.select(document.createElement("svg")).attr("height", 50);
-          g = svg.append("g");
-          g.append("rect").attr("width", r * 10).attr("height", 10);
-          g.append("text").text("10 times the radius of the cirlce").attr("dy", "25");
-          return {
-            type: "tooltip",
-            text: tformat(d.x) + " -  " + d.name + ": " + format(d.y),
-            detection: "shape",
-            placement: "fixed",
-            gravity: "top",
-            position: [X(d), Y1(d)],
-            displacement: [0, -10],
-            mousemove: false
-          };
+        legend.dispatch.on('legendClick', function(d, i) {
+          d.disabled = !d.disabled;
+
+          if (!data.filter(function(d) { return !d.disabled }).length) {
+            data.forEach(function(d) {
+              d.disabled = false;
+            });
+          }
+
+          selection.call(chart)
         });
+
+
+        legend.dispatch.on('legendMouseover', function(d, i) {
+          d.hover = true;
+          selection.call(chart)
+        });
+
+        legend.dispatch.on('legendMouseout', function(d, i) {
+          d.hover = false;
+          selection.call(chart)
+        });
+
+        dispatch.on('pointMouseover.tooltip', function(e) {
+          dispatch.showTooltip({
+            x: e.x,
+            y: e.y,
+            series: e.series,
+            pos: [e.pos[0] + margin.left, e.pos[1] + margin.top],
+            seriesIndex: e.seriesIndex,
+            pointIndex: e.pointIndex
+          });
+        });
+
+        dispatch.on('pointMouseout.tooltip', function(e) {
+          dispatch.hideTooltip(e);
+        });        
+
+
 
 
      
@@ -235,20 +304,7 @@ function stackedChart() {
     });
   }
 
-  // x accessor
-  function X(d) {
-    return xScale(d.x);
-  };
-
-  // y-0 accessor
-  function Y0(d) {
-    return yScale(d.y0);
-  };
-
-  // y-1 accessor
-  function Y1(d) {
-    return yScale(d.y0 + d.y);
-  };
+  chart.dispatch = dispatch;
 
   chart.margin = function(_) {
     if (!arguments.length) return margin;
@@ -315,6 +371,20 @@ function stackedChart() {
     legend = _;
     return chart;
   };
-
+    chart.xValue = function(_) {
+      if (!arguments.length) return xValue;
+      xValue = _;
+      return chart;
+    };
+    chart.yValue = function(_) {
+      if (!arguments.length) return yValue;
+      yValue = _;
+      return chart;
+    };
+    chart.nameValue = function(_) {
+      if (!arguments.length) return nameValue;
+      nameValue = _;
+      return chart;
+    };
   return chart;
 }

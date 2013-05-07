@@ -9,11 +9,14 @@
     var height = 400;
     var width = 1000;
     var xValue = function(d) {
-      return d.x
+      return d.x;
     };
     var yValue = function(d) {
-      return d.y
+      return d.y;
     };
+    var nameValue = function (d) {
+      return d.name;
+    }
     var offset = 'zero';
     var order = 'default';
     var yScale = d3.scale.linear();    
@@ -23,9 +26,7 @@
     var title = 'Chart Title';
     var yAxisTitle = 'Axis Title';
     var duration = 1000;
-    var legend = legendBox().nameAccessor(function(d) {
-      return d.name
-    });
+    var legend = legendBox().nameAccessor(nameValue);
 
     var xScale = d3.scale.ordinal()
     var xAxis = d3.svg.axis()
@@ -37,20 +38,23 @@
     var xAxisFontSize = 10;
     var yAxisFontSize = 10;
 
-    function toDate(d) {
-      return new Date(d.x);
+    function toDate(e) {
+      return new Date(e);
     }
     var sortByDateDesc = function(a, b) {
-      return toDate(a) > toDate(b) ? 1 : -1;
+      return toDate(xValue(a)) > toDate(xValue(b)) ? 1 : -1;
     };
     var sortByDateAsc = function(a, b) {
-      return toDate(b) < toDate(a) ? 1 : -1;
+      return toDate(xValue(b)) < toDate(xValue(a)) ? 1 : -1;
     };
 
+    var dispatch = d3.dispatch('showTooltip', 'hideTooltip', "pointMouseover", "pointMouseout");
 
     function chart(selection) {
-      selection.each(function(data) {
+      selection.each(function(rawData) {
 
+
+        data = rawData.filter(function(d) { return !d.disabled })
         //sort the data points in each layer
         data.forEach(function(layer) {
           layer.values.sort(sortByDateDesc)
@@ -80,7 +84,7 @@
         (data); // we pass the data as context
 
         xScale.domain(data[0].values.map(function(d) {
-          return d.x;
+          return xValue(d);
         }))
           .rangeRoundBands([0, width - margin.left - margin.right], 0.1);
 
@@ -141,12 +145,22 @@
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
         // reasign the data to trigger points
+        // specify a key function based on *name*, 
+        // so that entering/exiting works properly when filters are triggered
         var gLayer = g.select('.rects').selectAll('g.layerrects')
           .data(function(d) {
           return d
-        })
+        },function(d) {
+          return nameValue(d)
+        } )
+          .classed('hover', function(d) { 
+            return d.hover })                     
 
         gLayer.exit()
+          .transition()
+          .duration(500)
+          .style('stroke-opacity', 1e-6)
+          .style('fill-opacity', 1e-6)
           .remove();
 
         var gLayerEnter = gLayer.enter();
@@ -154,42 +168,66 @@
         // update entering rects
         var gRects = gLayerEnter.append("g").attr("class", "layerrects")
           .attr("fill", function(d, i) {
-          return colors(i);
+          return colors(nameValue(d));
         })
           .selectAll('g.rect')
           .data(function(d) {
           d.values.forEach(function(v) {
-            v.name = d.name
+            v.name = nameValue(d)
           });
           return d.values
         })
+
+        gRects.exit()
+          .remove();
+
 
         var rectsEnter = gRects.enter().append("g").attr("class", "rect");
 
         rectsEnter.append('rect')
           .attr("opacity", 0.1)
-          .attr("class", "layerrects")
           .attr("x", function(d) {
-          return xScale(d.x);
+          return xScale(xValue(d));
         })
           .attr("y", height - margin.top - margin.bottom)
           .attr("width", xScale.rangeBand())
-          .attr("height", 0);
+          .attr("height", 0)
+          .on('mouseover', function(d, i, j) {
+            console.log(d, xValue(d))
+            dispatch.pointMouseover({
+              x: xValue(d),
+              y: yValue(d),
+              series: d.name,
+              pos: [xScale(xValue(d)), yScale(d.y0 + d.y)],
+              pointIndex: i,
+              seriesIndex: j
+            });
+          })
+          .on('mouseout', function(d) {
+            dispatch.pointMouseout({
+              // point: d,
+              // series: data[d.series],
+              // pointIndex: d.point,
+              // seriesIndex: d.series
+            });
+          });
 
         // update the chillin rects
         g.selectAll('g.rect')
-          .select('rect')
+          .select("rect")
           .transition()
           .duration(duration)
-          .attr("opacity", 1)
+          .attr("opacity", 0.9)
           .attr("y", function(d) {
           return yScale(d.y0 + d.y);
         })
           .attr("height", function(d) {
           return yScale(d.y0) - yScale(d.y0 + d.y);
-        });
+        })
 
-
+      // update the title
+      g.select("text.chartTitle")
+        .text(title)
 
         // update the x-axis
         g.select(".x.axis")
@@ -212,7 +250,11 @@
 
           .call(yAxis)
 
-
+      g.select(".y.axis.label")
+        .attr("y", -45)
+        .attr("x", (-height + margin.top + margin.bottom) / 2)
+        .attr("dy", ".1em")
+        .text(yAxisTitle);
 
         // handle change from/to stacked/grouped
         d3.selectAll("input").on("change", change);
@@ -235,7 +277,7 @@
           })
             .attr("x", function(d, i, j) {
             // console.log(d,i,j)
-            return xScale(d.x) + xScale.rangeBand() / numLayers * j;
+            return xScale(xValue(d)) + xScale.rangeBand() / numLayers * j;
           })
             .attr("width", xScale.rangeBand() / numLayers)
             .transition()
@@ -266,19 +308,61 @@
           })
             .transition()
             .attr("x", function(d) {
-            return xScale(d.x);
+            return xScale(xValue(d));
           })
             .attr("width", xScale.rangeBand());
         }
 
-        // update the legend
-        g.select('.legend')
-          .datum(data)
-          .call(legend);
+        if (legend.numData() != rawData.length) {
+          // update the legend
+          g.select('.legend')
+            .datum(data)
+            .call(legend);
+        }
+
+        legend.dispatch.on('legendClick', function(d, i) {
+          d.disabled = !d.disabled;
+
+          if (!data.filter(function(d) { return !d.disabled }).length) {
+            data.forEach(function(d) {
+              d.disabled = false;
+            });
+          }
+
+          selection.call(chart)
+        });
+
+
+        legend.dispatch.on('legendMouseover', function(d, i) {
+          d.hover = true;
+          selection.call(chart)
+        });
+
+        legend.dispatch.on('legendMouseout', function(d, i) {
+          d.hover = false;
+          selection.call(chart)
+        });
+
+        dispatch.on('pointMouseover.tooltip', function(e) {
+          dispatch.showTooltip({
+            x: e.x,
+            y: e.y,
+            series: e.series,
+            pos: [e.pos[0] + margin.left, e.pos[1] + margin.top],
+            seriesIndex: e.seriesIndex,
+            pointIndex: e.pointIndex
+          });
+        });
+
+        dispatch.on('pointMouseout.tooltip', function(e) {
+          dispatch.hideTooltip(e);
+        });        
 
 
       })
     }
+
+    chart.dispatch = dispatch;
 
     chart.margin = function(_) {
       if (!arguments.length) return margin;
@@ -349,6 +433,21 @@
     chart.legend = function(_) {
       if (!arguments.length) return legend;
       legend = _;
+      return chart;
+    };
+    chart.xValue = function(_) {
+      if (!arguments.length) return xValue;
+      xValue = _;
+      return chart;
+    };
+    chart.yValue = function(_) {
+      if (!arguments.length) return yValue;
+      yValue = _;
+      return chart;
+    };
+    chart.nameValue = function(_) {
+      if (!arguments.length) return nameValue;
+      nameValue = _;
       return chart;
     };
 

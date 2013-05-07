@@ -1,51 +1,51 @@
 
 var barData = [
   {
-    "name": "apples",
+    "type": "apples",
     "values": [
-      { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-03'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-04'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-05'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-06'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-07'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-08'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-09'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-10'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-11'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-12'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-13'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-14'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-15'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-16'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-17'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-18'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-19'), "y":  100*Math.random()}
+      { "z": '2012-01-01', "v":  100*Math.random()},
+      { "z": '2012-01-02', "v":  100*Math.random()},
+      { "z": '2012-01-03', "v":  100*Math.random()},
+      { "z": '2012-01-04', "v":  100*Math.random()},
+      { "z": '2012-01-05', "v":  100*Math.random()},
+      { "z": '2012-01-06', "v":  100*Math.random()},
+      { "z": '2012-01-07', "v":  100*Math.random()},
+      { "z": '2012-01-08', "v":  100*Math.random()},
+      { "z": '2012-01-09', "v":  100*Math.random()},
+      { "z": '2012-01-10', "v":  100*Math.random()},
+      { "z": '2012-01-11', "v":  100*Math.random()},
+      { "z": '2012-01-12', "v":  100*Math.random()},
+      { "z": '2012-01-13', "v":  100*Math.random()},
+      { "z": '2012-01-14', "v":  100*Math.random()},
+      { "z": '2012-01-15', "v":  100*Math.random()},
+      { "z": '2012-01-16', "v":  100*Math.random()},
+      { "z": '2012-01-17', "v":  100*Math.random()},
+      { "z": '2012-01-18', "v":  100*Math.random()},
+      { "z": '2012-01-19', "v":  100*Math.random()}
     ]
   },
   {  
-    "name": "oranges",
+    "type": "oranges",
     "values": [
-      { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-03'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-04'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-05'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-06'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-07'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-08'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-09'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-10'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-11'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-12'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-13'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-14'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-15'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-16'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-17'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-18'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-19'), "y":  100*Math.random()}
+      { "z": '2012-01-01', "v":  100*Math.random()},
+      { "z": '2012-01-02', "v":  100*Math.random()},
+      { "z": '2012-01-03', "v":  100*Math.random()},
+      { "z": '2012-01-04', "v":  100*Math.random()},
+      { "z": '2012-01-05', "v":  100*Math.random()},
+      { "z": '2012-01-06', "v":  100*Math.random()},
+      { "z": '2012-01-07', "v":  100*Math.random()},
+      { "z": '2012-01-08', "v":  100*Math.random()},
+      { "z": '2012-01-09', "v":  100*Math.random()},
+      { "z": '2012-01-10', "v":  100*Math.random()},
+      { "z": '2012-01-11', "v":  100*Math.random()},
+      { "z": '2012-01-12', "v":  100*Math.random()},
+      { "z": '2012-01-13', "v":  100*Math.random()},
+      { "z": '2012-01-14', "v":  100*Math.random()},
+      { "z": '2012-01-15', "v":  100*Math.random()},
+      { "z": '2012-01-16', "v":  100*Math.random()},
+      { "z": '2012-01-17', "v":  100*Math.random()},
+      { "z": '2012-01-18', "v":  100*Math.random()},
+      { "z": '2012-01-19', "v":  100*Math.random()}
     ]
   }
 ];
@@ -56,110 +56,133 @@ var bar = barChart()
   .title("Apples or Oranges?")
   .yAxisTitle("Label your axes")
   .margin({top:50, bottom:30, left:100, right:200})
-  .legend(legendBox().height(100));
+  .legend(legendBox().height(100).nameAccessor(function(d) {return d.type}))
+  .xValue(function (d) {return new Date (d.z)})
+  .yValue(function (d) {return d.v})
+  .nameValue(function(d) {return d.type});
 d3.select('#bar-chart')
   .datum(barData)
   .call(bar);
 
+
+bar.dispatch.on('showTooltip', function(e) {
+
+  var offset = $('#bar-chart').offset(), // { left: 0, top: 0 }
+      left = e.pos[0] + offset.left,
+      top = e.pos[1] + offset.top,
+      formatterX = d3.time.format("%Y-%m-%d")
+      formatterY = d3.format(".02f");
+
+  var content = '<h3>' + e.series + '</h3>' +
+                '<p>' +
+                '<span class="value">[' + formatterX(e.x) + ', ' + formatterY(e.y) + ']</span>' +
+                '</p>';
+
+  nvtooltip.show([left, top], content);
+});
+
+bar.dispatch.on('hideTooltip', function(e) {
+  nvtooltip.cleanup();
+});
 
 
 setTimeout(function() { 
 
   var data2 = [ 
     {  
-      "name": "pears",
+      "type": "pears",
       "values": [
-        { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-03'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-04'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-05'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-06'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-07'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-08'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-09'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-10'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-11'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-12'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-13'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-14'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-15'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-16'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-17'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-18'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-19'), "y":  100*Math.random()}
+        { "z": '2012-01-01', "v":  100*Math.random()},
+        { "z": '2012-01-02', "v":  100*Math.random()},
+        { "z": '2012-01-03', "v":  100*Math.random()},
+        { "z": '2012-01-04', "v":  100*Math.random()},
+        { "z": '2012-01-05', "v":  100*Math.random()},
+        { "z": '2012-01-06', "v":  100*Math.random()},
+        { "z": '2012-01-07', "v":  100*Math.random()},
+        { "z": '2012-01-08', "v":  100*Math.random()},
+        { "z": '2012-01-09', "v":  100*Math.random()},
+        { "z": '2012-01-10', "v":  100*Math.random()},
+        { "z": '2012-01-11', "v":  100*Math.random()},
+        { "z": '2012-01-12', "v":  100*Math.random()},
+        { "z": '2012-01-13', "v":  100*Math.random()},
+        { "z": '2012-01-14', "v":  100*Math.random()},
+        { "z": '2012-01-15', "v":  100*Math.random()},
+        { "z": '2012-01-16', "v":  100*Math.random()},
+        { "z": '2012-01-17', "v":  100*Math.random()},
+        { "z": '2012-01-18', "v":  100*Math.random()},
+        { "z": '2012-01-19', "v":  100*Math.random()}
       ]
     },
     {  
-      "name": "kiwi",
+      "type": "kiwi",
       "values": [
-        { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-03'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-04'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-05'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-06'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-07'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-08'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-09'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-10'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-11'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-12'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-13'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-14'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-15'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-16'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-17'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-18'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-19'), "y":  100*Math.random()}
+        { "z": '2012-01-01', "v":  100*Math.random()},
+        { "z": '2012-01-02', "v":  100*Math.random()},
+        { "z": '2012-01-03', "v":  100*Math.random()},
+        { "z": '2012-01-04', "v":  100*Math.random()},
+        { "z": '2012-01-05', "v":  100*Math.random()},
+        { "z": '2012-01-06', "v":  100*Math.random()},
+        { "z": '2012-01-07', "v":  100*Math.random()},
+        { "z": '2012-01-08', "v":  100*Math.random()},
+        { "z": '2012-01-09', "v":  100*Math.random()},
+        { "z": '2012-01-10', "v":  100*Math.random()},
+        { "z": '2012-01-11', "v":  100*Math.random()},
+        { "z": '2012-01-12', "v":  100*Math.random()},
+        { "z": '2012-01-13', "v":  100*Math.random()},
+        { "z": '2012-01-14', "v":  100*Math.random()},
+        { "z": '2012-01-15', "v":  100*Math.random()},
+        { "z": '2012-01-16', "v":  100*Math.random()},
+        { "z": '2012-01-17', "v":  100*Math.random()},
+        { "z": '2012-01-18', "v":  100*Math.random()},
+        { "z": '2012-01-19', "v":  100*Math.random()}
       ]
     },
     {  
-      "name": "lychee",
+      "type": "lychee",
       "values": [
-        { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-03'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-04'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-05'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-06'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-07'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-08'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-09'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-10'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-11'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-12'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-13'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-14'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-15'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-16'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-17'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-18'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-19'), "y":  100*Math.random()}
+        { "z": '2012-01-01', "v":  100*Math.random()},
+        { "z": '2012-01-02', "v":  100*Math.random()},
+        { "z": '2012-01-03', "v":  100*Math.random()},
+        { "z": '2012-01-04', "v":  100*Math.random()},
+        { "z": '2012-01-05', "v":  100*Math.random()},
+        { "z": '2012-01-06', "v":  100*Math.random()},
+        { "z": '2012-01-07', "v":  100*Math.random()},
+        { "z": '2012-01-08', "v":  100*Math.random()},
+        { "z": '2012-01-09', "v":  100*Math.random()},
+        { "z": '2012-01-10', "v":  100*Math.random()},
+        { "z": '2012-01-11', "v":  100*Math.random()},
+        { "z": '2012-01-12', "v":  100*Math.random()},
+        { "z": '2012-01-13', "v":  100*Math.random()},
+        { "z": '2012-01-14', "v":  100*Math.random()},
+        { "z": '2012-01-15', "v":  100*Math.random()},
+        { "z": '2012-01-16', "v":  100*Math.random()},
+        { "z": '2012-01-17', "v":  100*Math.random()},
+        { "z": '2012-01-18', "v":  100*Math.random()},
+        { "z": '2012-01-19', "v":  100*Math.random()}
       ]
     },
     {  
-      "name": "mango",
+      "type": "mango",
       "values": [
-        { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-03'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-04'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-05'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-06'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-07'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-08'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-09'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-10'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-11'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-12'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-13'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-14'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-15'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-16'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-17'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-18'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-19'), "y":  100*Math.random()}
+        { "z": '2012-01-01', "v":  100*Math.random()},
+        { "z": '2012-01-02', "v":  100*Math.random()},
+        { "z": '2012-01-03', "v":  100*Math.random()},
+        { "z": '2012-01-04', "v":  100*Math.random()},
+        { "z": '2012-01-05', "v":  100*Math.random()},
+        { "z": '2012-01-06', "v":  100*Math.random()},
+        { "z": '2012-01-07', "v":  100*Math.random()},
+        { "z": '2012-01-08', "v":  100*Math.random()},
+        { "z": '2012-01-09', "v":  100*Math.random()},
+        { "z": '2012-01-10', "v":  100*Math.random()},
+        { "z": '2012-01-11', "v":  100*Math.random()},
+        { "z": '2012-01-12', "v":  100*Math.random()},
+        { "z": '2012-01-13', "v":  100*Math.random()},
+        { "z": '2012-01-14', "v":  100*Math.random()},
+        { "z": '2012-01-15', "v":  100*Math.random()},
+        { "z": '2012-01-16', "v":  100*Math.random()},
+        { "z": '2012-01-17', "v":  100*Math.random()},
+        { "z": '2012-01-18', "v":  100*Math.random()},
+        { "z": '2012-01-19', "v":  100*Math.random()}
       ]
     },
   ];  

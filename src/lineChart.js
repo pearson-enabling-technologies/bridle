@@ -10,11 +10,14 @@ function lineChart() {
   var height = 400;
   var width = 1000;
   var xValue = function(d) {
-    return d.date
+    return d.x
   };
   var yValue = function(d) {
     return d.y
   };
+  var nameValue = function(d) {
+    return d.name
+  }
   var title = 'Chart Title';
   var yAxisTitle = 'Axis Title';
   var duration = 1000;
@@ -25,35 +28,24 @@ function lineChart() {
   xAxis.tickSubdivide(true); // get/set?
   var yAxis = d3.svg.axis().scale(yScale).orient("left");
   var colors = d3.scale.category10();
-  var legend = legendBox().nameAccessor(function(d) {
-    return d.name
-  });
-
-  function getDate(d) {
-    console.log(d)
-    var dt = new Date(d.date);
-    dt.setHours(0);
-    dt.setMinutes(0);
-    dt.setSeconds(0);
-    dt.setMilliseconds(0);
-    return dt;
-  }
+  var legend = legendBox().nameAccessor(nameValue);
+  var dispatch = d3.dispatch('showTooltip', 'hideTooltip', "pointMouseover", "pointMouseout");
 
 
   function chart(selection) {
-    selection.each(function(data) {
+    selection.each(function(rawData) {
 
-
+      data = rawData.filter(function(d) { return !d.disabled })
 
       // get max and min date(s)
       var maxDates = data.map(function(d) {
-        return d3.max(d.values, function(dt) {
-          return dt.x
+        return d3.max(d.values, function(e) {
+          return xValue(e)
         });
       });
       var minDates = data.map(function(d) {
-        return d3.min(d.values, function(dt) {
-          return dt.x
+        return d3.min(d.values, function(e) {
+          return xValue(e)
         });
       });
 
@@ -68,8 +60,8 @@ function lineChart() {
 
       // find out the y max
       var maxYs = data.map(function(d) {
-        return d3.max(d.values, function(val) {
-          return val.y;
+        return d3.max(d.values, function(e) {
+          return yValue(e);
         })
       })
 
@@ -81,20 +73,20 @@ function lineChart() {
       // assign the X function to plot our line as we wish
       .x(function(d, i) {
         // return the X coordinate where we want to plot this datapoint
-        return xScale(d.x); //x(i);
+        return xScale(xValue(d));
       })
         .y(function(d) {
         // return the Y coordinate where we want to plot this datapoint
-        return yScale(d.y);
+        return yScale(yValue(d));
       });
 
 
-      function xx(e) {
-        return xScale(getDate(e));
+      function xx(d) {
+        return xScale(xValue(d));
       };
 
-      function yy(e) {
-        return yScale(e.y);
+      function yy(d) {
+        return yScale(yValue(d));
       };
 
 
@@ -120,6 +112,7 @@ function lineChart() {
         .attr("transform", "translate(" + (width - margin.left - margin.right + 20) + "," + 0 + ")")
         .style("font-size", "12px");
 
+
       // update the outer dimensions
       svg.attr("width", width)
         .attr("height", height)
@@ -130,9 +123,20 @@ function lineChart() {
 
       // reasign the data to trigger addition/deletion
       var gLine = g.select('.lines').selectAll('.line')
-        .data(function(d) {
-        return d
-      });
+          .data(function(d) {
+          return d
+        },function(d) {
+          return nameValue(d)
+        } )
+          .classed('hover', function(d) { 
+            return d.hover })     
+
+      gLine.exit()
+      //     // .transition()
+      //     // .duration(1000)
+      //     // .style('stroke-opacity', 1e-6)
+        .remove();
+
 
       var gLineEnter = gLine.enter();
       // add paths
@@ -141,8 +145,6 @@ function lineChart() {
         .attr("d", function(d) {
         return line(d.values);
       })
-      gLine.exit()
-        .remove();
 
       // reasign the data to trigger points
       var gPoints = g.select('.points').selectAll('g.seriespoints')
@@ -162,7 +164,7 @@ function lineChart() {
         .selectAll('g.circle')
         .data(function(d) {
         d.values.forEach(function(v) {
-          v.name = d.name
+          v.name = nameValue(d)
         });
         return d.values
       })
@@ -171,7 +173,7 @@ function lineChart() {
       gPoints.selectAll('g.circle')
         .data(function(d) {
         d.values.forEach(function(v) {
-          v.name = d.name
+          v.name = nameValue(d)
         });
         return d.values
       })
@@ -183,16 +185,35 @@ function lineChart() {
         .attr("class", "seriespoint")
         .attr('r', 0)
         .attr('cx', function(d) {
-        return xScale(d.x)
+        return xScale(xValue(d))
       })
         .attr('cy', function(d) {
-        return yScale(d.y)
-      });
+        return yScale(yValue(d))
+      })
+        .on('mouseover', function(d, i, j) {
+          dispatch.pointMouseover({
+            x: xValue(d),
+            y: yValue(d),
+            series: d.name,
+            pos: [xScale(xValue(d)), yScale(yValue(d))],
+            pointIndex: i,
+            seriesIndex: j
+          });
+        })
+        .on('mouseout', function(d) {
+          dispatch.pointMouseout({
+            // point: d,
+            // series: data[d.series],
+            // pointIndex: d.point,
+            // seriesIndex: d.series
+          });
+        });
+
 
       // update the lines
       g.selectAll('path.line')
         .attr("stroke", function(d, i) {
-        return colors(i);
+        return colors(nameValue(d));
       })
         .attr("fill", "none")
         .transition()
@@ -209,10 +230,10 @@ function lineChart() {
         .duration(duration)
         .attr('r', 5)
         .attr('cx', function(d) {
-        return xScale(d.x)
+        return xScale(xValue(d))
       })
         .attr('cy', function(d) {
-        return yScale(d.y)
+        return yScale(yValue(d))
       });
 
       // update the title
@@ -241,42 +262,57 @@ function lineChart() {
 
 
 
-      // update the legend
-      g.select('.legend')
-        .datum(data)
-        .call(legend);
+        if (legend.numData() != rawData.length) {
+          // update the legend
+          g.select('.legend')
+            .datum(data)
+            .call(legend);
+        }
+
+        legend.dispatch.on('legendClick', function(d, i) {
+          d.disabled = !d.disabled;
+
+          if (!data.filter(function(d) { return !d.disabled }).length) {
+            console.log("what does this do?")
+            data.forEach(function(d) {
+              d.disabled = false;
+            });
+          }
+          selection.call(chart)
+        });
 
 
-      // add tooltips
-      g.selectAll('g.circle')
-        .tooltip(function(d, i) {
-        var format = d3.format(',f');
-        var tformat = d3.time.format.utc('%Y-%m-%d')
-        var r, svg;
-        r = +d3.select(this).attr('r');
-        svg = d3.select(document.createElement("svg")).attr("height", 50);
-        g = svg.append("g");
-        g.append("rect").attr("width", r * 10).attr("height", 10);
-        g.append("text").text("10 times the radius of the circle").attr("dy", "25");
-        return {
-          type: "tooltip",
-          text: tformat(d.x) + " -  " + d.name + ": " + format(d.y),
-          detection: "shape",
-          placement: "fixed",
-          gravity: "top",
-          position: [X(d), Y1(d)],
-          displacement: [0, -10],
-          mousemove: false
-        };
-      });
+        legend.dispatch.on('legendMouseover', function(d, i) {
+          d.hover = true;
+          selection.call(chart)
+        });
 
+        legend.dispatch.on('legendMouseout', function(d, i) {
+          d.hover = false;
+          selection.call(chart)
+        });
 
+        dispatch.on('pointMouseover.tooltip', function(e) {
+          dispatch.showTooltip({
+            x: e.x,
+            y: e.y,
+            series: e.series,
+            pos: [e.pos[0] + margin.left, e.pos[1] + margin.top],
+            seriesIndex: e.seriesIndex,
+            pointIndex: e.pointIndex
+          });
+        });
+
+        dispatch.on('pointMouseout.tooltip', function(e) {
+          dispatch.hideTooltip(e);
+        });    
 
     });
 
 
   }
 
+  chart.dispatch = dispatch;
 
   // x accessor
 
@@ -358,6 +394,21 @@ function lineChart() {
   chart.legend = function(_) {
     if (!arguments.length) return legend;
     legend = _;
+    return chart;
+  }
+  chart.xValue = function(_) {
+    if (!arguments.length) return xValue;
+    xValue = _;
+    return chart;
+  }
+  chart.yValue = function(_) {
+    if (!arguments.length) return yValue;
+    yValue = _;
+    return chart;
+  }
+  chart.nameValue = function(_) {
+    if (!arguments.length) return nameValue;
+    nameValue = _;
     return chart;
   }
 

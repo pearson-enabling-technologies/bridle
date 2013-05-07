@@ -1,0 +1,36 @@
+<!doctype html>
+
+<html>
+
+  <head>
+    <meta charset="utf-8" />    
+    <title>Mocha Spec Runner</title>
+    <link rel="stylesheet" href="lib/mocha/mocha.css">    
+  </head>
+  <body>
+  <div id="mocha"></div>
+  <script src="lib/mocha/mocha.js"></script>
+  <script>mocha.setup('bdd')</script>
+
+  <!-- assertion framework -->
+  <script src="lib/chai.js"></script>
+  <script>expect = chai.expect</script>
+
+
+
+  <script src="../src/vendor/jquery.js"></script>
+  <script src="../src/vendor/d3.v3.js"></script>
+  <script src="../src/vendor/d3.legend.js"></script>
+  <script src="../src/vendor/d3.tooltip.js"></script>
+  <script src="../src/lineChart.js"></script>
+  <script src="../src/stackedChart.js"></script>
+  <script src="../src/barChart.js"></script>
+  <script src="../src/legend.js"></script>
+
+
+  <!-- trigger the mocha runner -->  
+  <script src="runner/mocha.js"></script>
+
+  </body>
+
+</html>

@@ -16,10 +16,12 @@ function legendBox() {
   var itemLineSpacing = 20;
   var xPadding = "1em";
   var nameAccessor = function(d) { return d.name };
+  var dispatch = d3.dispatch('legendClick', 'legendMouseover', 'legendMouseout');
+  var numData;
 
   function chart(selection) {
     selection.each(function(data) {
-
+      numData = data.length;
       // set up scaffolding
       var svg = d3.select(this).selectAll("svg").data([data]);
       var gEnter = svg.enter().append("svg").append("g")
@@ -39,13 +41,18 @@ function legendBox() {
 
       // add g for each legend item
       var gLegendItemEnter = gLegendItem.enter()
-      .append("g")   
+        .append("g")   
         .attr("class", "legendItem")
-        // .attr("transform", function(d,i) {
-        //   var translate = "translate(" + 0 + "," + (i*itemLineSpacing) + ")";
-        //   console.log(translate)
-        //   return translate;
-        // });
+          .on('click', function(d, i) {
+            dispatch.legendClick(d, i);
+            gLegendItem.classed('disabled', function(d) { return d.disabled });
+          })
+          .on('mouseover', function(d, i) {
+            dispatch.legendMouseover(d, i);
+          })
+          .on('mouseout', function(d, i) {
+            dispatch.legendMouseout(d, i);
+          });
 
       // add circles and text elements
       gLegendItemEnter.append("circle")
@@ -55,7 +62,11 @@ function legendBox() {
           // console.log(d,i)
           return -0.25+"em"})
         .attr("r","0.4em")
-        .style("fill", function(d, i) {
+        .attr("stroke-width", 1)
+        .attr("stroke", function(d, i) {
+        return colors(i)
+      })
+        .attr("fill", function(d, i) {
         return colors(i)
       });
 
@@ -63,8 +74,10 @@ function legendBox() {
         .attr("class", "text")      
         // .attr("y",function(d,i) { return +"em"})
         .attr("x", xPadding)
-        .text(nameAccessor);
+        .text(function(d) {
+          return nameAccessor(d)});
 
+      gLegendItem.classed('disabled', function(d) { return d.disabled });
       gLegendItem.exit()
         .remove();
 
@@ -103,8 +116,11 @@ function legendBox() {
 
       // height = margin.top + margin.bottom + ypos + 15; 
 
+
     })
   }
+
+  chart.dispatch = dispatch;
 
   chart.margin = function(_) {
     if (!arguments.length) return margin;
@@ -146,17 +162,24 @@ function legendBox() {
     if (!arguments.length) return duration;
     duration = _;
     return chart;
-  }
+  };
 
   chart.colors = function(_) {
     if (!arguments.length) return colors;
     colors = _;
     return chart;
-  }
+  };
+
   chart.nameAccessor = function(_) {
     if (!arguments.length) return nameAccessor;
     nameAccessor = _;
     return chart;
-  }
+  };
+  chart.numData = function(_) {
+    if (!arguments.length) return numData;
+    numData = _;
+    return chart;
+  };
+
   return chart;
 }
