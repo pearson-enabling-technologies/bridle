@@ -3,7 +3,7 @@ function stackedChart() {
   var margin = {top:50, bottom:30, left:100, right:100};
   var height = 400;
   var width  = 1000;
-  var xValue = function(d) { return d.date };
+  var xValue = function(d) { return d.x };
   var yValue = function(d) { return d.y };
   var nameValue = function(d) {return d.name}
   var style  = 'stack';
@@ -23,7 +23,7 @@ function stackedChart() {
   var duration = 1000;
   var legend = legendBox().nameAccessor( function(d) { return d.name} );
   var dispatch = d3.dispatch('showTooltip', 'hideTooltip', "pointMouseover", "pointMouseout");
-
+  var containerID = '#stacked-chart';
   // x accessor
   function X(d) {
     return xScale(xValue(d));
@@ -282,19 +282,23 @@ function stackedChart() {
         });
 
         dispatch.on('pointMouseover.tooltip', function(e) {
-          dispatch.showTooltip({
-            x: e.x,
-            y: e.y,
-            series: e.series,
-            pos: [e.pos[0] + margin.left, e.pos[1] + margin.top],
-            seriesIndex: e.seriesIndex,
-            pointIndex: e.pointIndex
-          });
+          var offset = $(containerID).offset(), // { left: 0, top: 0 }
+              left = e.pos[0] + offset.left + margin.left,
+              top = e.pos[1] + offset.top + margin.top,
+              formatterX = d3.time.format("%Y-%m-%d")
+              formatterY = d3.format(".02f");
+
+          var content = '<h3>' + e.series + '</h3>' +
+                        '<p>' +
+                        '<span class="value">[' + formatterX(e.x) + ', ' + formatterY(e.y) + ']</span>' +
+                        '</p>';
+
+          nvtooltip.show([left, top], content);
         });
 
         dispatch.on('pointMouseout.tooltip', function(e) {
-          dispatch.hideTooltip(e);
-        });        
+          nvtooltip.cleanup();
+        });       
 
 
 
@@ -384,6 +388,16 @@ function stackedChart() {
     chart.nameValue = function(_) {
       if (!arguments.length) return nameValue;
       nameValue = _;
+      return chart;
+    };
+    chart.colors = function(_) {
+      if (!arguments.length) return colors;
+      colors = _;
+      return chart;
+    };
+    chart.containerID = function(_) {
+      if (!arguments.length) return containerID;
+      containerID = _;
       return chart;
     };
   return chart;

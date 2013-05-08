@@ -1,5 +1,3 @@
-var containerID = "#bar-chart";
-$("body").append('<div id="switch"><label><input type="radio" name="mode" value="grouped"> Grouped</label><label><input type="radio" name="mode" value="stacked" checked> Stacked</label></div>');  
 jQuery.fn.d3Click = function () {
   this.each(function (i, e) {
     var evt = document.createEvent("MouseEvents");
@@ -27,7 +25,7 @@ jQuery.fn.d3Mouseout = function () {
   });
 };
 
-var barData = [
+var stackedData = [
   {
     "name": "apples",
     "values": [
@@ -175,175 +173,176 @@ var data2 = [
     ]
   },
 ];
-var barData2 = barData.concat(data2)
+var stackedData2 = stackedData.concat(data2)
+
+var containerID = "#stacked-chart"
 
 function cleanup() {
 
-barData = [
-  {
-    "name": "apples",
-    "values": [
-      { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-03'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-04'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-05'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-06'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-07'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-08'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-09'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-10'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-11'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-12'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-13'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-14'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-15'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-16'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-17'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-18'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-19'), "y":  100*Math.random()}
-    ]
-  },
-  {  
-    "name": "oranges",
-    "values": [
-      { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-03'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-04'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-05'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-06'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-07'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-08'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-09'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-10'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-11'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-12'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-13'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-14'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-15'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-16'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-17'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-18'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-19'), "y":  100*Math.random()}
-    ]
-  }
-];
-data2 = [ 
-  {  
-    "name": "pears",
-    "values": [
-      { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-03'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-04'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-05'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-06'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-07'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-08'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-09'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-10'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-11'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-12'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-13'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-14'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-15'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-16'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-17'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-18'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-19'), "y":  100*Math.random()}
-    ]
-  },
-  {  
-    "name": "kiwi",
-    "values": [
-      { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-03'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-04'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-05'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-06'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-07'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-08'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-09'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-10'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-11'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-12'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-13'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-14'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-15'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-16'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-17'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-18'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-19'), "y":  100*Math.random()}
-    ]
-  },
-  {  
-    "name": "lychee",
-    "values": [
-      { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-03'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-04'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-05'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-06'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-07'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-08'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-09'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-10'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-11'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-12'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-13'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-14'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-15'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-16'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-17'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-18'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-19'), "y":  100*Math.random()}
-    ]
-  },
-  {  
-    "name": "mango",
-    "values": [
-      { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-03'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-04'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-05'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-06'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-07'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-08'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-09'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-10'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-11'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-12'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-13'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-14'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-15'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-16'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-17'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-18'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-19'), "y":  100*Math.random()}
-    ]
-  },
-];
-barData2 = barData.concat(data2)
+  stackedData = [
+    {
+      "name": "apples",
+      "values": [
+        { "x": new Date('2012-01-01'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-02'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-03'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-04'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-05'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-06'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-07'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-08'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-09'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-10'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-11'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-12'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-13'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-14'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-15'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-16'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-17'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-18'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-19'), "y":  100*Math.random()}
+      ]
+    },
+    {  
+      "name": "oranges",
+      "values": [
+        { "x": new Date('2012-01-01'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-02'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-03'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-04'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-05'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-06'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-07'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-08'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-09'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-10'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-11'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-12'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-13'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-14'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-15'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-16'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-17'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-18'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-19'), "y":  100*Math.random()}
+      ]
+      }
+  ];
+  data2 = [ 
+    {  
+      "name": "pears",
+      "values": [
+        { "x": new Date('2012-01-01'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-02'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-03'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-04'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-05'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-06'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-07'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-08'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-09'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-10'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-11'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-12'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-13'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-14'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-15'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-16'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-17'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-18'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-19'), "y":  100*Math.random()}
+      ]
+    },
+    {  
+      "name": "kiwi",
+      "values": [
+        { "x": new Date('2012-01-01'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-02'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-03'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-04'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-05'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-06'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-07'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-08'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-09'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-10'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-11'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-12'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-13'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-14'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-15'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-16'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-17'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-18'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-19'), "y":  100*Math.random()}
+      ]
+    },
+    {  
+      "name": "lychee",
+      "values": [
+        { "x": new Date('2012-01-01'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-02'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-03'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-04'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-05'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-06'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-07'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-08'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-09'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-10'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-11'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-12'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-13'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-14'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-15'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-16'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-17'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-18'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-19'), "y":  100*Math.random()}
+      ]
+    },
+    {  
+      "name": "mango",
+      "values": [
+        { "x": new Date('2012-01-01'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-02'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-03'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-04'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-05'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-06'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-07'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-08'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-09'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-10'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-11'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-12'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-13'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-14'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-15'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-16'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-17'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-18'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-19'), "y":  100*Math.random()}
+      ]
+    },
+  ];
+  stackedData2 = stackedData.concat(data2)
 
   d3.select("svg")
     .remove();
   d3.selectAll(".nvtooltip")
-    .remove();  
-  // d3.select("#switch").remove();
-} 
+    .remove();    
 
-describe("bar chart initial load", function() {
+}
 
+describe("stacked chart initial load", function() {
 
   beforeEach(function() {
     cleanup();
 
     var time = 500;
-    this.bar = barChart()
+    this.stacked = stackedChart()
       .duration(time)
       .width(800)
       .title("Apples or Oranges?")
@@ -356,24 +355,24 @@ describe("bar chart initial load", function() {
     })
       .legend(legendBox().height(100));
     d3.select(containerID)
-      .datum(barData)
-      .call(this.bar);
+      .datum(stackedData)
+      .call(this.stacked);
+
   });
 
-
   it("has been initiated", function() {
-    this.bar.should.be.a('function')
+    this.stacked.should.be.a('function')
   });
 
   it("allows get/set of option variables", function() {
-    this.bar.title().should.equal('Apples or Oranges?')
-    this.bar.width().should.equal(800)
-    this.bar.height().should.equal(400)
-    this.bar.margin().should.be.a('object')
+    this.stacked.title().should.equal('Apples or Oranges?')
+    this.stacked.width().should.equal(800)
+    this.stacked.height().should.equal(400)
+    this.stacked.margin().should.be.a('object')
   });
 
   it('creates svg', function() {
-    var svgs = $(containerID+' svg');
+    var svgs = $(containerID + ' svg');
     svgs.length.should.equal(2); // bar-chart + legend = 2
     var svg = d3.select(containerID).select("svg");
     parseInt(svg.attr("width")).should.equal(800)
@@ -384,117 +383,134 @@ describe("bar chart initial load", function() {
 
   });
 
-  it('has correct number of data series', function() {
+  it('has correct number of area series', function() {
 
-    var layerRects = d3.selectAll('g.layerrects');
-    layerRects[0].length.should.equal(barData.length)
-
-  });
-
-  it('has correct number of rects in series', function() {
-
-    var rects = d3.select('g.layerrects').selectAll("rect");
-    rects[0].length.should.equal(barData[0].values.length)
+    var areas = d3.selectAll('g.areas path');
+    areas[0].length.should.equal(stackedData.length)
 
   });
 
-  it('has correct number of xAxis labels', function() {
+  it('has correct number of points series', function() {
+
+    var series = d3.selectAll('g.seriespoints');
+    series[0].length.should.equal(stackedData.length)
+
+  });
+
+  it('has correct number of points in seriespoints', function() {
+
+    var points = d3.select('g.seriespoints').selectAll("circle");
+    points[0].length.should.equal(stackedData[0].values.length)
+
+  });
+
+  it('has some xAxis labels', function() {
+
+    // console.log(this.stacked.xAxis.ticks)
 
     var xAxisTicks = d3.selectAll('g.x.axis g.tick.major');
 
-    var nthLabel = Math.ceil(200 / (this.bar.width() / barData[0].values.length));
+    var nthLabel = Math.ceil(200 / (this.stacked.width() / stackedData[0].values.length));
 
-    var expectedNumLabels = Math.round(barData[0].values.length / nthLabel);
+    var expectedNumLabels = Math.round(stackedData[0].values.length / nthLabel);
 
-    xAxisTicks[0].length.should.equal(expectedNumLabels)
+    // change this to a specific expected number if possible
+    xAxisTicks[0].length.should.above(2)
 
   });
 
   it('has correct number of legend labels', function() {
 
     var legendItems = d3.selectAll('g.legendItem');
-    legendItems[0].length.should.equal(barData.length)
+    legendItems[0].length.should.equal(stackedData.length)
 
   });
 
   it('legend labels have text', function() {
 
     var legendText = d3.selectAll('g.legendItem text');
-    legendText[0].length.should.equal(barData.length)
+    legendText[0].length.should.equal(stackedData.length)
 
   });
 
   it('legend circles have correct colour', function() {
 
-    var colorFunc = this.bar.colors()
+    var colorFunc = this.stacked.colors()
     var legendCircle = d3.select('g.legendItem circle');
-    legendCircle.attr("fill").should.equal(colorFunc(barData[0].name));
+    legendCircle.attr("fill").should.equal(colorFunc(stackedData[0].name));
 
   });
 
 });
 
-describe("bar chart - adding data", function() {
 
+
+describe("stacked chart - adding data", function() {
 
   beforeEach(function() {
     cleanup();
 
     var time = 500;
-    this.bar = barChart()
+    this.stacked = stackedChart()
       .duration(time)
       .width(800)
       .title("Apples or Oranges?")
       .yAxisTitle("Label your axes")
       .margin({
-      top: 50,
-      bottom: 30,
-      left: 100,
-      right: 200
-    })
+        top: 50,
+        bottom: 30,
+        left: 100,
+        right: 200
+      })
       .legend(legendBox().height(100));
     d3.select(containerID)
-      .datum(barData)
-      .call(this.bar);
-
+      .datum(stackedData)
+      .call(this.stacked);
 
     d3.select(containerID)
-      .datum(barData2)
-      .call(this.bar);
+      .datum(stackedData2)
+      .call(this.stacked);
+
+  });
+
+  it('has correct number of line series', function() {
+
+    var areas = d3.selectAll('g.areas path');
+    areas[0].length.should.equal(stackedData2.length)
+
+  });
+
+  it('has correct number of points series', function() {
+
+    var series = d3.selectAll('g.seriespoints');
+    series[0].length.should.equal(stackedData2.length)
+
+  });
+
+  it('has correct number of points in seriespoints', function() {
+
+    var points = d3.select('g.seriespoints').selectAll("circle");
+    points[0].length.should.equal(stackedData2[0].values.length)
 
   });
 
 
-  it('has correct number of data series', function() {
-
-    var layerRects = d3.selectAll('g.layerrects');
-    layerRects[0].length.should.equal(barData2.length)
-
-  });
-
-  it('has correct number of rects in series', function() {
-
-    var rects = d3.select('g.layerrects').selectAll("rect");
-    rects[0].length.should.equal(barData2[0].values.length)
-
-  });
   it('has correct number of legend labels', function() {
-
     var legendItems = d3.selectAll('g.legendItem');
-    legendItems[0].length.should.equal(barData2.length)
-
+    legendItems[0].length.should.equal(stackedData2.length)
   });
 });
 
 
-describe("bar chart - legend click (hiding data)", function() {
+
+describe("stacked chart - legend click (hiding series)", function() {
 
 
   beforeEach(function() {
     cleanup();
 
     var time = 500;
-    this.bar = barChart()
+    this.stacked = stackedChart()
       .duration(time)
       .width(800)
       .title("Apples or Oranges?")
@@ -508,9 +524,9 @@ describe("bar chart - legend click (hiding data)", function() {
       .legend(legendBox().height(100));
 
 
-    d3.select(containerID)
-      .datum(barData2)
-      .call(this.bar);
+    d3.select('#bar-chart')
+      .datum(stackedData2)
+      .call(this.stacked);
 
     // click on the third legend item - (kiwi)
     var legendItems = d3.selectAll('g.legendItem');
@@ -520,12 +536,12 @@ describe("bar chart - legend click (hiding data)", function() {
   });
 
   it('triggers "disabled" on clicked data point', function() {
-    barData2[3].disabled.should.equal(true);
+    stackedData2[3].disabled.should.equal(true);
   });
 
-  it('removes disabled series bars', function() {
-    var layerRects = d3.selectAll('g.layerrects');
-    layerRects[0].length.should.equal(barData2.length - 1)
+  it('removes disabled series lines', function() {
+    var series = d3.selectAll('g.areas path');
+    series[0].length.should.equal(stackedData2.length - 1)
   });
 
 
@@ -541,14 +557,13 @@ describe("bar chart - legend click (hiding data)", function() {
 });
 
 
-
-describe("bar chart - legend mouseover", function() {
+describe("stacked chart - legend mouseover", function() {
 
   beforeEach(function() {
     cleanup();
 
     var time = 500;
-    this.bar = barChart()
+    this.stacked = stackedChart()
       .duration(time)
       .width(800)
       .title("Apples or Oranges?")
@@ -562,9 +577,9 @@ describe("bar chart - legend mouseover", function() {
       .legend(legendBox().height(100));
 
 
-    d3.select(containerID)
-      .datum(barData2)
-      .call(this.bar);
+    d3.select('#bar-chart')
+      .datum(stackedData2)
+      .call(this.stacked);
 
 
     // mouseover on the third legend item - (kiwi)
@@ -575,33 +590,36 @@ describe("bar chart - legend mouseover", function() {
   });
 
   it('triggers "hover" on clicked data point', function() {
-    barData2[3].hover.should.equal(true);
-    $('g.layerrects.hover rect').length.should.equal(barData2[3].values.length)
+    stackedData2[3].hover.should.equal(true);
+    $('path.area.hover').length.should.equal(1)
   });
 
 
-  it('increases opacity of series rects', function() {
-    var observedOpacity = $('g.layerrects.hover rect').css('fill-opacity');
+  it('increases opacity of area.hover', function() {
+    var observedOpacity = $('path.area.hover').css('fill-opacity');
     parseInt(observedOpacity).should.equal(1);
   });
 
   // mouseout reverts to 0.9 opacity
-  it('rect opacity reverts after mouseout', function() {
+  it('area opacity reverts after mouseout', function() {
     // mouseout on the third legend item - (kiwi)
+    $('path.area.hover').length.should.equal(1);
     var legendItems = d3.selectAll('g.legendItem');
     $(legendItems[0][3]).d3Mouseout();
-    $('g.layerrects.hover rect').length.should.equal(0)
+    $('path.area').length.should.equal(stackedData2.length);
+    $('path.area.hover').length.should.equal(0);
   });
 });
 
 
-describe("bar chart - rect mouseover", function() {
+
+describe("stacked chart - point mouseover", function() {
 
   beforeEach(function() {
     cleanup();
 
     var time = 500;
-    this.bar = barChart()
+    this.stacked = stackedChart()
       .duration(time)
       .width(800)
       .title("Apples or Oranges?")
@@ -616,13 +634,14 @@ describe("bar chart - rect mouseover", function() {
 
 
     d3.select(containerID)
-      .datum(barData2)
-      .call(this.bar);
+      .datum(stackedData2)
+      .call(this.stacked);
 
 
-    // mouseover on the 4th rect of 4th series - (kiwi 2012-01-04)
-    var layerrects = d3.selectAll('g.layerrects').selectAll("rect");
-    $(layerrects[3][3]).d3Mouseover();
+    // mouseover on the 4th point of 4th series - (kiwi 2012-01-04)    
+    var points = d3.selectAll('g.seriespoints').selectAll("circle");
+
+    $(points[3][3]).d3Mouseover();
 
   });
 
@@ -633,13 +652,13 @@ describe("bar chart - rect mouseover", function() {
 
   it('tooltip shows correct text', function() {
     var tooltip = d3.select('.nvtooltip').html();
-    var yFormatted = d3.format(".02f")(barData2[3].values[3].y)
+    var yFormatted = d3.format(".02f")(stackedData2[3].values[3].y)
     tooltip.should.equal('<h3>kiwi</h3><p><span class="value">[2012-01-04, ' + yFormatted + ']</span></p>')
   });
 
   it('tooltip gets destroyed on mouseout', function() {
-    var layerrects = d3.selectAll('g.layerrects').selectAll("rect");
-    $(layerrects[3][3]).d3Mouseout();
+    var points = d3.selectAll('g.seriespoints').selectAll("circle");
+    $(points[3][3]).d3Mouseout();
     // mouseout on the 4th rect of 4th series - (kiwi 2012-01-04)
     // delay 1 second so that tooltip remove transition completes
     setTimeout(function() {
@@ -650,44 +669,3 @@ describe("bar chart - rect mouseover", function() {
   });
 
 });
-
-// describe("bar chart - stacked to grouped", function() {
-
-//   beforeEach(function() {
-//     cleanup();
-
-//     var time = 500;
-//     this.bar = barChart()
-//       .duration(time)
-//       .width(800)
-//       .title("Apples or Oranges?")
-//       .yAxisTitle("Label your axes")
-//       .margin({
-//       top: 50,
-//       bottom: 30,
-//       left: 100,
-//       right: 200
-//     })
-//       .legend(legendBox().height(100));
-
-
-//     d3.select(containerID)
-//       .datum(barData2)
-//       .call(this.bar);
-
-//     setTimeout(function() {
-//       $("input:radio:first").click();
-//     }, 1000)
-//   });
-
-//   it('does something', function() {
-//   });
-
-
-// });
-
-
-
-
-
-

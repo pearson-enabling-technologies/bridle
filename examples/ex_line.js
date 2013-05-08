@@ -87,24 +87,6 @@ d3.select('#line-chart')
   .datum(lineData)
   .call(line);
 
-line.dispatch.on('showTooltip', function(e) {
-  var offset = $('#line-chart').offset(), // { left: 0, top: 0 }
-      left = e.pos[0] + offset.left,
-      top = e.pos[1] + offset.top,
-      formatterX = d3.time.format("%Y-%m-%d")
-      formatterY = d3.format(".02f");
-
-  var content = '<h3>' + e.series + '</h3>' +
-                '<p>' +
-                '<span class="value">[' + formatterX(e.x) + ', ' + formatterY(e.y) + ']</span>' +
-                '</p>';
-
-  nvtooltip.show([left, top], content);
-});
-
-line.dispatch.on('hideTooltip', function(e) {
-  nvtooltip.cleanup();
-});  
 
 setTimeout(function() { 
 

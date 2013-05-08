@@ -1,5 +1,7 @@
   function barChart() {
 
+    var mode = "stacked";
+    var containerID = "#bar-chart";
     var margin = {
       top: 50,
       bottom: 100,
@@ -113,15 +115,19 @@
           return layer.values.length
         });
 
-        yScale.domain([0, yStackMax])
+        yScale
           .range([height - margin.top - margin.bottom, 0]);
 
+        if (mode === "stacked") yScale.domain([0, yStackMax])
+          else yScale.domain([0, yGroupMax]);
+
+            
 
 
         // set up the scaffolding
         // note: enter only fires if data is empty
         var svg = d3.select(this).selectAll("svg").data([data]);
-        var gEnter = svg.enter().append("svg").append("g");
+        var gEnter = svg.enter().append("svg").attr("class", "bridle").append("g");
         gEnter.append("g").attr("class", "rects");
         gEnter.append("g").attr("class", "x axis");
         gEnter.append("g").attr("class", "y axis").append("text")
@@ -189,18 +195,28 @@
 
         rectsEnter.append('rect')
           .attr("opacity", 0.1)
-          .attr("x", function(d) {
-          return xScale(xValue(d));
+          .attr("x", function(d, i, j) {
+            if (mode === "stacked") return xScale(xValue(d));
+            else return xScale(xValue(d)) + xScale.rangeBand() / numLayers * j;
         })
-          .attr("y", height - margin.top - margin.bottom)
-          .attr("width", xScale.rangeBand())
+          .attr("y", function(d) {
+            return height - margin.top - margin.bottom
+          })
+          .attr("width", function () {
+            if (mode === "stacked") return xScale.rangeBand();
+            else return xScale.rangeBand() / numLayers;
+          })
           .attr("height", 0)
           .on('mouseover', function(d, i, j) {
+            var yPos = yScale(d.y0 + d.y)
+            if (mode === "grouped") {
+              yPos = yScale(d.y)
+            }
             dispatch.pointMouseover({
               x: xValue(d),
               y: yValue(d),
               series: d.name,
-              pos: [xScale(xValue(d)), yScale(d.y0 + d.y)],
+              pos: [xScale(xValue(d)), yPos],
               pointIndex: i,
               seriesIndex: j
             });
@@ -215,16 +231,27 @@
           });
 
         // update the chillin rects
-        g.selectAll('g.rect')
+        g.selectAll('g.layerrects').selectAll('g.rect')
           .select("rect")
           .transition()
           .duration(duration)
           .attr("opacity", 0.9)
           .attr("y", function(d) {
-          return yScale(d.y0 + d.y);
+            if (mode === "stacked") return yScale(d.y0 + d.y);
+            else return yScale(d.y);
         })
           .attr("height", function(d) {
-          return yScale(d.y0) - yScale(d.y0 + d.y);
+            if (mode === "stacked") return yScale(d.y0) - yScale(d.y0 + d.y);
+            else return height - yScale(d.y) - margin.top - margin.bottom;
+        })
+          .attr("width", function () {
+            if (mode === "stacked") return xScale.rangeBand();
+            else return xScale.rangeBand() / numLayers;
+          })
+          .attr("x", function(d, i, j) {
+            // console.log(d,i,j)
+            if (mode === "stacked") return xScale(xValue(d));
+            else return xScale(xValue(d)) + xScale.rangeBand() / numLayers * j;
         })
 
       // update the title
@@ -264,12 +291,24 @@
         function change() {
           if (this.value === "grouped") transitionGrouped();
           else transitionStacked();
+          if (this.value === "grouped") mode = "grouped"
+          else mode = "stacked";
         }
 
         // transition to grouped layout
 
         function transitionGrouped() {
+
           yScale.domain([0, yGroupMax]);
+
+        // update the y-axis
+        g.select(".y.axis")
+        //.attr("transform", "translate(")
+        .transition()
+          .duration(duration)
+          .attr("transform", "translate(-25,0)")
+
+          .call(yAxis)
 
           g.selectAll('g.layerrects').selectAll('rect')
             .transition()
@@ -295,6 +334,15 @@
 
         function transitionStacked() {
           yScale.domain([0, yStackMax]);
+
+                  // update the y-axis
+        g.select(".y.axis")
+        //.attr("transform", "translate(")
+        .transition()
+          .duration(duration)
+          .attr("transform", "translate(-25,0)")
+
+          .call(yAxis)
 
           g.selectAll('g.layerrects').selectAll('rect')
             .transition()
@@ -346,18 +394,22 @@
         });
 
         dispatch.on('pointMouseover.tooltip', function(e) {
-          dispatch.showTooltip({
-            x: e.x,
-            y: e.y,
-            series: e.series,
-            pos: [e.pos[0] + margin.left, e.pos[1] + margin.top],
-            seriesIndex: e.seriesIndex,
-            pointIndex: e.pointIndex
-          });
+          var offset = $(containerID).offset(), // { left: 0, top: 0 }
+              left = e.pos[0] + offset.left + margin.left,
+              top = e.pos[1] + offset.top + margin.top,
+              formatterX = d3.time.format("%Y-%m-%d")
+              formatterY = d3.format(".02f");
+
+          var content = '<h3>' + e.series + '</h3>' +
+                        '<p>' +
+                        '<span class="value">[' + formatterX(e.x) + ', ' + formatterY(e.y) + ']</span>' +
+                        '</p>';
+
+          nvtooltip.show([left, top], content);
         });
 
         dispatch.on('pointMouseout.tooltip', function(e) {
-          dispatch.hideTooltip(e);
+          nvtooltip.cleanup();
         });        
 
 
@@ -455,6 +507,16 @@
     chart.colors = function(_) {
       if (!arguments.length) return colors;
       colors = _;
+      return chart;
+    };
+    chart.containerID = function(_) {
+      if (!arguments.length) return containerID;
+      containerID = _;
+      return chart;
+    };
+    chart.mode = function(_) {
+      if (!arguments.length) return mode;
+      mode = _;
       return chart;
     };
 

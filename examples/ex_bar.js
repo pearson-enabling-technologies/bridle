@@ -52,6 +52,7 @@ var barData = [
 var time = 1000;
 var bar = barChart()
   .duration(time)
+  .mode("grouped")
   .width(800)
   .title("Apples or Oranges?")
   .yAxisTitle("Label your axes")
@@ -63,27 +64,6 @@ var bar = barChart()
 d3.select('#bar-chart')
   .datum(barData)
   .call(bar);
-
-
-bar.dispatch.on('showTooltip', function(e) {
-
-  var offset = $('#bar-chart').offset(), // { left: 0, top: 0 }
-      left = e.pos[0] + offset.left,
-      top = e.pos[1] + offset.top,
-      formatterX = d3.time.format("%Y-%m-%d")
-      formatterY = d3.format(".02f");
-
-  var content = '<h3>' + e.series + '</h3>' +
-                '<p>' +
-                '<span class="value">[' + formatterX(e.x) + ', ' + formatterY(e.y) + ']</span>' +
-                '</p>';
-
-  nvtooltip.show([left, top], content);
-});
-
-bar.dispatch.on('hideTooltip', function(e) {
-  nvtooltip.cleanup();
-});
 
 
 setTimeout(function() { 

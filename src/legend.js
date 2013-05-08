@@ -24,7 +24,7 @@ function legendBox() {
       numData = data.length;
       // set up scaffolding
       var svg = d3.select(this).selectAll("svg").data([data]);
-      var gEnter = svg.enter().append("svg").append("g")
+      var gEnter = svg.enter().append("svg").attr('class', 'bridle').append("g")
       gEnter.append("g").attr("class", 'legend');
 
       //update outer dimensions
@@ -44,7 +44,6 @@ function legendBox() {
         .append("g")   
         .attr("class", "legendItem")
           .on('click', function(d, i) {
-            console.log(d,i)
             dispatch.legendClick(d, i);
             gLegendItem.classed('disabled', function(d) { return d.disabled });
           })

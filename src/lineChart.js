@@ -1,5 +1,6 @@
 function lineChart() {
 
+  var containerID = "#bar-chart";
   // define dimensions of graph
   var margin = {
     top: 50,
@@ -93,7 +94,7 @@ function lineChart() {
 
       // set up the scaffolding
       var svg = d3.select(this).selectAll("svg").data([data]);
-      var gEnter = svg.enter().append("svg").append("g");
+      var gEnter = svg.enter().append("svg").attr("class", "bridle").append("g");
       gEnter.append("g").attr("class", "lines");
       gEnter.append("g").attr("class", "points");
       gEnter.append("g").attr("class", "x axis");
@@ -293,18 +294,22 @@ function lineChart() {
         });
 
         dispatch.on('pointMouseover.tooltip', function(e) {
-          dispatch.showTooltip({
-            x: e.x,
-            y: e.y,
-            series: e.series,
-            pos: [e.pos[0] + margin.left, e.pos[1] + margin.top],
-            seriesIndex: e.seriesIndex,
-            pointIndex: e.pointIndex
-          });
+          var offset = $(containerID).offset(), // { left: 0, top: 0 }
+              left = e.pos[0] + offset.left + margin.left,
+              top = e.pos[1] + offset.top + margin.top,
+              formatterX = d3.time.format("%Y-%m-%d")
+              formatterY = d3.format(".02f");
+
+          var content = '<h3>' + e.series + '</h3>' +
+                        '<p>' +
+                        '<span class="value">[' + formatterX(e.x) + ', ' + formatterY(e.y) + ']</span>' +
+                        '</p>';
+
+          nvtooltip.show([left, top], content);
         });
 
         dispatch.on('pointMouseout.tooltip', function(e) {
-          dispatch.hideTooltip(e);
+          nvtooltip.cleanup();
         });    
 
     });
@@ -411,6 +416,15 @@ function lineChart() {
     nameValue = _;
     return chart;
   }
-
+  chart.colors = function(_) {
+    if (!arguments.length) return colors;
+    colors = _;
+    return chart;
+  };  
+  chart.containerID = function(_) {
+    if (!arguments.length) return containerID;
+    containerID = _;
+    return chart;
+  };
   return chart;
 }
