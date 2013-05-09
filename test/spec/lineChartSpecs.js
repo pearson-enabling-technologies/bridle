@@ -29,9 +29,9 @@ var lineData = [
   {
     "name": "apples",
     "values": [
-      { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-03'), "y":  100*Math.random()},
+      { "x": new Date('2012-01-01'), "y":  60},
+      { "x": new Date('2012-01-02'), "y":  30},
+      { "x": new Date('2012-01-03'), "y":  0},
       { "x": new Date('2012-01-04'), "y":  100*Math.random()},
       { "x": new Date('2012-01-05'), "y":  100*Math.random()},
       { "x": new Date('2012-01-06'), "y":  100*Math.random()},
@@ -103,9 +103,9 @@ var data2 = [
   {  
     "name": "kiwi",
     "values": [
-      { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-03'), "y":  100*Math.random()},
+      { "x": new Date('2012-01-01'), "y":  100},
+      { "x": new Date('2012-01-02'), "y":  50},
+      { "x": new Date('2012-01-03'), "y":  0},
       { "x": new Date('2012-01-04'), "y":  100*Math.random()},
       { "x": new Date('2012-01-05'), "y":  100*Math.random()},
       { "x": new Date('2012-01-06'), "y":  100*Math.random()},
@@ -183,9 +183,9 @@ function cleanup() {
   {
     "name": "apples",
     "values": [
-      { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-03'), "y":  100*Math.random()},
+      { "x": new Date('2012-01-01'), "y":  60},
+      { "x": new Date('2012-01-02'), "y":  30},
+      { "x": new Date('2012-01-03'), "y":  0},
       { "x": new Date('2012-01-04'), "y":  100*Math.random()},
       { "x": new Date('2012-01-05'), "y":  100*Math.random()},
       { "x": new Date('2012-01-06'), "y":  100*Math.random()},
@@ -257,9 +257,9 @@ function cleanup() {
     {  
       "name": "kiwi",
       "values": [
-        { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-03'), "y":  100*Math.random()},
+      { "x": new Date('2012-01-01'), "y":  100},
+      { "x": new Date('2012-01-02'), "y":  50},
+      { "x": new Date('2012-01-03'), "y":  0},
         { "x": new Date('2012-01-04'), "y":  100*Math.random()},
         { "x": new Date('2012-01-05'), "y":  100*Math.random()},
         { "x": new Date('2012-01-06'), "y":  100*Math.random()},
@@ -341,7 +341,7 @@ describe("line chart initial load", function () {
   beforeEach(function () {
     cleanup();
 
-    var time = 500;
+    var time = 0;
     this.line = lineChart()
       .duration(time)
       .width(800)
@@ -398,6 +398,27 @@ describe("line chart initial load", function () {
       points[0].length.should.equal(lineData[0].values.length)
 
     });
+
+
+  it('points have correct height', function(done) {
+    // 
+
+
+    var points = d3.selectAll('g.seriespoints').selectAll("circle");
+    console.log(points)
+    var height1 = parseFloat(Math.round(points[0][0].getAttribute('cy')))
+    var height2 = parseFloat(Math.round(points[0][1].getAttribute('cy')))
+    var height3 = parseFloat(Math.round(points[0][2].getAttribute('cy')))
+    console.log(height1, height2, height3)
+
+    height1.should.equal(height2*2)
+    height3.should.equal(0)
+    //
+
+
+    done()
+  })
+
 
   it('has some xAxis labels', function () {
 

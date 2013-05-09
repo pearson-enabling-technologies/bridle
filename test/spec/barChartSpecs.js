@@ -1,5 +1,4 @@
 var containerID = "#bar-chart";
-$("body").append('<div id="switch"><label><input type="radio" name="mode" value="grouped"> Grouped</label><label><input type="radio" name="mode" value="stacked" checked> Stacked</label></div>');  
 jQuery.fn.d3Click = function () {
   this.each(function (i, e) {
     var evt = document.createEvent("MouseEvents");
@@ -31,9 +30,9 @@ var barData = [
   {
     "name": "apples",
     "values": [
-      { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-03'), "y":  100*Math.random()},
+      { "x": new Date('2012-01-01'), "y":  60},
+      { "x": new Date('2012-01-02'), "y":  30},
+      { "x": new Date('2012-01-03'), "y":  0},
       { "x": new Date('2012-01-04'), "y":  100*Math.random()},
       { "x": new Date('2012-01-05'), "y":  100*Math.random()},
       { "x": new Date('2012-01-06'), "y":  100*Math.random()},
@@ -105,9 +104,9 @@ var data2 = [
   {  
     "name": "kiwi",
     "values": [
-      { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-03'), "y":  100*Math.random()},
+      { "x": new Date('2012-01-01'), "y":  100},
+      { "x": new Date('2012-01-02'), "y":  50},
+      { "x": new Date('2012-01-03'), "y":  0},
       { "x": new Date('2012-01-04'), "y":  100*Math.random()},
       { "x": new Date('2012-01-05'), "y":  100*Math.random()},
       { "x": new Date('2012-01-06'), "y":  100*Math.random()},
@@ -178,14 +177,15 @@ var data2 = [
 var barData2 = barData.concat(data2)
 
 function cleanup() {
+  $('#switch').remove();
 
 barData = [
   {
     "name": "apples",
     "values": [
-      { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-03'), "y":  100*Math.random()},
+      { "x": new Date('2012-01-01'), "y":  60},
+      { "x": new Date('2012-01-02'), "y":  30},
+      { "x": new Date('2012-01-03'), "y":  0},
       { "x": new Date('2012-01-04'), "y":  100*Math.random()},
       { "x": new Date('2012-01-05'), "y":  100*Math.random()},
       { "x": new Date('2012-01-06'), "y":  100*Math.random()},
@@ -257,9 +257,9 @@ data2 = [
   {  
     "name": "kiwi",
     "values": [
-      { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-03'), "y":  100*Math.random()},
+      { "x": new Date('2012-01-01'), "y":  100},
+      { "x": new Date('2012-01-02'), "y":  50},
+      { "x": new Date('2012-01-03'), "y":  0},
       { "x": new Date('2012-01-04'), "y":  100*Math.random()},
       { "x": new Date('2012-01-05'), "y":  100*Math.random()},
       { "x": new Date('2012-01-06'), "y":  100*Math.random()},
@@ -398,6 +398,19 @@ describe("bar chart initial load", function() {
 
   });
 
+  it('rects have correct height', function(done) {
+    // 
+    var layerRects = d3.selectAll('g.layerrects').selectAll("rect");
+    var height1 = layerRects[0][0].getAttribute('height')
+    var height2 = layerRects[0][1].getAttribute('height')
+    var height3 = layerRects[0][2].getAttribute('height')
+
+    Math.round(parseFloat(height1)).should.equal(Math.round(height2*2))
+    Math.round(height3).should.equal(0)
+    //
+    done()
+  })
+
   it('has correct number of xAxis labels', function() {
 
     var xAxisTicks = d3.selectAll('g.x.axis g.tick.major');
@@ -478,6 +491,20 @@ describe("bar chart - adding data", function() {
     rects[0].length.should.equal(barData2[0].values.length)
 
   });
+
+  it('rects have correct height', function(done) {
+    // 
+    var layerRects = d3.selectAll('g.layerrects').selectAll("rect");
+    var height1 = layerRects[3][0].getAttribute('height')
+    var height2 = layerRects[3][1].getAttribute('height')
+    var height3 = layerRects[3][2].getAttribute('height')
+
+    Math.round(parseFloat(height1)).should.equal(Math.round(height2*2))
+    Math.round(height3).should.equal(0)
+    //
+    done()
+  })
+
   it('has correct number of legend labels', function() {
 
     var legendItems = d3.selectAll('g.legendItem');
@@ -651,40 +678,126 @@ describe("bar chart - rect mouseover", function() {
 
 });
 
-// describe("bar chart - stacked to grouped", function() {
+describe("bar chart - stacked to grouped", function() {
 
-//   beforeEach(function() {
-//     cleanup();
+  beforeEach(function(done) {
+    cleanup();
+    $("body").append('<div id="switch"><label><input type="radio" name="mode" value="grouped"> Grouped</label><label><input type="radio" name="mode" value="stacked" checked> Stacked</label></div>');  
 
-//     var time = 500;
-//     this.bar = barChart()
-//       .duration(time)
-//       .width(800)
-//       .title("Apples or Oranges?")
-//       .yAxisTitle("Label your axes")
-//       .margin({
-//       top: 50,
-//       bottom: 30,
-//       left: 100,
-//       right: 200
-//     })
-//       .legend(legendBox().height(100));
-
-
-//     d3.select(containerID)
-//       .datum(barData2)
-//       .call(this.bar);
-
-//     setTimeout(function() {
-//       $("input:radio:first").click();
-//     }, 1000)
-//   });
-
-//   it('does something', function() {
-//   });
+    var time = 100;
+    this.bar = barChart()
+      .duration(time)
+      .width(800)
+      .title("Apples or Oranges?")
+      .yAxisTitle("Label your axes")
+      .margin({
+      top: 50,
+      bottom: 30,
+      left: 100,
+      right: 200
+    })
+      .legend(legendBox().height(100));
 
 
-// });
+    d3.select(containerID)
+      .datum(barData2)
+      .call(this.bar);
+
+
+
+    setTimeout(function() {
+      $("input:radio:first").click();
+      done()
+    }, 100)
+  });
+
+  it('switches rects to grouped form', function(done) {
+    setTimeout(function() {
+
+      var layerRects = d3.selectAll('g.layerrects').selectAll("rect");
+
+
+      layerRects.each(function(rect) {
+        
+        // var attrs = {
+        //   w : this.getAttribute('width'),
+        //   h : this.getAttribute('height'),
+        //   y : this.getAttribute('y'),
+        //   x : this.getAttribute('x')
+        // } 
+
+        // console.log(attrs, this)
+
+        var hb = this.height.baseVal.value;
+        var yb = this.y.baseVal.value;
+
+        var sum = Math.round(hb + yb)
+
+        sum.should.equal(320);
+
+      })
+
+      done();
+      // console.log($(layerRects[3][3]))
+      // console.log($(layerRects[3][3])[0])
+      // console.log($(layerRects[3][3]).attr("y"))
+      // console.log($(layerRects[3][3]).attr("height"))
+      // console.log($(layerRects[3][3])[0].y.animVal.value)
+      // console.log($(layerRects[3][3])[0].height.animVal.value)
+      // console.log($(layerRects[3][3])[0].y.baseVal.value)
+      // console.log($(layerRects[3][3])[0].height.baseVal.value)
+    },1500);
+
+  });
+
+  it('rects have correct height', function(done) {
+    // 
+    var layerRects = d3.selectAll('g.layerrects').selectAll("rect");
+    var height1 = layerRects[3][0].getAttribute('height')
+    var height2 = layerRects[3][1].getAttribute('height')
+    var height3 = layerRects[3][2].getAttribute('height')
+
+    Math.round(parseFloat(height1)).should.equal(Math.round(height2*2))
+    Math.round(height3).should.equal(0)
+    //
+    done()
+  })
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

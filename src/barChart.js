@@ -16,12 +16,12 @@
     var yValue = function(d) {
       return d.y;
     };
-    var nameValue = function (d) {
+    var nameValue = function(d) {
       return d.name;
     }
     var offset = 'zero';
     var order = 'default';
-    var yScale = d3.scale.linear();    
+    var yScale = d3.scale.linear();
     var colors = d3.scale.category10();
 
     var yAxis = d3.svg.axis().scale(yScale).orient("left");
@@ -49,30 +49,19 @@
     var sortByDateAsc = function(a, b) {
       return toDate(xValue(b)) < toDate(xValue(a)) ? 1 : -1;
     };
-
     var dispatch = d3.dispatch('showTooltip', 'hideTooltip', "pointMouseover", "pointMouseout");
 
     function chart(selection) {
       selection.each(function(rawData) {
 
-
-        var data = rawData.filter(function(d) { return !d.disabled })
+        // preserve rawData variable (needed to control updates of legend module)
+        var data = rawData.filter(function(d) {
+          return !d.disabled
+        })
         //sort the data points in each layer
         data.forEach(function(layer) {
           layer.values.sort(sortByDateDesc)
         });
-
-        // how many data points are there in each layer on average 
-        var avgDataPoints = function() {
-          var sumPoints = 0;
-          data.forEach(function(layer) {
-            sumPoints += layer.values.length;
-          });
-          // console.log("THIS", sumPoints, data.length, sumPoints / data.length)
-          return (sumPoints / data.length);
-        }
-
-
 
         // convert the data to an appropriate representation
         data = d3.layout.stack()
@@ -85,10 +74,21 @@
           .y(yValue)
         (data); // we pass the data as context
 
+        // set up scales and axes
         xScale.domain(data[0].values.map(function(d) {
           return xValue(d);
         }))
           .rangeRoundBands([0, width - margin.left - margin.right], 0.1);
+
+        // how many data points are there in each layer on average 
+        var avgDataPoints = function() {
+          var sumPoints = 0;
+          data.forEach(function(layer) {
+            sumPoints += layer.values.length;
+          });
+          // console.log("THIS", sumPoints, data.length, sumPoints / data.length)
+          return (sumPoints / data.length);
+        }
 
         xAxis.tickFormat(tickFormat)
           .tickValues(xScale.domain().filter(function(d, i) {
@@ -110,18 +110,34 @@
         });
 
         var numLayers = data.length;
-        
+
         var maxLayerLength = d3.max(data, function(layer) {
           return layer.values.length
         });
 
-        yScale
-          .range([height - margin.top - margin.bottom, 0]);
+        yScale.range([height - margin.top - margin.bottom, 0]);
 
         if (mode === "stacked") yScale.domain([0, yStackMax])
-          else yScale.domain([0, yGroupMax]);
+        else yScale.domain([0, yGroupMax]);
 
-            
+
+        // functions for rect attributes depending on stacked/group mode
+        var xScaleMode = function(d, i, j) {
+          if (mode === "stacked") return xScale(xValue(d));
+          else return xScale(xValue(d)) + xScale.rangeBand() / numLayers * j;
+        }
+        var yScaleMode = function(d) {
+          if (mode === "stacked") return yScale(d.y0 + d.y);
+          else return yScale(d.y);
+        }
+        var heightMode = function(d) {
+          if (mode === "stacked") return yScale(d.y0) - yScale(d.y0 + d.y);
+          else return height - yScale(d.y) - margin.top - margin.bottom;
+        }
+        var widthMode = function() {
+          if (mode === "stacked") return xScale.rangeBand();
+          else return xScale.rangeBand() / numLayers;
+        }
 
 
         // set up the scaffolding
@@ -159,18 +175,19 @@
         var gLayer = g.select('.rects').selectAll('g.layerrects')
           .data(function(d) {
           return d
-        },function(d) {
+        }, function(d) {
           return nameValue(d)
-        } )
-          .classed('hover', function(d) { 
-            return d.hover })                     
+        })
+          .classed('hover', function(d) {
+          return d.hover
+        })
 
         gLayer.exit()
-          // .transition()
-          // .duration(500)
-          // .style('stroke-opacity', 1e-6)
-          // .style('fill-opacity', 1e-6)
-          .remove();
+        // .transition()
+        // .duration(500)
+        // .style('stroke-opacity', 1e-6)
+        // .style('fill-opacity', 1e-6)
+        .remove();
 
         var gLayerEnter = gLayer.enter();
 
@@ -190,45 +207,38 @@
         gRects.exit()
           .remove();
 
-
         var rectsEnter = gRects.enter().append("g").attr("class", "rect");
 
         rectsEnter.append('rect')
           .attr("opacity", 0.1)
           .attr("x", function(d, i, j) {
-            if (mode === "stacked") return xScale(xValue(d));
-            else return xScale(xValue(d)) + xScale.rangeBand() / numLayers * j;
+          return xScaleMode(d, i, j)
         })
           .attr("y", function(d) {
-            return height - margin.top - margin.bottom
-          })
-          .attr("width", function () {
-            if (mode === "stacked") return xScale.rangeBand();
-            else return xScale.rangeBand() / numLayers;
-          })
+          return height - margin.top - margin.bottom
+        })
+          .attr("width", function() {
+          return widthMode();
+        })
           .attr("height", 0)
           .on('mouseover', function(d, i, j) {
-            var yPos = yScale(d.y0 + d.y)
-            if (mode === "grouped") {
-              yPos = yScale(d.y)
-            }
-            dispatch.pointMouseover({
-              x: xValue(d),
-              y: yValue(d),
-              series: d.name,
-              pos: [xScale(xValue(d)), yPos],
-              pointIndex: i,
-              seriesIndex: j
-            });
-          })
-          .on('mouseout', function(d) {
-            dispatch.pointMouseout({
-              // point: d,
-              // series: data[d.series],
-              // pointIndex: d.point,
-              // seriesIndex: d.series
-            });
+          dispatch.pointMouseover({
+            x: xValue(d),
+            y: yValue(d),
+            series: d.name,
+            pos: [xScale(xValue(d)), yScaleMode(d)],
+            pointIndex: i,
+            seriesIndex: j
           });
+        })
+          .on('mouseout', function(d) {
+          dispatch.pointMouseout({
+            // point: d,
+            // series: data[d.series],
+            // pointIndex: d.point,
+            // seriesIndex: d.series
+          });
+        });
 
         // update the chillin rects
         g.selectAll('g.layerrects').selectAll('g.rect')
@@ -237,26 +247,21 @@
           .duration(duration)
           .attr("opacity", 0.9)
           .attr("y", function(d) {
-            if (mode === "stacked") return yScale(d.y0 + d.y);
-            else return yScale(d.y);
+          return yScaleMode(d)
         })
           .attr("height", function(d) {
-            if (mode === "stacked") return yScale(d.y0) - yScale(d.y0 + d.y);
-            else return height - yScale(d.y) - margin.top - margin.bottom;
+          return heightMode(d)
         })
-          .attr("width", function () {
-            if (mode === "stacked") return xScale.rangeBand();
-            else return xScale.rangeBand() / numLayers;
-          })
+          .attr("width", function() {
+          return widthMode();
+        })
           .attr("x", function(d, i, j) {
-            // console.log(d,i,j)
-            if (mode === "stacked") return xScale(xValue(d));
-            else return xScale(xValue(d)) + xScale.rangeBand() / numLayers * j;
+          return xScaleMode(d, i, j)
         })
 
-      // update the title
-      g.select("text.chartTitle")
-        .text(title)
+        // update the title
+        g.select("text.chartTitle")
+          .text(title)
 
         // update the x-axis
         g.select(".x.axis")
@@ -279,36 +284,39 @@
 
           .call(yAxis)
 
-      g.select(".y.axis.label")
-        .attr("y", -45)
-        .attr("x", (-height + margin.top + margin.bottom) / 2)
-        .attr("dy", ".1em")
-        .text(yAxisTitle);
+        g.select(".y.axis.label")
+          .attr("y", -45)
+          .attr("x", (-height + margin.top + margin.bottom) / 2)
+          .attr("dy", ".1em")
+          .text(yAxisTitle);
 
         // handle change from/to stacked/grouped
         d3.selectAll("input").on("change", change);
 
         function change() {
-          if (this.value === "grouped") transitionGrouped();
-          else transitionStacked();
-          if (this.value === "grouped") mode = "grouped"
-          else mode = "stacked";
+          console.log("mode change")
+          if (this.value === "grouped") {
+            mode = "grouped";
+            yScale.domain([0, yGroupMax]);
+            transitionGrouped();
+          } else {
+            mode = "stacked";
+            yScale.domain([0, yStackMax]);
+            transitionStacked();
+          }
         }
 
+
         // transition to grouped layout
-
         function transitionGrouped() {
+          // update the y-axis
+          g.select(".y.axis")
+          //.attr("transform", "translate(")
+          .transition()
+            .duration(duration)
+            .attr("transform", "translate(-25,0)")
 
-          yScale.domain([0, yGroupMax]);
-
-        // update the y-axis
-        g.select(".y.axis")
-        //.attr("transform", "translate(")
-        .transition()
-          .duration(duration)
-          .attr("transform", "translate(-25,0)")
-
-          .call(yAxis)
+            .call(yAxis)
 
           g.selectAll('g.layerrects').selectAll('rect')
             .transition()
@@ -319,6 +327,7 @@
             .attr("x", function(d, i, j) {
             // console.log(d,i,j)
             return xScale(xValue(d)) + xScale.rangeBand() / numLayers * j;
+
           })
             .attr("width", xScale.rangeBand() / numLayers)
             .transition()
@@ -331,18 +340,16 @@
         }
 
         //transition to stacked layout
-
         function transitionStacked() {
-          yScale.domain([0, yStackMax]);
 
-                  // update the y-axis
-        g.select(".y.axis")
-        //.attr("transform", "translate(")
-        .transition()
-          .duration(duration)
-          .attr("transform", "translate(-25,0)")
+          // update the y-axis
+          g.select(".y.axis")
+          //.attr("transform", "translate(")
+          .transition()
+            .duration(duration)
+            .attr("transform", "translate(-25,0)")
 
-          .call(yAxis)
+            .call(yAxis)
 
           g.selectAll('g.layerrects').selectAll('rect')
             .transition()
@@ -363,6 +370,7 @@
             .attr("width", xScale.rangeBand());
         }
 
+        // update the legend only if the data has changed
         if (legend.numData() != rawData.length) {
           // update the legend
           g.select('.legend')
@@ -370,10 +378,14 @@
             .call(legend);
         }
 
+        // listen for click events from the legend module, 
+        // filter the relevant data series
         legend.dispatch.on('legendClick', function(d, i) {
           d.disabled = !d.disabled;
 
-          if (!data.filter(function(d) { return !d.disabled }).length) {
+          if (!data.filter(function(d) {
+            return !d.disabled
+          }).length) {
             data.forEach(function(d) {
               d.disabled = false;
             });
@@ -382,35 +394,42 @@
           selection.call(chart)
         });
 
-
+        // listen for mouseover events from legend module
+        // flag 'hover' on data series
         legend.dispatch.on('legendMouseover', function(d, i) {
           d.hover = true;
           selection.call(chart)
         });
 
+        // listen for mouseout events from legend module
+        // remove 'hover' from data series
         legend.dispatch.on('legendMouseout', function(d, i) {
           d.hover = false;
           selection.call(chart)
         });
 
+        // listen for mouseover events within this module
+        // (i.e. on rectangles) and show tooltip
         dispatch.on('pointMouseover.tooltip', function(e) {
           var offset = $(containerID).offset(), // { left: 0, top: 0 }
-              left = e.pos[0] + offset.left + margin.left,
-              top = e.pos[1] + offset.top + margin.top,
-              formatterX = d3.time.format("%Y-%m-%d")
-              formatterY = d3.format(".02f");
+            left = e.pos[0] + offset.left + margin.left,
+            top = e.pos[1] + offset.top + margin.top,
+            formatterX = d3.time.format("%Y-%m-%d")
+            formatterY = d3.format(".02f");
 
           var content = '<h3>' + e.series + '</h3>' +
-                        '<p>' +
-                        '<span class="value">[' + formatterX(e.x) + ', ' + formatterY(e.y) + ']</span>' +
-                        '</p>';
+            '<p>' +
+            '<span class="value">[' + formatterX(e.x) + ', ' + formatterY(e.y) + ']</span>' +
+            '</p>';
 
           nvtooltip.show([left, top], content);
         });
 
+        // listen for mouseout events within this module
+        // hide tooltip
         dispatch.on('pointMouseout.tooltip', function(e) {
           nvtooltip.cleanup();
-        });        
+        });
 
 
       })
