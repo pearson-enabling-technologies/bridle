@@ -29,9 +29,9 @@ var stackedData = [
   {
     "name": "apples",
     "values": [
-      { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-03'), "y":  100*Math.random()},
+      { "x": new Date('2012-01-01'), "y":  60},
+      { "x": new Date('2012-01-02'), "y":  30},
+      { "x": new Date('2012-01-03'), "y":  0},
       { "x": new Date('2012-01-04'), "y":  100*Math.random()},
       { "x": new Date('2012-01-05'), "y":  100*Math.random()},
       { "x": new Date('2012-01-06'), "y":  100*Math.random()},
@@ -103,9 +103,9 @@ var data2 = [
   {  
     "name": "kiwi",
     "values": [
-      { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-03'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-01'), "y":  100},
+        { "x": new Date('2012-01-02'), "y":  50},
+        { "x": new Date('2012-01-03'), "y":  0},
       { "x": new Date('2012-01-04'), "y":  100*Math.random()},
       { "x": new Date('2012-01-05'), "y":  100*Math.random()},
       { "x": new Date('2012-01-06'), "y":  100*Math.random()},
@@ -183,9 +183,9 @@ function cleanup() {
     {
       "name": "apples",
       "values": [
-        { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-03'), "y":  100*Math.random()},
+      { "x": new Date('2012-01-01'), "y":  60},
+      { "x": new Date('2012-01-02'), "y":  30},
+      { "x": new Date('2012-01-03'), "y":  0},
         { "x": new Date('2012-01-04'), "y":  100*Math.random()},
         { "x": new Date('2012-01-05'), "y":  100*Math.random()},
         { "x": new Date('2012-01-06'), "y":  100*Math.random()},
@@ -257,9 +257,9 @@ function cleanup() {
     {  
       "name": "kiwi",
       "values": [
-        { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-        { "x": new Date('2012-01-03'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-01'), "y":  100},
+        { "x": new Date('2012-01-02'), "y":  50},
+        { "x": new Date('2012-01-03'), "y":  0},
         { "x": new Date('2012-01-04'), "y":  100*Math.random()},
         { "x": new Date('2012-01-05'), "y":  100*Math.random()},
         { "x": new Date('2012-01-06'), "y":  100*Math.random()},
@@ -335,24 +335,21 @@ function cleanup() {
     .remove();    
 
 }
-
+var margin = {top:50, bottom:30, left:100, right:200};
+var height = 400;
 describe("stacked chart initial load", function() {
 
   beforeEach(function() {
     cleanup();
 
-    var time = 500;
+    var time = 100;
     this.stacked = stackedChart()
       .duration(time)
       .width(800)
+      .height(height)
       .title("Apples or Oranges?")
       .yAxisTitle("Label your axes")
-      .margin({
-      top: 50,
-      bottom: 30,
-      left: 100,
-      right: 200
-    })
+      .margin(margin)
       .legend(legendBox().height(100));
     d3.select(containerID)
       .datum(stackedData)
@@ -403,6 +400,26 @@ describe("stacked chart initial load", function() {
     points[0].length.should.equal(stackedData[0].values.length)
 
   });
+
+  it('points have correct height', function(done) {
+    // 
+    setTimeout(function() {    
+      var points = d3.selectAll('g.seriespoints').selectAll("circle");
+      var cy1 = parseFloat(Math.round(points[0][0].getAttribute('cy')))
+      var cy2 = parseFloat(Math.round(points[0][1].getAttribute('cy')))
+      var cy3 = parseFloat(Math.round(points[0][2].getAttribute('cy')))
+      var base = height - margin.top - margin.bottom;
+      var y1 = (base - cy1);
+      var y2 = (base - cy2);
+      var y3 = (base - cy3);
+
+      y1.should.equal(y2*2)
+      y3.should.equal(0)
+
+    done()
+
+    }, 1000)
+  })
 
   it('has some xAxis labels', function() {
 
@@ -494,6 +511,25 @@ describe("stacked chart - adding data", function() {
 
   });
 
+  it('points have correct height', function(done) {
+    // 
+    setTimeout(function() {    
+      var points = d3.selectAll('g.seriespoints').selectAll("circle");
+      var cy1 = parseFloat(Math.round(points[0][0].getAttribute('cy')))
+      var cy2 = parseFloat(Math.round(points[0][1].getAttribute('cy')))
+      var cy3 = parseFloat(Math.round(points[0][2].getAttribute('cy')))
+      var base = height - margin.top - margin.bottom;
+      var y1 = (base - cy1);
+      var y2 = (base - cy2);
+      var y3 = (base - cy3);
+
+      y1.should.equal(y2*2)
+      y3.should.equal(0)
+    done()
+
+    }, 1500)
+
+  })
 
   it('has correct number of legend labels', function() {
     var legendItems = d3.selectAll('g.legendItem');

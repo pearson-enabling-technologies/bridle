@@ -104,7 +104,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test', ['jshint', 'mocha']);
 
-  grunt.registerTask('default', ['jshint', 'mocha', 'concat', 'uglify']);
+  grunt.registerTask('default', ['concat', 'uglify']);
 
   grunt.registerTask('server', function (target) {
       if (target === 'dist') {

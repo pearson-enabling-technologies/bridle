@@ -156,3 +156,26 @@ text {
   display: inline-block;
   margin: 2px 0;
 }
+
+//
+// Tables
+// --------------------------------------------------
+
+table
+{
+border-collapse:collapse;
+}
+table, td, th
+{
+background:black;  
+border:1px black;
+color: #BEF202;
+}
+th:hover, td:hover {
+background: whitesmoke;
+color: black;
+}
+tr:hover {
+background: whitesmoke;
+color: black;
+}

@@ -180,52 +180,52 @@ var containerID = "#line-chart"
 function cleanup() {
 
   lineData = [
-  {
-    "name": "apples",
-    "values": [
-      { "x": new Date('2012-01-01'), "y":  60},
-      { "x": new Date('2012-01-02'), "y":  30},
-      { "x": new Date('2012-01-03'), "y":  0},
-      { "x": new Date('2012-01-04'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-05'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-06'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-07'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-08'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-09'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-10'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-11'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-12'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-13'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-14'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-15'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-16'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-17'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-18'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-19'), "y":  100*Math.random()}
-    ]
-  },
-  {  
-    "name": "oranges",
-    "values": [
-      { "x": new Date('2012-01-01'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-02'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-03'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-04'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-05'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-06'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-07'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-08'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-09'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-10'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-11'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-12'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-13'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-14'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-15'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-16'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-17'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-18'), "y":  100*Math.random()},
-      { "x": new Date('2012-01-19'), "y":  100*Math.random()}
+    {
+      "name": "apples",
+      "values": [
+        { "x": new Date('2012-01-01'), "y":  60},
+        { "x": new Date('2012-01-02'), "y":  30},
+        { "x": new Date('2012-01-03'), "y":  0},
+        { "x": new Date('2012-01-04'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-05'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-06'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-07'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-08'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-09'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-10'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-11'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-12'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-13'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-14'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-15'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-16'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-17'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-18'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-19'), "y":  100*Math.random()}
+      ]
+    },
+    {  
+      "name": "oranges",
+      "values": [
+        { "x": new Date('2012-01-01'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-02'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-03'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-04'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-05'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-06'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-07'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-08'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-09'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-10'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-11'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-12'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-13'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-14'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-15'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-16'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-17'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-18'), "y":  100*Math.random()},
+        { "x": new Date('2012-01-19'), "y":  100*Math.random()}
     ]
     }
   ];
@@ -335,7 +335,8 @@ function cleanup() {
     .remove();    
 
 }
-
+var margin = {top:50, bottom:30, left:100, right:200};
+var height = 400;
 describe("line chart initial load", function () {
 
   beforeEach(function () {
@@ -345,9 +346,10 @@ describe("line chart initial load", function () {
     this.line = lineChart()
       .duration(time)
       .width(800)
+      .height(height)
       .title("Apples or Oranges?")
       .yAxisTitle("Label your axes")
-      .margin({top:50, bottom:30, left:100, right:200})
+      .margin(margin)
       .legend(legendBox().height(100));
     d3.select('#line-chart')
       .datum(lineData)
@@ -402,21 +404,22 @@ describe("line chart initial load", function () {
 
   it('points have correct height', function(done) {
     // 
+    setTimeout(function() {    
+      var points = d3.selectAll('g.seriespoints').selectAll("circle");
+      var cy1 = parseFloat(Math.round(points[0][0].getAttribute('cy')))
+      var cy2 = parseFloat(Math.round(points[0][1].getAttribute('cy')))
+      var cy3 = parseFloat(Math.round(points[0][2].getAttribute('cy')))
+      var base = height - margin.top - margin.bottom;
+      var y1 = (base - cy1);
+      var y2 = (base - cy2);
+      var y3 = (base - cy3);
 
-
-    var points = d3.selectAll('g.seriespoints').selectAll("circle");
-    console.log(points)
-    var height1 = parseFloat(Math.round(points[0][0].getAttribute('cy')))
-    var height2 = parseFloat(Math.round(points[0][1].getAttribute('cy')))
-    var height3 = parseFloat(Math.round(points[0][2].getAttribute('cy')))
-    console.log(height1, height2, height3)
-
-    height1.should.equal(height2*2)
-    height3.should.equal(0)
-    //
-
-
+      y1.should.equal(y2*2)
+      y3.should.equal(0)
     done()
+
+    }, 1000)
+
   })
 
 
@@ -470,14 +473,10 @@ describe("line chart - adding data", function() {
     this.line = lineChart()
       .duration(time)
       .width(800)
+      .height(height)
       .title("Apples or Oranges?")
       .yAxisTitle("Label your axes")
-      .margin({
-      top: 50,
-      bottom: 30,
-      left: 100,
-      right: 200
-    })
+      .margin(margin)
       .legend(legendBox().height(100));
     d3.select(containerID)
       .datum(lineData)
@@ -510,6 +509,25 @@ describe("line chart - adding data", function() {
 
     });
 
+  it('points have correct height', function(done) {
+    // 
+    setTimeout(function() {    
+      var points = d3.selectAll('g.seriespoints').selectAll("circle");
+      var cy1 = parseFloat(Math.round(points[3][0].getAttribute('cy')))
+      var cy2 = parseFloat(Math.round(points[3][1].getAttribute('cy')))
+      var cy3 = parseFloat(Math.round(points[3][2].getAttribute('cy')))
+      var base = height - margin.top - margin.bottom;
+      var y1 = (base - cy1);
+      var y2 = (base - cy2);
+      var y3 = (base - cy3);
+
+      y1.should.equal(y2*2)
+      y3.should.equal(0)
+    done()
+
+    }, 1000)
+
+  })
 
   it('has correct number of legend labels', function () {
       var legendItems = d3.selectAll('g.legendItem');
@@ -529,14 +547,10 @@ describe("line chart - legend click (hiding series)", function() {
     this.line = lineChart()
       .duration(time)
       .width(800)
+      .height(height)
       .title("Apples or Oranges?")
       .yAxisTitle("Label your axes")
-      .margin({
-      top: 50,
-      bottom: 30,
-      left: 100,
-      right: 200
-    })
+      .margin(margin)
       .legend(legendBox().height(100));
 
 
@@ -582,14 +596,10 @@ describe("line chart - legend mouseover", function() {
     this.line = lineChart()
       .duration(time)
       .width(800)
+      .height(height)
       .title("Apples or Oranges?")
       .yAxisTitle("Label your axes")
-      .margin({
-      top: 50,
-      bottom: 30,
-      left: 100,
-      right: 200
-    })
+      .margin(margin)
       .legend(legendBox().height(100));
 
 
@@ -640,14 +650,10 @@ describe("line chart - point mouseover", function() {
     this.line = lineChart()
       .duration(time)
       .width(800)
+      .height(height)
       .title("Apples or Oranges?")
       .yAxisTitle("Label your axes")
-      .margin({
-        top: 50,
-        bottom: 30,
-        left: 100,
-        right: 200
-    })
+      .margin(margin)
       .legend(legendBox().height(100));
 
 

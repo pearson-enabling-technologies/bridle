@@ -1,6 +1,5 @@
 function lineChart() {
 
-  var containerID = "#bar-chart";
   // define dimensions of graph
   var margin = {
     top: 50,
@@ -35,7 +34,7 @@ function lineChart() {
 
   function chart(selection) {
     selection.each(function(rawData) {
-
+      var containerID = this;
       data = rawData.filter(function(d) { return !d.disabled })
 
       // get max and min date(s)
@@ -133,10 +132,11 @@ function lineChart() {
             return d.hover })     
 
       gLine.exit()
-      //     // .transition()
-      //     // .duration(1000)
-      //     // .style('stroke-opacity', 1e-6)
-        .remove();
+          // can't figure out why this transition seems to stop the line being removed.
+          // .transition()
+          // .duration(duration)
+          // .style('stroke-opacity', 1e-6)
+          .remove();
 
 
       var gLineEnter = gLine.enter();
@@ -154,7 +154,11 @@ function lineChart() {
       });
 
       gPoints.exit()
-        .remove();
+          .transition()
+          .duration(duration)
+          .style('r', 0)
+          .style('opacity', 1e-6)      
+          .remove();
 
       var gPointsEnter = gPoints.enter();
 
@@ -396,35 +400,36 @@ function lineChart() {
     duration = _;
     return chart;
   }
+
   chart.legend = function(_) {
     if (!arguments.length) return legend;
     legend = _;
     return chart;
   }
+
   chart.xValue = function(_) {
     if (!arguments.length) return xValue;
     xValue = _;
     return chart;
   }
+
   chart.yValue = function(_) {
     if (!arguments.length) return yValue;
     yValue = _;
     return chart;
   }
+
   chart.nameValue = function(_) {
     if (!arguments.length) return nameValue;
     nameValue = _;
     return chart;
   }
+
   chart.colors = function(_) {
     if (!arguments.length) return colors;
     colors = _;
     return chart;
-  };  
-  chart.containerID = function(_) {
-    if (!arguments.length) return containerID;
-    containerID = _;
-    return chart;
   };
+
   return chart;
 }

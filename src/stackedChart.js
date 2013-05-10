@@ -23,7 +23,6 @@ function stackedChart() {
   var duration = 1000;
   var legend = legendBox().nameAccessor( function(d) { return d.name} );
   var dispatch = d3.dispatch('showTooltip', 'hideTooltip', "pointMouseover", "pointMouseout");
-  var containerID = '#stacked-chart';
   // x accessor
   function X(d) {
     return xScale(xValue(d));
@@ -41,7 +40,7 @@ function stackedChart() {
 
   function chart (selection) {
     selection.each(function(rawData) {
-
+      var containerID = this;
       data = rawData.filter(function(d) { return !d.disabled })
 
       // convert the data to an appropriate representation
@@ -142,8 +141,9 @@ function stackedChart() {
             return area(d.values);
           });
       gArea.exit()
+          // can't figure out why this transition stops the area being removed.
           // .transition()
-          // .duration(1000)
+          // .duration(duration)
           // .style('stroke-opacity', 1e-6)
           // .style('fill-opacity', 1e-6)
           .remove();
@@ -154,6 +154,10 @@ function stackedChart() {
           .data(function(d) { return d });
 
       gPoints.exit()
+          .transition()
+          .duration(duration)
+          .style('r', 0)
+          .style('opacity', 1e-6)         
         .remove();
 
       var gPointsEnter = gPoints.enter();
@@ -213,7 +217,7 @@ function stackedChart() {
           .attr("d", function(d) {
             return area(d.values);
           });
-      
+
       // update the circles
       g.selectAll('g.circle')
           .select('circle')
@@ -225,7 +229,7 @@ function stackedChart() {
         })
         .attr('cy', function (d) {
           return Y1(d)
-        });          
+        });
 
        // update the title
       g.select("text.chartTitle")
@@ -375,30 +379,30 @@ function stackedChart() {
     legend = _;
     return chart;
   };
-    chart.xValue = function(_) {
-      if (!arguments.length) return xValue;
-      xValue = _;
-      return chart;
-    };
-    chart.yValue = function(_) {
-      if (!arguments.length) return yValue;
-      yValue = _;
-      return chart;
-    };
-    chart.nameValue = function(_) {
-      if (!arguments.length) return nameValue;
-      nameValue = _;
-      return chart;
-    };
-    chart.colors = function(_) {
-      if (!arguments.length) return colors;
-      colors = _;
-      return chart;
-    };
-    chart.containerID = function(_) {
-      if (!arguments.length) return containerID;
-      containerID = _;
-      return chart;
-    };
+
+  chart.xValue = function(_) {
+    if (!arguments.length) return xValue;
+    xValue = _;
+    return chart;
+  };
+
+  chart.yValue = function(_) {
+    if (!arguments.length) return yValue;
+    yValue = _;
+    return chart;
+  };
+
+  chart.nameValue = function(_) {
+    if (!arguments.length) return nameValue;
+    nameValue = _;
+    return chart;
+  };
+
+  chart.colors = function(_) {
+    if (!arguments.length) return colors;
+    colors = _;
+    return chart;
+  };
+  
   return chart;
 }

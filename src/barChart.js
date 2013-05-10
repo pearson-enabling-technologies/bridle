@@ -1,7 +1,6 @@
   function barChart() {
 
     var mode = "stacked";
-    var containerID = "#bar-chart";
     var margin = {
       top: 50,
       bottom: 100,
@@ -53,7 +52,7 @@
 
     function chart(selection) {
       selection.each(function(rawData) {
-
+        var containerID = this;
         // preserve rawData variable (needed to control updates of legend module)
         var data = rawData.filter(function(d) {
           return !d.disabled
@@ -139,10 +138,9 @@
           else return xScale.rangeBand() / numLayers;
         }
 
-
         // set up the scaffolding
         // note: enter only fires if data is empty
-        var svg = d3.select(this).selectAll("svg").data([data]);
+        var svg = d3.select(containerID).selectAll("svg").data([data]);
         var gEnter = svg.enter().append("svg").attr("class", "bridle").append("g");
         gEnter.append("g").attr("class", "rects");
         gEnter.append("g").attr("class", "x axis");
@@ -182,11 +180,12 @@
           return d.hover
         })
 
-        gLayer.exit()
-        // .transition()
-        // .duration(500)
-        // .style('stroke-opacity', 1e-6)
-        // .style('fill-opacity', 1e-6)
+        gLayer
+        .exit()
+        .transition()
+        .duration(duration)
+        .style('stroke-opacity', 1e-6)
+        .style('fill-opacity', 1e-6)
         .remove();
 
         var gLayerEnter = gLayer.enter();
@@ -205,6 +204,10 @@
         })
 
         gRects.exit()
+        .transition()
+        .duration(duration)
+        .style('stroke-opacity', 1e-6)
+        .style('fill-opacity', 1e-6)        
           .remove();
 
         var rectsEnter = gRects.enter().append("g").attr("class", "rect");
@@ -508,31 +511,31 @@
       legend = _;
       return chart;
     };
+
     chart.xValue = function(_) {
       if (!arguments.length) return xValue;
       xValue = _;
       return chart;
     };
+
     chart.yValue = function(_) {
       if (!arguments.length) return yValue;
       yValue = _;
       return chart;
     };
+
     chart.nameValue = function(_) {
       if (!arguments.length) return nameValue;
       nameValue = _;
       return chart;
     };
+
     chart.colors = function(_) {
       if (!arguments.length) return colors;
       colors = _;
       return chart;
     };
-    chart.containerID = function(_) {
-      if (!arguments.length) return containerID;
-      containerID = _;
-      return chart;
-    };
+    
     chart.mode = function(_) {
       if (!arguments.length) return mode;
       mode = _;

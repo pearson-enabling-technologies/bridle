@@ -551,8 +551,10 @@ describe("bar chart - legend click (hiding data)", function() {
   });
 
   it('removes disabled series bars', function() {
-    var layerRects = d3.selectAll('g.layerrects');
-    layerRects[0].length.should.equal(barData2.length - 1)
+    setTimeout(function() { 
+      var layerRects = d3.selectAll('g.layerrects');
+      layerRects[0].length.should.equal(barData2.length - 1)
+    }, 1000)
   });
 
 
@@ -737,7 +739,6 @@ describe("bar chart - stacked to grouped", function() {
 
       })
 
-      done();
       // console.log($(layerRects[3][3]))
       // console.log($(layerRects[3][3])[0])
       // console.log($(layerRects[3][3]).attr("y"))
@@ -747,6 +748,7 @@ describe("bar chart - stacked to grouped", function() {
       // console.log($(layerRects[3][3])[0].y.baseVal.value)
       // console.log($(layerRects[3][3])[0].height.baseVal.value)
     },1500);
+      done();
 
   });
 
