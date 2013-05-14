@@ -30,6 +30,21 @@ module.exports = function(grunt) {
         }
       }
     },
+    compass: {
+        options: {
+            cssDir: '.tmp/styles',
+            sassDir: 'src/styles',
+            javascriptsDir: '.tmp/src',
+            relativeAssets: true,
+            force: true
+        },
+        dist: {},
+        server: {
+            options: {
+                debugInfo: true
+            }
+        }
+    },    
     mocha: {
       files: ['test/**/*.html']
     },
@@ -45,9 +60,33 @@ module.exports = function(grunt) {
         }
       }
     },
+    // watch: {
+    //     compass: {
+    //         files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
+    //         tasks: ['compass']
+    //     },
+    //     livereload: {
+    //         files: [
+    //             '<%= yeoman.app %>/*.html',
+    //             '{.tmp,<%= yeoman.app %>}/styles/{,*/}*.css',
+    //             '{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js',
+    //             '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp}'
+    //         ],
+    //         tasks: ['livereload']
+    //     }
+    // },    
     watch: {
-      files: ['<%= jshint.files %>'],
-      tasks: ['livereload']
+        compass: {
+            files: ['src/styles/{,*/}*.{scss,sass}'],
+            tasks: ['compass']
+        },
+        livereload: {
+            files: [
+                '.tmp, src/**/*',
+                '.tmp, examples/**/*'
+            ],
+            tasks: ['livereload']
+        }      
     },
     connect: {
       options: {
@@ -61,7 +100,7 @@ module.exports = function(grunt) {
             return [
               lrSnippet,
               mountFolder(connect, 'examples'),
-              mountFolder(connect, 'styles'),              
+              mountFolder(connect, '.tmp'),              
               mountFolder(connect, 'src')
             ];
           }
@@ -114,6 +153,7 @@ module.exports = function(grunt) {
       if (target === 'test') {
         return grunt.task.run([
           'clean:server',
+          'compass',          
           'livereload-start',
           'connect:test',
           'open',
@@ -122,6 +162,8 @@ module.exports = function(grunt) {
       }
 
       grunt.task.run([
+          'clean:server',        
+          'compass:server',        
           'livereload-start',
           'connect:livereload',
           'open',
