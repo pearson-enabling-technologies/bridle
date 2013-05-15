@@ -1,4 +1,4 @@
-function lineChart() {
+Bridle.LineChart = function() {
 
   // define dimensions of graph
   var margin = {
@@ -28,7 +28,7 @@ function lineChart() {
   xAxis.tickSubdivide(true); // get/set?
   var yAxis = d3.svg.axis().scale(yScale).orient("left");
   var colors = d3.scale.category10();
-  var legend = legendBox().nameAccessor(nameValue);
+  var legend = Bridle.LegendBox().nameAccessor(nameValue);
   var dispatch = d3.dispatch('showTooltip', 'hideTooltip', "pointMouseover", "pointMouseout");
 
 
