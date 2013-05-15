@@ -1,4 +1,4 @@
-function legendBox() {
+Bridle.LegendBox = function() {
   var margin = {
     top: 5,
     bottom: 5,
@@ -182,4 +182,4 @@ function legendBox() {
   };
 
   return chart;
-}
+};

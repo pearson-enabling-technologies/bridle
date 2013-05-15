@@ -1,4 +1,4 @@
-function table() {
+Bridle.Table = function() {
 
   var numFormat = d3.format('.3f');
   var margin = {

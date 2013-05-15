@@ -1,4 +1,4 @@
-  function barChart() {
+Bridle.BarChart = function () {
 
     var mode = "stacked";
     var margin = {
@@ -27,7 +27,7 @@
     var title = 'Chart Title';
     var yAxisTitle = 'Axis Title';
     var duration = 1000;
-    var legend = legendBox().nameAccessor(nameValue);
+    var legend = Bridle.LegendBox().nameAccessor(nameValue);
 
     var xScale = d3.scale.ordinal()
     var xAxis = d3.svg.axis()
@@ -543,4 +543,4 @@
     };
 
     return chart;
-  }
+  };

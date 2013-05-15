@@ -1,4 +1,4 @@
-function stackedChart() {
+Bridle.StackedChart = function() {
 
   var margin = {top:50, bottom:30, left:100, right:100};
   var height = 400;
@@ -21,7 +21,7 @@ function stackedChart() {
   var title  = 'Chart Title';
   var yAxisTitle = 'Axis Title';
   var duration = 1000;
-  var legend = legendBox().nameAccessor( function(d) { return d.name} );
+  var legend = Bridle.LegendBox().nameAccessor( function(d) { return d.name} );
   var dispatch = d3.dispatch('showTooltip', 'hideTooltip', "pointMouseover", "pointMouseout");
   // x accessor
   function X(d) {
