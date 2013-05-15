@@ -204,7 +204,7 @@ Bridle.StackedChart = function() {
               // pointIndex: d.point,
               // seriesIndex: d.series
             });
-          });        
+          });
 
       // update the areas
       g.selectAll('path.area')
