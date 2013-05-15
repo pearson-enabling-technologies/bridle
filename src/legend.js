@@ -1,3 +1,7 @@
+// create global namespace
+var Bridle = window.Bridle || {};
+
+
 Bridle.LegendBox = function() {
   var margin = {
     top: 5,

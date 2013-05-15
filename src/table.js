@@ -1,3 +1,6 @@
+// create global namespace
+var Bridle = window.Bridle || {};
+
 Bridle.Table = function() {
 
   var numFormat = d3.format('.3f');

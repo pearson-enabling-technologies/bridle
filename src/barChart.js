@@ -1,3 +1,6 @@
+// create global namespace
+var Bridle = window.Bridle || {};
+
 Bridle.BarChart = function () {
 
     var mode = "stacked";

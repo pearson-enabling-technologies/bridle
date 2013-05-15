@@ -51,7 +51,7 @@ var rawData = [
 
 var headers = ['Fruit', 'Date', 'Sales']
 var tableData = transform(headers, rawData)
-console.log(tableData)
+// console.log(tableData)
 
 
 
