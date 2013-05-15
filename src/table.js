@@ -206,4 +206,4 @@ function merge(left,right,comparison)
   };
 
   return chart;
-}
+};

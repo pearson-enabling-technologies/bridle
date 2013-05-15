@@ -544,3 +544,4 @@ Bridle.BarChart = function () {
 
     return chart;
   };
+  

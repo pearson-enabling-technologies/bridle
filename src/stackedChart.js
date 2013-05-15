@@ -405,4 +405,4 @@ Bridle.StackedChart = function() {
   };
   
   return chart;
-}
+};
