@@ -1,4 +1,5 @@
 /*@import "compass_twitter_bootstrap";*/
+
 text {
   fill: #333;
 }
@@ -62,94 +63,8 @@ text {
     right: 10px;
     top: 10px;
   }
-
 }
 
 #legend-box {
   font: 13px sans-serif;
-}
-
-.legendItem.disabled circle {
-  fill-opacity: 0;
-}
-
-.layerrects.hover rect {
-  transition: opacity 250ms linear;
-  -moz-transition: opacity 250ms linear;
-  -webkit-transition: opacity 250ms linear;
-
-  transition-delay: 250ms
-  -moz-transition-delay: 250ms;
-  -webkit-transition-delay: 250ms;
-
-  opacity: 1;
-}
-.line.hover {
-  transition: stroke-width 250ms linear;
-  -moz-transition: stroke-width 250ms linear;
-  -webkit-transition: stroke-width 250ms linear;
-
-  transition-delay: 250ms
-  -moz-transition-delay: 250ms;
-  -webkit-transition-delay: 250ms;
-
-  stroke-width: 4;
-}
-
-.area.hover {
-  transition: opacity 250ms linear;
-  -moz-transition: opacity 250ms linear;
-  -webkit-transition: opacity 250ms linear;
-
-  transition-delay: 250ms
-  -moz-transition-delay: 250ms;
-  -webkit-transition-delay: 250ms;
-
-  opacity: 1;
-}
-
-/********************
- * TOOLTIP CSS
- */
-
-.nvtooltip {
-  position: absolute;
-  background-color: rgba(255,255,255,1);
-  padding: 10px;
-  border: 1px solid #ddd;
-
-  font-family: Arial;
-  font-size: 13px;
-
-  transition: opacity 500ms linear;
-  -moz-transition: opacity 500ms linear;
-  -webkit-transition: opacity 500ms linear;
-
-  transition-delay: 500ms
-  -moz-transition-delay: 500ms;
-  -webkit-transition-delay: 500ms;
-
-  -moz-box-shadow: 4px 4px 12px rgba(0,0,0,.5);
-  -webkit-box-shadow: 4px 4px 12px rgba(0,0,0,.5);
-  box-shadow: 4px 4px 12px rgba(0,0,0,.5);
-
-  -moz-border-radius: 15px;
-  border-radius: 15px;
-}
-
-.nvtooltip h3 {
-  margin: 0;
-  padding: 0;
-  text-align: center;
-}
-
-.nvtooltip p {
-  margin: 0;
-  padding: 0;
-  text-align: center;
-}
-
-.nvtooltip span {
-  display: inline-block;
-  margin: 2px 0;
 }

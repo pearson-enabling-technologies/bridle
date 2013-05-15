@@ -432,4 +432,4 @@ Bridle.LineChart = function() {
   };
 
   return chart;
-}
+};
