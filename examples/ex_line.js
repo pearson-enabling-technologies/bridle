@@ -65,12 +65,12 @@ var lineData = [
   }
 ];
 var time = 1000;
-var line = lineChart()
+var line = Bridle.LineChart()
   .duration(time)
   .width(800)
   .title("Apples or Oranges?")
   .yAxisTitle("Label your axes")
-  .legend(legendBox().height(100).nameAccessor(function(d) {return d.type}))
+  .legend(Bridle.LegendBox().height(100).nameAccessor(function(d) {return d.type}))
   .margin({top:50, bottom:30, left:100, right:200})
   .xValue(function (d) {
     return new Date (d.z)

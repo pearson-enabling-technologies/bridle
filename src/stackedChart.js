@@ -1,6 +1,3 @@
-// create global namespace
-var Bridle = window.Bridle || {};
-
 Bridle.StackedChart = function() {
 
   var margin = {top:50, bottom:30, left:100, right:100};

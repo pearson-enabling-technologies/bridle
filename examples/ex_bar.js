@@ -50,14 +50,14 @@ var barData = [
   }
 ];
 var time = 1000;
-var bar = barChart()
+var bar = Bridle.BarChart()
   .duration(time)
   .mode("stacked")
   .width(800)
   .title("Apples or Oranges?")
   .yAxisTitle("Label your axes")
   .margin({top:50, bottom:30, left:100, right:200})
-  .legend(legendBox().height(100).nameAccessor(function(d) {return d.type}))
+  .legend(Bridle.LegendBox().height(100).nameAccessor(function(d) {return d.type}))
   .xValue(function (d) {return new Date (d.z)})
   .yValue(function (d) {return d.v})
   .nameValue(function(d) {return d.type});

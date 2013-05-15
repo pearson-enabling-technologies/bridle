@@ -55,7 +55,7 @@ var tableData = transform(headers, rawData)
 
 
 
-var table = table()
+var table = Bridle.Table()
   // .sortBy('Fruit')
   // .sortDesc(false)
 

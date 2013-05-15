@@ -54,12 +54,12 @@ var stackedData = [
 
 
 
-    var stacked = stackedChart()
+    var stacked = Bridle.StackedChart()
       .duration(time)
       .width(800)
       .title("Are oranges more popular than apples?")
       .yAxisTitle("Fruit Impact (Millions of Gallons of Juice)")
-  .legend(legendBox().height(100).nameAccessor(function(d) {return d.type}))
+  .legend(Bridle.LegendBox().height(100).nameAccessor(function(d) {return d.type}))
   .margin({top:50, bottom:30, left:100, right:200})
   .xValue(function (d) {
     return new Date (d.z)
