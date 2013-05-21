@@ -6,11 +6,15 @@ var Bridle = window.Bridle || {};
 
 // add support for amd
 if (typeof window.define === "function" && window.define.amd) {
-  window.define("Bridle", [], function() {
+  window.define("Bridle", ['jquery', 'd3'], function() {
     return Bridle;
   });
 }
 
+
+
+// create global namespace
+var Bridle = window.Bridle || {};
 
 
 Bridle.LegendBox = function() {
@@ -198,6 +202,9 @@ Bridle.LegendBox = function() {
 
   return chart;
 };
+// create global namespace
+var Bridle = window.Bridle || {};
+
 Bridle.BarChart = function () {
 
     var mode = "stacked";
@@ -744,7 +751,10 @@ Bridle.BarChart = function () {
 
     return chart;
   };
-  Bridle.LineChart = function() {
+  // create global namespace
+var Bridle = window.Bridle || {};
+
+Bridle.LineChart = function() {
 
   // define dimensions of graph
   var margin = {
@@ -1587,6 +1597,9 @@ Bridle.StackedChart = function() {
   
   return chart;
 };
+// create global namespace
+var Bridle = window.Bridle || {};
+
 Bridle.Table = function() {
 
   var numFormat = d3.format('.3f');
