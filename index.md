@@ -39,7 +39,7 @@ For more information about why we use this paradigm, please refer to the article
 At Pearson Technology we're building a data analytics project called Palomino. Palomino is a coat colour in horses, and since this library is part of the Palomino project, we chose something horse related. The idea is that the bridle is what helps you direct a horse and connects you to it.
 
 
-<script type="text/javascript" src="/javascripts/lineChart.js">
+<script type="text/javascript" src="{{ relative }}javascripts/lineChart.js">
 </script>
 
 
