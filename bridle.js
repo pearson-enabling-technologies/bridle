@@ -1383,7 +1383,7 @@ Bridle.StackedChart = function() {
           .attr("fill", function(d,i) {
             return colors(nameValue(d));
           })
-          .attr("opacity", 0)
+          .attr("fill-opacity", 0)
           .attr("d", function(d) {
             return area(d.values);
           });
@@ -1404,7 +1404,7 @@ Bridle.StackedChart = function() {
           .transition()
           .duration(duration)
           .style('r', 0)
-          .style('opacity', 1e-6)         
+          .style('fill-opacity', 1e-6)         
         .remove();
 
       var gPointsEnter = gPoints.enter();
@@ -1425,7 +1425,7 @@ Bridle.StackedChart = function() {
       var circlesEnter = gCircles.enter().append("g").attr("class", "circle");
 
       circlesEnter.append('circle')
-        .attr("opacity", 0.1)
+        .attr("fill-opacity", 0.1)
         .attr("class", "seriespoint")
         .attr('r', 0)
         .attr('cx', function (d) {
@@ -1460,7 +1460,7 @@ Bridle.StackedChart = function() {
           })
           .transition()
           .duration(duration)
-          .attr("opacity", 0.9)
+          .attr("fill-opacity", 0.9)
           .attr("d", function(d) {
             return area(d.values);
           });
