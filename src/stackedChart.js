@@ -144,10 +144,10 @@ Bridle.StackedChart = function() {
           });
       gArea.exit()
           // can't figure out why this transition stops the area being removed.
-          // .transition()
-          // .duration(duration)
-          // .style('stroke-opacity', 1e-6)
-          // .style('fill-opacity', 1e-6)
+          .transition()
+          .duration(duration)
+          .style('stroke-opacity', 1e-6)
+          .style('fill-opacity', 1e-6)
           .remove();
 
 
