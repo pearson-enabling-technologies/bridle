@@ -92,7 +92,7 @@ Bridle.StackedChart = function() {
       // set up the scaffolding
       // note: enter only fires if data is empty
       var svg = d3.select(this).selectAll("svg").data([data]);
-      var gEnter = svg.enter().append("svg").append("g");
+      var gEnter = svg.enter().append("svg").attr('class', 'bridle').append("g");
       gEnter.append("g").attr("class", "areas");
       gEnter.append("g").attr("class", "points");
       gEnter.append("g").attr("class", "x axis");
