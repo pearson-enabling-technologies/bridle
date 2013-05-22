@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Legend</title>
+        <meta name="viewport" content="width=device-width">
+
+        <!-- syntax highlighting CSS -->
+        <link rel="stylesheet" href="/css/syntax.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/css/main.css">
+
+        <!-- CSS for the graphs -->
+        <link rel="stylesheet" href="/css/graphs.css">
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script src="https://raw.github.com/ptdavteam/bridle/develop/bridle.js" charset="utf-8"></script>
+
+    </head>
+    <body>
+
+        <div class="container">
+          <div class="site">
+            <div class="header">
+              <h1 class="title"><a href="/">Bridle</a></h1>
+              <a class="extra" href="/">Home</a>
+              <a class="extra" href="/examples/">Examples</a>
+              <a class="extra" href="https://github.com/ptdavteam/bridle">Fork Project on Github</a>
+            </div>
+     
+                <h1 id='legend'>Legend</h1>
+<div id='legend-box'> </div>
+<p>This shows how to use the legend module.</p>
+
+<h2 id='code'>Code</h2>
+<div class='highlight'><pre><code class='javascript'><span class='c1'>// setup legend</span>
+<span class='kd'>var</span> <span class='nx'>legend</span> <span class='o'>=</span> <span class='nx'>legendBox</span><span class='p'>()</span>
+  <span class='p'>.</span><span class='nx'>duration</span><span class='p'>(</span><span class='mi'>1000</span><span class='p'>)</span>
+  <span class='p'>.</span><span class='nx'>width</span><span class='p'>(</span><span class='mi'>600</span><span class='p'>)</span>
+  <span class='p'>.</span><span class='nx'>height</span><span class='p'>(</span><span class='mi'>100</span><span class='p'>)</span>
+  <span class='p'>.</span><span class='nx'>colors</span><span class='p'>(</span><span class='nx'>d3</span><span class='p'>.</span><span class='nx'>scale</span><span class='p'>.</span><span class='nx'>category20</span><span class='p'>());</span>
+
+<span class='c1'>// draw legend</span>
+<span class='nx'>d3</span><span class='p'>.</span><span class='nx'>select</span><span class='p'>(</span><span class='s1'>&#39;#legend-box&#39;</span><span class='p'>)</span>
+  <span class='p'>.</span><span class='nx'>datum</span><span class='p'>(</span><span class='nx'>data</span><span class='p'>)</span>
+  <span class='p'>.</span><span class='nx'>call</span><span class='p'>(</span><span class='nx'>legend</span><span class='p'>);</span>
+</code></pre></div>
+<h2 id='data'>Data</h2>
+<div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>data</span> <span class='o'>=</span> <span class='p'>[</span>
+    <span class='p'>{</span>  
+      <span class='s2'>&quot;name&quot;</span><span class='o'>:</span> <span class='s2'>&quot;bananas&quot;</span>
+    <span class='p'>},</span>
+    <span class='p'>{</span>
+      <span class='s2'>&quot;name&quot;</span><span class='o'>:</span> <span class='s2'>&quot;kiwis&quot;</span>
+    <span class='p'>},</span>
+    <span class='p'>{</span>  
+      <span class='s2'>&quot;name&quot;</span><span class='o'>:</span> <span class='s2'>&quot;guavas&quot;</span>
+    <span class='p'>},</span>
+    <span class='p'>{</span>
+      <span class='s2'>&quot;name&quot;</span><span class='o'>:</span> <span class='s2'>&quot;mangos&quot;</span>
+    <span class='p'>},</span>
+    <span class='p'>{</span>  
+      <span class='s2'>&quot;name&quot;</span><span class='o'>:</span> <span class='s2'>&quot;grapefruit&quot;</span>
+    <span class='p'>},</span>
+    <span class='p'>{</span>
+      <span class='s2'>&quot;name&quot;</span><span class='o'>:</span> <span class='s2'>&quot;pears&quot;</span>
+    <span class='p'>},</span>
+    <span class='p'>{</span>  
+      <span class='s2'>&quot;name&quot;</span><span class='o'>:</span> <span class='s2'>&quot;bananas&quot;</span>
+    <span class='p'>},</span>
+    <span class='p'>{</span>
+      <span class='s2'>&quot;name&quot;</span><span class='o'>:</span> <span class='s2'>&quot;kiwis&quot;</span>
+    <span class='p'>},</span>
+    <span class='p'>{</span>  
+      <span class='s2'>&quot;name&quot;</span><span class='o'>:</span> <span class='s2'>&quot;guavas&quot;</span>
+    <span class='p'>}</span>
+  <span class='p'>];</span>
+</code></pre></div><script type='text/javascript'>
+var data = [
+    {  
+      "name": "bananas"
+    },
+    {
+      "name": "kiwis"
+    },
+    {  
+      "name": "guavas"
+    },
+    {
+      "name": "mangos"
+    },
+    {  
+      "name": "grapefruit"
+    },
+    {
+      "name": "pears"
+    },
+    {  
+      "name": "bananas"
+    },
+    {
+      "name": "kiwis"
+    },
+    {  
+      "name": "guavas"
+    }
+  ];
+
+
+var legend = Bridle.LegendBox()
+  .duration(1000)
+  .width(600)
+  .height(100)
+  .colors(d3.scale.category20());
+
+d3.select('#legend-box')
+  .datum(data)
+  .call(legend);
+</script>
+
+
+
+
+
+
+
+            <div class="footer">
+              <div class="contact">
+                <p>
+                  Copyright 2013 - Pearson Technology<br />
+                  Data Analytics and Visualisation Team<br />
+                  pearson.davteam@gmail.com
+                </p>
+              </div>
+              <div class="contact">
+                <p>
+                  Built by<br />
+                  <a href="https://twitter.com/hubert_rogers">Hubert Rogers</a> and <a href="https://twitter.com/radiodario">Dario Villanueva</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /container -->
+
+
+    </body>
+</html>

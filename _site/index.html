@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Bridle v0.0.1</title>
+        <meta name="viewport" content="width=device-width">
+
+        <!-- syntax highlighting CSS -->
+        <link rel="stylesheet" href="/css/syntax.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="/css/main.css">
+
+        <!-- CSS for the graphs -->
+        <link rel="stylesheet" href="/css/graphs.css">
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script src="https://raw.github.com/ptdavteam/bridle/develop/bridle.js" charset="utf-8"></script>
+
+    </head>
+    <body>
+
+        <div class="container">
+          <div class="site">
+            <div class="header">
+              <h1 class="title"><a href="/">Bridle</a></h1>
+              <a class="extra" href="/">Home</a>
+              <a class="extra" href="/examples/">Examples</a>
+              <a class="extra" href="https://github.com/ptdavteam/bridle">Fork Project on Github</a>
+            </div>
+     
+                <h3 id='what_is_bridle'>What is bridle?</h3>
+
+<p>Bridle is a repository of charts built following the <a href='bost.ocks.org/mike/chart/'>reusable chart paradigm</a>. The library is in its infancy, and still requires a bunch of work. We decided to still use d3 to invoke the chart, so that you can integrate them in your d3 workflow as seamlessly as possible:</p>
+<div id='line-chart'> </div>
+<h3 id='usage'>Usage</h3>
+
+<p>First of all you create a <em>chart generator</em> by invoking the function of the chart you want to use:</p>
+<div class='highlight'><pre><code class='javascript'>  <span class='kd'>var</span> <span class='nx'>chart</span> <span class='o'>=</span> <span class='nx'>Bridle</span><span class='p'>.</span><span class='nx'>LineChart</span><span class='p'>()</span>
+</code></pre></div>
+<p>This call returns a <em>chart generator function</em>, much like <code>d3.axis</code> returns an axis generator. In order to customise the chart, you can call the different getters/setters of the function:</p>
+<div class='highlight'><pre><code class='javascript'>  <span class='nx'>chart</span>
+    <span class='p'>.</span><span class='nx'>width</span><span class='p'>(</span><span class='mi'>900</span><span class='p'>)</span>
+    <span class='p'>.</span><span class='nx'>height</span><span class='p'>(</span><span class='mi'>400</span><span class='p'>)</span>
+    <span class='p'>.</span><span class='nx'>title</span><span class='p'>(</span><span class='s1'>&#39;Oranges are healthy&#39;</span><span class='p'>)</span>
+    <span class='p'>.</span><span class='nx'>yAxisTitle</span><span class='p'>(</span><span class='s1'>&#39;Vitamin C content&#39;</span><span class='p'>)</span>
+</code></pre></div>
+<p>Once you have setup your generator, just use d3 to render the chart:</p>
+<div class='highlight'><pre><code class='javascript'>  <span class='nx'>d3</span><span class='p'>.</span><span class='nx'>select</span><span class='p'>(</span><span class='s1'>&#39;#line-chart&#39;</span><span class='p'>)</span>
+    <span class='p'>.</span><span class='nx'>datum</span><span class='p'>(</span><span class='nx'>data</span><span class='p'>)</span> <span class='c1'>// pass it your data object</span>
+    <span class='p'>.</span><span class='nx'>call</span><span class='p'>(</span><span class='nx'>chart</span><span class='p'>)</span> <span class='c1'>// and have d3 call your chart generator</span>
+</code></pre></div>
+<p>For more information about why we use this paradigm, please refer to the article <a href='bost.ocks.org/mike/chart/'>Towards Reusable Charts</a> by d3.s creator, Michael Bostock.</p>
+
+<h3 id='whats_in_a_name'>What&#8217;s in a name?</h3>
+
+<p>At Pearson Technology we&#8217;re building a data analytics project called Palomino. Palomino is a coat colour in horses, and since this library is part of the Palomino project, we chose something horse related. The idea is that the bridle is what helps you direct a horse and connects you to it.</p>
+<script src='/javascripts/lineChart.js' type='text/javascript'>
+</script>
+
+            <div class="footer">
+              <div class="contact">
+                <p>
+                  Copyright 2013 - Pearson Technology<br />
+                  Data Analytics and Visualisation Team<br />
+                  pearson.davteam@gmail.com
+                </p>
+              </div>
+              <div class="contact">
+                <p>
+                  Built by<br />
+                  <a href="https://twitter.com/hubert_rogers">Hubert Rogers</a> and <a href="https://twitter.com/radiodario">Dario Villanueva</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /container -->
+
+
+    </body>
+</html>
