@@ -1,3 +1,5 @@
+// A stacked chart
+
 Bridle.StackedChart = function() {
 
   var margin = {top:50, bottom:30, left:100, right:100};
@@ -297,11 +299,11 @@ Bridle.StackedChart = function() {
                         '<span class="value">[' + formatterX(e.x) + ', ' + formatterY(e.y) + ']</span>' +
                         '</p>';
 
-          nvtooltip.show([left, top], content);
+          Bridle.tooltip.show([left, top], content);
         });
 
         dispatch.on('pointMouseout.tooltip', function(e) {
-          nvtooltip.cleanup();
+          Bridle.tooltip.cleanup();
         });       
 
 
