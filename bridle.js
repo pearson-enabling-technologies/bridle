@@ -1387,7 +1387,7 @@ Bridle.StackedChart = function() {
           .attr("d", function(d) {
             return area(d.values);
           });
-      gArea.exit()
+      gArea.exit().selectAll('path')
           // can't figure out why this transition stops the area being removed.
           .transition()
           .duration(duration)
