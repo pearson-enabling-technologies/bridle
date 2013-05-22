@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Bridle : Beautiful Javascript graphs and charts using D3.js" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Bridle</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/ptdavteam/bridle">View on GitHub</a>
+
+          <h1 id="project_title">Bridle</h1>
+          <h2 id="project_tagline">Beautiful Javascript graphs and charts using D3.js</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/ptdavteam/bridle/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/ptdavteam/bridle/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h3>What is bridle?</h3>
+
+<p>Bridle is a repository of charts built following the <a href="bost.ocks.org/mike/chart/">reusable chart paradigm</a>. The library is in its infancy, and still requires a bunch of work. We decided to still use d3 to invoke the chart, so that you can integrate them in your d3 workflow as seamlessly as possible</p>
+
+<p><img src="https://dl.dropboxusercontent.com/u/68514/bridle_line_chart_ex.png" alt="line chart example" title="line chart example"></p>
+
+<h3>Usage</h3>
+
+<p>First of all you create a <em>chart generator</em> by invoking the function of the chart you want to use:</p>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">chart</span> <span class="o">=</span> <span class="nx">Bridle</span><span class="p">.</span><span class="nx">LineChart</span><span class="p">()</span>
+</pre></div>
+
+<p>This call returns a <em>chart generator function</em>, much like <code>d3.axis</code> returns an axis generator. In order to customise the chart, you can call the different getters/setters of the function:</p>
+
+<div class="highlight"><pre><span class="nx">chart</span>
+  <span class="p">.</span><span class="nx">width</span><span class="p">(</span><span class="mi">900</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">height</span><span class="p">(</span><span class="mi">400</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">title</span><span class="p">(</span><span class="s1">'Oranges are healthy'</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">yAxisTitle</span><span class="p">(</span><span class="s1">'Vitamin C content'</span><span class="p">)</span>
+</pre></div>
+
+<p>and so on.</p>
+
+<h3>What's in a name?</h3>
+
+<p>At Pearson Technology we're building a data analytics project called Palomino. Palomino is a coat colour in horses, and since this library is part of the Palomino project, we chose something horse related. The idea is that the bridle is what helps you direct a horse and connects you to it.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Bridle maintained by <a href="https://github.com/ptdavteam">ptdavteam</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
