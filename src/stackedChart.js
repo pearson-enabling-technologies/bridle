@@ -215,7 +215,7 @@ Bridle.StackedChart = function() {
           })
           .transition()
           .duration(duration)
-          .attr("fill-opacity", 0.9)
+          .attr("fill-opacity", 0.8)
           .attr("d", function(d) {
             return area(d.values);
           });
