@@ -1,26 +1,80 @@
 (function () {
 
-
 // create global namespace
 var Bridle = window.Bridle || {};
 
-// add support for amd
-if (typeof window.define === "function" && window.define.amd) {
-  window.define("Bridle", ['jquery', 'd3'], function() {
-    return Bridle;
-  });
-// we're not using amd, then set up as 
-// global var
-} else {
-  window.Bridle = Bridle;
+/*****
+ * Really simple tooltip implementation, stolen from nvtooltip
+ *****/
+
+Bridle.tooltip = {
+
+  show: function(pos, content, gravity, dist) {
+    var container = $('<div class="bridle tooltip">');
+
+    gravity = gravity || 's';
+    dist = dist || 20;
+
+    container
+      .html(content)
+      .css({left: -1000, top: -1000, opacity: 0})
+      .appendTo('body');
+
+    var height = container.height() + parseInt(container.css('padding-top'))  + parseInt(container.css('padding-bottom')),
+        width = container.width() + parseInt(container.css('padding-left'))  + parseInt(container.css('padding-right')),
+        windowWidth = $(window).width(),
+        windowHeight = $(window).height(),
+        scrollTop = $('body').scrollTop(),  //TODO: also adjust horizontal scroll
+        left, top;
+
+
+    //TODO: implement other gravities
+    switch (gravity) {
+      case 'e':
+      case 'w':
+      case 'n':
+        left = pos[0] - (width / 2);
+        top = pos[1] + dist;
+        if (left < 0) left = 5;
+        if (left + width > windowWidth) left = windowWidth - width - 5;
+        if (scrollTop + windowHeight < top + height) top = pos[1] - height - dist;
+        break;
+      case 's':
+        left = pos[0] - (width / 2);
+        top = pos[1] - height - dist;
+        if (left < 0) left = 5;
+        if (left + width > windowWidth) left = windowWidth - width - 5;
+        if (scrollTop > top) top = pos[1] + dist;
+        break;
+    }
+
+    container
+        .css({
+          left: left,
+          top: top,
+          opacity: 1
+        });
+  },
+
+  cleanup : function() {
+    var tooltips = $('.bridle.tooltip');
+
+    // remove right away, but delay the show with css
+    tooltips.css({
+        'transition-delay': '0 !important',
+        '-moz-transition-delay': '0 !important',
+        '-webkit-transition-delay': '0 !important'
+    });
+
+    tooltips.css('opacity',0);
+
+    setTimeout(function() {
+      tooltips.remove()
+    }, 500);
+  }
+
 }
-
-
-
-// create global namespace
-var Bridle = window.Bridle || {};
-
-
+// The legend box
 Bridle.LegendBox = function() {
   var margin = {
     top: 5,
@@ -206,9 +260,7 @@ Bridle.LegendBox = function() {
 
   return chart;
 };
-// create global namespace
-var Bridle = window.Bridle || {};
-
+// a Bar chart
 Bridle.BarChart = function () {
 
     var mode = "stacked";
@@ -636,13 +688,13 @@ Bridle.BarChart = function () {
             '<span class="value">[' + formatterX(e.x) + ', ' + formatterY(e.y) + ']</span>' +
             '</p>';
 
-          nvtooltip.show([left, top], content);
+          Bridle.tooltip.show([left, top], content);
         });
 
         // listen for mouseout events within this module
         // hide tooltip
         dispatch.on('pointMouseout.tooltip', function(e) {
-          nvtooltip.cleanup();
+          Bridle.tooltip.cleanup();
         });
 
 
@@ -756,7 +808,6 @@ Bridle.BarChart = function () {
     return chart;
   };
   // create global namespace
-var Bridle = window.Bridle || {};
 
 Bridle.LineChart = function() {
 
@@ -1069,11 +1120,11 @@ Bridle.LineChart = function() {
                         '<span class="value">[' + formatterX(e.x) + ', ' + formatterY(e.y) + ']</span>' +
                         '</p>';
 
-          nvtooltip.show([left, top], content);
+          Bridle.tooltip.show([left, top], content);
         });
 
         dispatch.on('pointMouseout.tooltip', function(e) {
-          nvtooltip.cleanup();
+          Bridle.tooltip.cleanup();
         });    
 
     });
@@ -1193,6 +1244,8 @@ Bridle.LineChart = function() {
 
   return chart;
 };
+// A stacked chart
+
 Bridle.StackedChart = function() {
 
   var margin = {top:50, bottom:30, left:100, right:100};
@@ -1492,11 +1545,11 @@ Bridle.StackedChart = function() {
                         '<span class="value">[' + formatterX(e.x) + ', ' + formatterY(e.y) + ']</span>' +
                         '</p>';
 
-          nvtooltip.show([left, top], content);
+          Bridle.tooltip.show([left, top], content);
         });
 
         dispatch.on('pointMouseout.tooltip', function(e) {
-          nvtooltip.cleanup();
+          Bridle.tooltip.cleanup();
         });       
 
 
@@ -1601,9 +1654,7 @@ Bridle.StackedChart = function() {
   
   return chart;
 };
-// create global namespace
-var Bridle = window.Bridle || {};
-
+// Table generator
 Bridle.Table = function() {
 
   var numFormat = d3.format('.3f');
@@ -1813,4 +1864,15 @@ function merge(left,right,comparison)
 
   return chart;
 };
+// add support for amd
+if (typeof window.define === "function" && window.define.amd) {
+  window.define("Bridle", ['jquery', 'd3'], function() {
+    return Bridle;
+  });
+// we're not using amd, then set up as 
+// global var
+} else {
+  window.Bridle = Bridle;
+}
+
 })();
