@@ -17,7 +17,8 @@
     "grunt-concurrent": "~0.1.0",
     "matchdep": "~0.1.1",
     "grunt-mocha-phantomjs": "~0.2.7",
-    "uglify-js" : "~2.3.3"
+    "uglify-js" : "~2.3.3",
+    "sass" : "*"
   },
   "engines": {
     "node": ">=0.8.0"
