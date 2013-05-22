@@ -24,7 +24,7 @@ svg.bridle {
     fill: none;
     display: none; }
   svg.bridle .x.axis text {
-    font-size: 10 !important; }
+    font-size: 10px !important; }
   svg.bridle .y.axis line, svg.bridle .y.axis path {
     stroke: steelblue;
     stroke-width: 2;
