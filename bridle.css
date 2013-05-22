@@ -1,0 +1,116 @@
+svg.bridle {
+  /********************
+   * Legend
+   */
+  /********************
+   * Transitions
+   */
+ /*//
+// Tables
+// --------------------------------------------------
+//*/ }
+  svg.bridle text {
+    fill: #333; }
+  svg.bridle .x.axis line {
+    stroke: #fff;
+    stroke: lightgrey; }
+  svg.bridle .x.axis .minor {
+    stroke-opacity: .5;
+    stroke-width: 0.5px; }
+  svg.bridle .x.axis .major {
+    stroke-opacity: .5;
+    stroke-width: 1px; }
+  svg.bridle .x.axis path {
+    fill: none;
+    display: none; }
+  svg.bridle .x.axis text {
+    font-size: 10 !important; }
+  svg.bridle .y.axis line, svg.bridle .y.axis path {
+    stroke: steelblue;
+    stroke-width: 2;
+    fill: none; }
+  svg.bridle .y.axis .tick line {
+    stroke-width: 1; }
+  svg.bridle g.legend {
+    font: 13px sans-serif; }
+  svg.bridle .legendItem.disabled circle {
+    fill-opacity: 0; }
+  svg.bridle .layerrects.hover rect {
+    transition: opacity 250ms linear;
+    -moz-transition: opacity 250ms linear;
+    -webkit-transition: opacity 250ms linear;
+    transition-delay: 250ms;
+    -moz-transition-delay: 250ms;
+    -webkit-transition-delay: 250ms;
+    opacity: 1; }
+  svg.bridle .line.hover {
+    transition: stroke-width 250ms linear;
+    -moz-transition: stroke-width 250ms linear;
+    -webkit-transition: stroke-width 250ms linear;
+    transition-delay: 250ms;
+    -moz-transition-delay: 250ms;
+    -webkit-transition-delay: 250ms;
+    stroke-width: 4; }
+  svg.bridle .area.hover {
+    transition: opacity 250ms linear;
+    -moz-transition: opacity 250ms linear;
+    -webkit-transition: opacity 250ms linear;
+    transition-delay: 250ms;
+    -moz-transition-delay: 250ms;
+    -webkit-transition-delay: 250ms;
+    opacity: 1; }
+
+table.bridle {
+  /* Caret for sorting */ }
+  table.bridle tr {
+    text-align: left; }
+  table.bridle .asc {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    vertical-align: top;
+    border-bottom: 4px solid #000000;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+    content: "";
+    margin-left: 1em; }
+  table.bridle .desc {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    vertical-align: top;
+    border-top: 4px solid #000000;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+    content: "";
+    margin-left: 1em; }
+
+div.bridle.tooltip {
+  position: absolute;
+  background-color: white;
+  padding: 10px;
+  border: 1px solid #ddd;
+  font-family: Arial;
+  font-size: 13px;
+  transition: opacity 500ms linear;
+  -moz-transition: opacity 500ms linear;
+  -webkit-transition: opacity 500ms linear;
+  transition-delay: 500ms;
+  -moz-transition-delay: 500ms;
+  -webkit-transition-delay: 500ms;
+  -moz-box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.5);
+  box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.5);
+  -moz-border-radius: 15px;
+  border-radius: 15px; }
+  div.bridle.tooltip h3 {
+    margin: 0;
+    padding: 0;
+    text-align: center; }
+  div.bridle.tooltip p {
+    margin: 0;
+    padding: 0;
+    text-align: center; }
+  div.bridle.tooltip span {
+    display: inline-block;
+    margin: 2px 0; }

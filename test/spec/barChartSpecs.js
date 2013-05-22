@@ -343,7 +343,7 @@ describe("bar chart initial load", function() {
     cleanup();
 
     var time = 500;
-    this.bar = barChart()
+    this.bar = Bridle.BarChart()
       .duration(time)
       .width(800)
       .title("Apples or Oranges?")
@@ -354,7 +354,7 @@ describe("bar chart initial load", function() {
       left: 100,
       right: 200
     })
-      .legend(legendBox().height(100));
+      .legend(Bridle.LegendBox().height(100));
     d3.select(containerID)
       .datum(barData)
       .call(this.bar);
@@ -454,7 +454,7 @@ describe("bar chart - adding data", function() {
     cleanup();
 
     var time = 500;
-    this.bar = barChart()
+    this.bar = Bridle.BarChart()
       .duration(time)
       .width(800)
       .title("Apples or Oranges?")
@@ -465,7 +465,7 @@ describe("bar chart - adding data", function() {
       left: 100,
       right: 200
     })
-      .legend(legendBox().height(100));
+      .legend(Bridle.LegendBox().height(100));
     d3.select(containerID)
       .datum(barData)
       .call(this.bar);
@@ -521,7 +521,7 @@ describe("bar chart - legend click (hiding data)", function() {
     cleanup();
 
     var time = 500;
-    this.bar = barChart()
+    this.bar = Bridle.BarChart()
       .duration(time)
       .width(800)
       .title("Apples or Oranges?")
@@ -532,7 +532,7 @@ describe("bar chart - legend click (hiding data)", function() {
       left: 100,
       right: 200
     })
-      .legend(legendBox().height(100));
+      .legend(Bridle.LegendBox().height(100));
 
 
     d3.select(containerID)
@@ -577,7 +577,7 @@ describe("bar chart - legend mouseover", function() {
     cleanup();
 
     var time = 500;
-    this.bar = barChart()
+    this.bar = Bridle.BarChart()
       .duration(time)
       .width(800)
       .title("Apples or Oranges?")
@@ -588,7 +588,7 @@ describe("bar chart - legend mouseover", function() {
       left: 100,
       right: 200
     })
-      .legend(legendBox().height(100));
+      .legend(Bridle.LegendBox().height(100));
 
 
     d3.select(containerID)
@@ -630,7 +630,7 @@ describe("bar chart - rect mouseover", function() {
     cleanup();
 
     var time = 500;
-    this.bar = barChart()
+    this.bar = Bridle.BarChart()
       .duration(time)
       .width(800)
       .title("Apples or Oranges?")
@@ -641,7 +641,7 @@ describe("bar chart - rect mouseover", function() {
       left: 100,
       right: 200
     })
-      .legend(legendBox().height(100));
+      .legend(Bridle.LegendBox().height(100));
 
 
     d3.select(containerID)
@@ -687,7 +687,7 @@ describe("bar chart - stacked to grouped", function() {
     $("body").append('<div id="switch"><label><input type="radio" name="mode" value="grouped"> Grouped</label><label><input type="radio" name="mode" value="stacked" checked> Stacked</label></div>');  
 
     var time = 100;
-    this.bar = barChart()
+    this.bar = Bridle.BarChart()
       .duration(time)
       .width(800)
       .title("Apples or Oranges?")
@@ -698,7 +698,7 @@ describe("bar chart - stacked to grouped", function() {
       left: 100,
       right: 200
     })
-      .legend(legendBox().height(100));
+      .legend(Bridle.LegendBox().height(100));
 
 
     d3.select(containerID)

@@ -1,6 +1,4 @@
-// create global namespace
-var Bridle = window.Bridle || {};
-
+// a Bar chart
 Bridle.BarChart = function () {
 
     var mode = "stacked";
@@ -428,13 +426,13 @@ Bridle.BarChart = function () {
             '<span class="value">[' + formatterX(e.x) + ', ' + formatterY(e.y) + ']</span>' +
             '</p>';
 
-          nvtooltip.show([left, top], content);
+          Bridle.tooltip.show([left, top], content);
         });
 
         // listen for mouseout events within this module
         // hide tooltip
         dispatch.on('pointMouseout.tooltip', function(e) {
-          nvtooltip.cleanup();
+          Bridle.tooltip.cleanup();
         });
 
 

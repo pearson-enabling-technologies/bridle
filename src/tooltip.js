@@ -1,13 +1,11 @@
 /*****
- * Really simple tooltip implementation.
- * I may build upon it, but really trying to keep it minimal.
+ * Really simple tooltip implementation, stolen from nvtooltip
  *****/
 
-(function($) {
-  var nvtooltip = window.nvtooltip = {};
+Bridle.tooltip = {
 
-  nvtooltip.show = function(pos, content, gravity, dist) {
-    var container = $('<div class="nvtooltip">');
+  show: function(pos, content, gravity, dist) {
+    var container = $('<div class="bridle tooltip">');
 
     gravity = gravity || 's';
     dist = dist || 20;
@@ -51,10 +49,10 @@
           top: top,
           opacity: 1
         });
-  };
+  },
 
-  nvtooltip.cleanup = function() {
-    var tooltips = $('.nvtooltip');
+  cleanup : function() {
+    var tooltips = $('.bridle.tooltip');
 
     // remove right away, but delay the show with css
     tooltips.css({
@@ -68,6 +66,6 @@
     setTimeout(function() {
       tooltips.remove()
     }, 500);
-  };
+  }
 
-})(jQuery);
+}
