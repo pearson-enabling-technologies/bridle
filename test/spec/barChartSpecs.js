@@ -550,11 +550,10 @@ describe("bar chart - legend click (hiding data)", function() {
     barData2[3].disabled.should.equal(true);
   });
 
-  it('removes disabled series bars', function() {
-    setTimeout(function() { 
+  it('removes disabled series bars', function(done) {
       var layerRects = d3.selectAll('g.layerrects');
       layerRects[0].length.should.equal(barData2.length - 1)
-    }, 1000)
+      done()
   });
 
 

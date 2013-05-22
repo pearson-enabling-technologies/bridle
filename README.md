@@ -1,6 +1,6 @@
 Bridle 
 ======
-version 0.0.2
+version 0.0.3
 
 A [d3](https://github.com/mbostock/d3) reusable chart library. Bridle v0.0.1 includes a line chart, bar chart (with stacked or grouped modes), a stacked area chart and a sortable html table generator. Each chart works with an external legend module, which allows you to hide data series.
 
@@ -14,11 +14,17 @@ bower install bridle
 Then you can require it with require.js as you would normally do with any other AMD package
 
 ### Dependencies
-Bridle depends on d3.js and jquery. Make sure they are loaded before you load bridle
+Bridle depends on d3.js and jquery. Make sure they are loaded before you load bridle.
 
+### CSS
+Bridle comes with a minimal set of css classes to format the tooltips, and do some transitions. Load `bridle.css` on the head of your document to use.
 
 ## Usage
+
+
 See the [Examples](http://ptdavteam.github.io/bridle/examples/) for more usage examples.
+
+
 
 ![line chart example](https://dl.dropboxusercontent.com/u/68514/bridle_line_chart_ex.png "line chart example")
 
@@ -82,17 +88,32 @@ d3.select('#line-chart')
   .call(line);
 ```
 
-
 ## Development
 
-In order to develop you will need to run `npm install` on the local directory. This will install all the dependencies listed on `package.json`. 
+In order to develop you will need to run `npm install` on the local directory. This will install the dependencies listed on `package.json`. 
+
+To compile the `scss` file you'll need sass - just install it by running 
+```
+$ gem install sass
+```
+
+now you can type `make` to build the js files and the css version of the library
 
 #### Makefile
 The concatenation happens on the makefile. If you're adding a new module, or a new visualisation, add it between `legendbox.js` and `footer.js`, then run `make`. This will concatenate the files inside `src` and create a new `bridle.js` and `bridle.min.js`
 
 
 #### Running tests
-There is a gruntfile that was used for development - 
+At the moment the test are broken with mocha-phantomjs, you'll have to start a local server, i.e. with `twistd`:
+
+```
+$ cd bridle
+$ twistd web --path . --port 8080
+$ open http://localhost:8080/test
+```
+that will open a browser (if you're using mac os x) and run the mocha tests on the browser. 
+
+We're working to fix the headless tests asap.
 
 ## License
 
