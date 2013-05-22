@@ -1,5 +1,16 @@
 (function() {
+
+  console.log("are we on phantom?", window.mochaPhantomJS, runner)
+
+  if (window.mochaPhantomJS) { 
+    console.log('hey')
+    mochaPhantomJS.run(); 
+    return;
+  } 
+
   var runner = mocha.run().globals(['LiveReload', 'jQuery*', '__screenCapturePageContext__']);
+
+  
 
   if(!window.PHANTOMJS) return;
 

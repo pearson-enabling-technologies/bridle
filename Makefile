@@ -30,7 +30,7 @@ bridle.js: Makefile
 
 bridle.css: Makefile
 					rm -f $@
-					sass bridle.scss:$@
+					sass $(filter %.scss,$^):$@
 
 clean:
 	rm -rf bridle.js bridle.min.js bridle.css

@@ -96,8 +96,6 @@ Bridle.LineChart = function() {
       // set up the scaffolding
       var svg = d3.select(this).selectAll("svg").data([data]);
       var gEnter = svg.enter().append("svg").attr("class", "bridle").append("g");
-      gEnter.append("g").attr("class", "lines");
-      gEnter.append("g").attr("class", "points");
       gEnter.append("g").attr("class", "x axis");
       gEnter.append("g").attr("class", "y axis").append("text")
         .attr("transform", "rotate(-90)")
@@ -113,7 +111,8 @@ Bridle.LineChart = function() {
         .attr("class", "legend")
         .attr("transform", "translate(" + (width - margin.left - margin.right + 20) + "," + 0 + ")")
         .style("font-size", "12px");
-
+      gEnter.append("g").attr("class", "lines");
+      gEnter.append("g").attr("class", "points");
 
       // update the outer dimensions
       svg.attr("width", width)
