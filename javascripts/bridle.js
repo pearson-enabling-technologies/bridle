@@ -1434,8 +1434,6 @@ Bridle.StackedChart = function() {
         .remove();
 
 
-
-
       gPoints.enter()
         .append("g")
         .attr("class", "seriespoints");

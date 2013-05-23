@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Bridle v0.0.1
+title: Bridle JavaScript Charting Library
 ---
 
 ### What is bridle?
