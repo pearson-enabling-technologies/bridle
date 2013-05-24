@@ -4,5 +4,11 @@
   "dependencies": {
     "d3": "3.1.5",
     "jquery": "*"
-  }
+  },
+  "main": "bridle.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ]
 }
