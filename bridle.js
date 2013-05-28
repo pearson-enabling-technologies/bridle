@@ -290,7 +290,9 @@ Bridle.BarChart = function () {
     var title = 'Chart Title';
     var yAxisTitle = 'Axis Title';
     var duration = 1000;
-    var legend = Bridle.LegendBox().nameAccessor(nameValue);
+    var legend = Bridle.LegendBox().nameAccessor(function(d) {
+      return nameValue
+    });
 
     var xScale = d3.scale.ordinal()
     var xAxis = d3.svg.axis()
@@ -839,14 +841,18 @@ Bridle.LineChart = function() {
   xAxis.tickSubdivide(true); // get/set?
   var yAxis = d3.svg.axis().scale(yScale).orient("left");
   var colors = d3.scale.category10();
-  var legend = Bridle.LegendBox().nameAccessor(nameValue);
+  var legend = Bridle.LegendBox().nameAccessor(function(d) {
+    return nameValue(d)
+  });
   var dispatch = d3.dispatch('showTooltip', 'hideTooltip', "pointMouseover", "pointMouseout");
 
 
   function chart(selection) {
     selection.each(function(rawData) {
       var containerID = this;
-      data = rawData.filter(function(d) { return !d.disabled })
+      data = rawData.filter(function(d) {
+        return !d.disabled
+      })
 
       // get max and min date(s)
       var maxDates = data.map(function(d) {
@@ -861,7 +867,8 @@ Bridle.LineChart = function() {
       });
 
 
-      xScale.domain([d3.min(minDates), d3.max(maxDates)])
+      xScale
+        .domain([d3.min(minDates), d3.max(maxDates)])
         .range([0, width - margin.left - margin.right]);
 
 
@@ -921,7 +928,6 @@ Bridle.LineChart = function() {
         .attr("transform", "translate(" + (width - margin.left - margin.right + 20) + "," + 0 + ")")
         .style("font-size", "12px");
       gEnter.append("g").attr("class", "lines");
-      gEnter.append("g").attr("class", "points");
 
       // update the outer dimensions
       svg.attr("width", width)
@@ -931,69 +937,51 @@ Bridle.LineChart = function() {
       var g = svg.select("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-      // reasign the data to trigger addition/deletion
-      var gLine = g.select('.lines').selectAll('.line')
-          .data(function(d) {
-          return d
-        },function(d) {
-          return nameValue(d)
-        } )
-          .classed('hover', function(d) { 
-            return d.hover })     
+      // reasign the data to trigger addition/deletion and add
+      // a series group per series in the data
+      var gSeries = g.select('.lines').selectAll('.series')
+        .data(function(d) {
+            return d
+          }, function(d) {
+            return nameValue(d)
+          })
+        .classed('hover', function(d) {
+          return d.hover
+        })
 
-      gLine.exit()
-          // can't figure out why this transition seems to stop the line being removed.
-          // .transition()
-          // .duration(duration)
-          // .style('stroke-opacity', 1e-6)
-          .remove();
+      gSeries.exit()
+        .transition()
+        .duration(duration)
+        .style('opacity', 0)
+        .remove()
 
 
-      var gLineEnter = gLine.enter();
+      var gSeriesEnter = gSeries.enter()
+          .append('g')
+          .attr('class', 'series');
+      
       // add paths
-      gLineEnter.append("path")
-        .attr("class", "line")
-        .attr("d", function(d) {
-        return line(d.values);
-      })
+      gSeriesEnter
+        .append("path")
+          .attr("class", "line")
+          .attr("stroke-opacity", 0)
+          .attr("d", function(d) {
+            return line(d.values);
+          })
 
-      // reasign the data to trigger points
-      var gPoints = g.select('.points').selectAll('g.seriespoints')
+      // add points
+      var points = gSeriesEnter.append("g")
+        .attr("class", "circles")
+        .selectAll('circle')
         .data(function(d) {
-        return d
-      });
+          d.values.forEach(function(v) {
+            v.name = nameValue(d)
+          });
+          return d.values
+        })
 
-      gPoints.exit()
-          .transition()
-          .duration(duration)
-          .style('r', 0)
-          .style('opacity', 1e-6)      
-          .remove();
-
-      var gPointsEnter = gPoints.enter();
-
-
-
-      // update entering points
-      var gCircles = gPointsEnter.append("g").attr("class", "seriespoints")
-        .selectAll('g.circle')
-        .data(function(d) {
-        d.values.forEach(function(v) {
-          v.name = nameValue(d)
-        });
-        return d.values
-      })
-
-      // update chilling points
-      gPoints.selectAll('g.circle')
-        .data(function(d) {
-        d.values.forEach(function(v) {
-          v.name = nameValue(d)
-        });
-        return d.values
-      })
-
-      var circlesEnter = gCircles.enter().append("g").attr("class", "circle");
+      // add the points
+      var circlesEnter = points.enter();
 
       circlesEnter.append('circle')
         .attr("opacity", 0.1)
@@ -1006,50 +994,54 @@ Bridle.LineChart = function() {
         return yScale(yValue(d))
       })
         .on('mouseover', function(d, i, j) {
-          dispatch.pointMouseover({
-            x: xValue(d),
-            y: yValue(d),
-            series: d.name,
-            pos: [xScale(xValue(d)), yScale(yValue(d))],
-            pointIndex: i,
-            seriesIndex: j
-          });
-        })
-        .on('mouseout', function(d) {
-          dispatch.pointMouseout({
-            // point: d,
-            // series: data[d.series],
-            // pointIndex: d.point,
-            // seriesIndex: d.series
-          });
+        dispatch.pointMouseover({
+          x: xValue(d),
+          y: yValue(d),
+          series: d.name,
+          pos: [xScale(xValue(d)), yScale(yValue(d))],
+          pointIndex: i,
+          seriesIndex: j
         });
+      })
+        .on('mouseout', function(d) {
+        dispatch.pointMouseout({
+          // point: d,
+          // series: data[d.series],
+          // pointIndex: d.point,
+          // seriesIndex: d.series
+        });
+      });
 
+      circles.exit()
+        .attr('fill-opacity', 0)
+        .attr('r', 0)
+        .remove();
 
       // update the lines
       g.selectAll('path.line')
         .attr("stroke", function(d, i) {
-        return colors(nameValue(d));
-      })
+          return colors(nameValue(d));
+        })
         .attr("fill", "none")
         .transition()
         .duration(duration)
         .attr("d", function(d) {
-        return line(d.values);
-      })
+          return line(d.values);
+        })
+        .attr("stroke-opacity", 1)
         .attr("stroke-width", 1.5);
 
       // update the circles
-      g.selectAll('g.circle')
-        .select('circle')
+      g.selectAll('circle.seriespoint')
         .transition()
         .duration(duration)
         .attr('r', 5)
         .attr('cx', function(d) {
-        return xScale(xValue(d))
-      })
+          return xScale(xValue(d))
+        })
         .attr('cy', function(d) {
-        return yScale(yValue(d))
-      });
+          return yScale(yValue(d))
+        });
 
       // update the title
       g.select("text.chartTitle")
@@ -1067,7 +1059,7 @@ Bridle.LineChart = function() {
         .duration(duration)
         .attr("transform", "translate(-25,0)")
 
-        .call(yAxis)
+      .call(yAxis)
 
       g.select(".y.axis.label")
         .attr("y", -45)
@@ -1077,54 +1069,56 @@ Bridle.LineChart = function() {
 
 
 
-        if (legend.numData() != rawData.length) {
-          // update the legend
-          g.select('.legend')
-            .datum(data)
-            .call(legend);
+      if (legend.numData() != rawData.length) {
+        // update the legend
+        g.select('.legend')
+          .datum(data)
+          .call(legend);
+      }
+
+      legend.dispatch.on('legendClick', function(d, i) {
+        d.disabled = !d.disabled;
+
+        if (!data.filter(function(d) {
+          return !d.disabled
+        }).length) {
+          console.log("what does this do?")
+          data.forEach(function(d) {
+            d.disabled = false;
+          });
         }
-
-        legend.dispatch.on('legendClick', function(d, i) {
-          d.disabled = !d.disabled;
-
-          if (!data.filter(function(d) { return !d.disabled }).length) {
-            console.log("what does this do?")
-            data.forEach(function(d) {
-              d.disabled = false;
-            });
-          }
-          selection.call(chart)
-        });
+        selection.call(chart)
+      });
 
 
-        legend.dispatch.on('legendMouseover', function(d, i) {
-          d.hover = true;
-          selection.call(chart)
-        });
+      legend.dispatch.on('legendMouseover', function(d, i) {
+        d.hover = true;
+        selection.call(chart)
+      });
 
-        legend.dispatch.on('legendMouseout', function(d, i) {
-          d.hover = false;
-          selection.call(chart)
-        });
+      legend.dispatch.on('legendMouseout', function(d, i) {
+        d.hover = false;
+        selection.call(chart)
+      });
 
-        dispatch.on('pointMouseover.tooltip', function(e) {
-          var offset = $(containerID).offset(), // { left: 0, top: 0 }
-              left = e.pos[0] + offset.left + margin.left,
-              top = e.pos[1] + offset.top + margin.top,
-              formatterX = d3.time.format("%Y-%m-%d")
-              formatterY = d3.format(".02f");
+      dispatch.on('pointMouseover.tooltip', function(e) {
+        var offset = $(containerID).offset(), // { left: 0, top: 0 }
+          left = e.pos[0] + offset.left + margin.left,
+          top = e.pos[1] + offset.top + margin.top,
+          formatterX = d3.time.format("%Y-%m-%d")
+          formatterY = d3.format(".02f");
 
-          var content = '<h3>' + e.series + '</h3>' +
-                        '<p>' +
-                        '<span class="value">[' + formatterX(e.x) + ', ' + formatterY(e.y) + ']</span>' +
-                        '</p>';
+        var content = '<h3>' + e.series + '</h3>' +
+          '<p>' +
+          '<span class="value">[' + formatterX(e.x) + ', ' + formatterY(e.y) + ']</span>' +
+          '</p>';
 
-          Bridle.tooltip.show([left, top], content);
-        });
+        Bridle.tooltip.show([left, top], content);
+      });
 
-        dispatch.on('pointMouseout.tooltip', function(e) {
-          Bridle.tooltip.cleanup();
-        });    
+      dispatch.on('pointMouseout.tooltip', function(e) {
+        Bridle.tooltip.cleanup();
+      });
 
     });
 
@@ -1242,8 +1236,7 @@ Bridle.LineChart = function() {
   };
 
   return chart;
-};
-// A stacked chart
+};// A stacked chart
 
 Bridle.StackedChart = function() {
 
@@ -1280,7 +1273,7 @@ Bridle.StackedChart = function() {
   var yAxisTitle = 'Axis Title';
   var duration = 1000;
   var legend = Bridle.LegendBox().nameAccessor(function(d) {
-    return d.name
+    return nameValue(d)
   });
   var dispatch = d3.dispatch('showTooltip', 'hideTooltip', "pointMouseover", "pointMouseout");
   // x accessor
@@ -1313,8 +1306,8 @@ Bridle.StackedChart = function() {
         .offset(offset)
         .order(order)
         .values(function(d) {
-        return d.values
-      })
+          return d.values
+        })
         .x(xValue)
         .y(yValue)
       (data); // we pass the data as context
@@ -1374,7 +1367,6 @@ Bridle.StackedChart = function() {
         .attr("transform", "translate(" + (width - margin.left - margin.right + 20) + "," + 0 + ")")
         .style("font-size", "12px");
       gEnter.append("g").attr("class", "areas");
-      gEnter.append("g").attr("class", "points");
 
 
       // update the outer dimensions
@@ -1386,62 +1378,37 @@ Bridle.StackedChart = function() {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
       // reasign the data to trigger addition/deletion
-      var gArea = g.select('.areas').selectAll('.area')
+      var gArea = g.select('.areas').selectAll('g.area')
         .data(function(d) {
-        return d
-      }, function(d) {
-        return nameValue(d)
-      })
+          return d
+        }, function(d) {
+          return nameValue(d)
+        })
         .classed('hover', function(d) {
-        return d.hover
-      })
+          return d.hover
+        })
 
-      var gAreaEnter = gArea.enter();
-      // add paths
+      // when the area enters
+      var gAreaEnter = gArea.enter()
+        .insert('g')
+        .attr('class', 'area');
+      // add the paths
       gAreaEnter.append("path")
         .attr("class", "area")
         .attr("fill", function(d, i) {
-          return colors(nameValue(d));
-        })
+        return colors(nameValue(d));
+      })
         .attr("fill-opacity", 0)
         .attr("d", function(d) {
-          return area(d.values);
-        });
-
-      gArea.exit()
-      // can't figure out why this transition stops the area being removed.
-      // .transition()
-      // .duration(duration)
-      // .style('stroke-opacity', 1e-6)
-      // .style('fill-opacity', 1e-6)
-      .remove();
-
-
-      // reasign the data to trigger points
-      var gPoints = g.select('.points').selectAll('g.seriespoints')
-        .data(function(d) {
-        return d
+        return area(d.values);
       });
 
-
-      var gPointsExit = gPoints.exit()
-        
-      console.log(gPointsExit)
-
-      gPointsExit.transition()
-        .duration(duration)
-        .attr('fill-opacity', 0)
-        .remove();
-
-
-      gPoints.enter()
-        .append("g")
-        .attr("class", "seriespoints");
-
-
-
-      // update entering points
-      var gCircles = g.selectAll('g.seriespoints').selectAll('circle.seriespoint')
+      // and add a group of points and 
+      // assign data to trigger circle
+      // addition
+      var circles = gAreaEnter.append("g")
+        .attr('class', 'seriespoints')
+        .selectAll('circle')
         .data(function(d) {
           d.values.forEach(function(v) {
             v.name = nameValue(d)
@@ -1449,7 +1416,7 @@ Bridle.StackedChart = function() {
           return d.values
         })
 
-      var circlesEnter = gCircles.enter().append('circle')
+       var circlesEnter = circles.enter().append('circle')
         .attr("fill-opacity", 0.1)
         .attr("class", "seriespoint")
         .attr('r', 0)
@@ -1479,13 +1446,23 @@ Bridle.StackedChart = function() {
         });
 
       // exiting cirgles
-      gCircles.exit()
+      var gAreaExit = gArea.exit()
         .transition()
         .duration(duration)
-        .attr('fill-opacity', 1e-6)
-        .attr('r', 0)
-        .remove()
+        .style('opacity', 0)
+        .remove();
+        
 
+      circles.exit()
+        .attr('fill-opacity', 0)
+        .attr('r', 0)
+        .remove();
+
+
+      gAreaExit.selectAll('path')
+        .attr('stroke-opacity', 0)
+        .attr('fill-opacity', 0)
+        .remove();
 
 
       // update the areas
@@ -1528,7 +1505,7 @@ Bridle.StackedChart = function() {
         .duration(duration)
         .attr("transform", "translate(-25,0)")
 
-        .call(yAxis)
+      .call(yAxis)
 
       g.select(".y.axis.label")
         .attr("y", -45)
@@ -1685,7 +1662,7 @@ Bridle.StackedChart = function() {
   };
 
   return chart;
-}; // Table generator
+};// Table generator
 Bridle.Table = function() {
 
   var numFormat = d3.format('.3f');
@@ -1897,7 +1874,7 @@ function merge(left,right,comparison)
 };
 // add support for amd
 if (typeof window.define === "function" && window.define.amd) {
-  window.define("Bridle", ['jquery', 'd3'], function() {
+  window.define("bridle", ['jquery', 'd3'], function() {
     return Bridle;
   });
 // we're not using amd, then set up as 

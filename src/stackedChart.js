@@ -35,7 +35,7 @@ Bridle.StackedChart = function() {
   var yAxisTitle = 'Axis Title';
   var duration = 1000;
   var legend = Bridle.LegendBox().nameAccessor(function(d) {
-    return d.name
+    return nameValue(d)
   });
   var dispatch = d3.dispatch('showTooltip', 'hideTooltip', "pointMouseover", "pointMouseout");
   // x accessor
@@ -68,8 +68,8 @@ Bridle.StackedChart = function() {
         .offset(offset)
         .order(order)
         .values(function(d) {
-        return d.values
-      })
+          return d.values
+        })
         .x(xValue)
         .y(yValue)
       (data); // we pass the data as context
@@ -129,7 +129,6 @@ Bridle.StackedChart = function() {
         .attr("transform", "translate(" + (width - margin.left - margin.right + 20) + "," + 0 + ")")
         .style("font-size", "12px");
       gEnter.append("g").attr("class", "areas");
-      gEnter.append("g").attr("class", "points");
 
 
       // update the outer dimensions
@@ -141,62 +140,37 @@ Bridle.StackedChart = function() {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
       // reasign the data to trigger addition/deletion
-      var gArea = g.select('.areas').selectAll('.area')
+      var gArea = g.select('.areas').selectAll('g.area')
         .data(function(d) {
-        return d
-      }, function(d) {
-        return nameValue(d)
-      })
+          return d
+        }, function(d) {
+          return nameValue(d)
+        })
         .classed('hover', function(d) {
-        return d.hover
-      })
+          return d.hover
+        })
 
-      var gAreaEnter = gArea.enter();
-      // add paths
+      // when the area enters
+      var gAreaEnter = gArea.enter()
+        .insert('g')
+        .attr('class', 'area');
+      // add the paths
       gAreaEnter.append("path")
         .attr("class", "area")
         .attr("fill", function(d, i) {
-          return colors(nameValue(d));
-        })
+        return colors(nameValue(d));
+      })
         .attr("fill-opacity", 0)
         .attr("d", function(d) {
-          return area(d.values);
-        });
-
-      gArea.exit()
-      // can't figure out why this transition stops the area being removed.
-      // .transition()
-      // .duration(duration)
-      // .style('stroke-opacity', 1e-6)
-      // .style('fill-opacity', 1e-6)
-      .remove();
-
-
-      // reasign the data to trigger points
-      var gPoints = g.select('.points').selectAll('g.seriespoints')
-        .data(function(d) {
-        return d
+        return area(d.values);
       });
 
-
-      var gPointsExit = gPoints.exit()
-        
-      console.log(gPointsExit)
-
-      gPointsExit.transition()
-        .duration(duration)
-        .attr('fill-opacity', 0)
-        .remove();
-
-
-      gPoints.enter()
-        .append("g")
-        .attr("class", "seriespoints");
-
-
-
-      // update entering points
-      var gCircles = g.selectAll('g.seriespoints').selectAll('circle.seriespoint')
+      // and add a group of points and 
+      // assign data to trigger circle
+      // addition
+      var circles = gAreaEnter.append("g")
+        .attr('class', 'seriespoints')
+        .selectAll('circle')
         .data(function(d) {
           d.values.forEach(function(v) {
             v.name = nameValue(d)
@@ -204,7 +178,7 @@ Bridle.StackedChart = function() {
           return d.values
         })
 
-      var circlesEnter = gCircles.enter().append('circle')
+       var circlesEnter = circles.enter().append('circle')
         .attr("fill-opacity", 0.1)
         .attr("class", "seriespoint")
         .attr('r', 0)
@@ -234,13 +208,23 @@ Bridle.StackedChart = function() {
         });
 
       // exiting cirgles
-      gCircles.exit()
+      var gAreaExit = gArea.exit()
         .transition()
         .duration(duration)
-        .attr('fill-opacity', 1e-6)
-        .attr('r', 0)
-        .remove()
+        .style('opacity', 0)
+        .remove();
+        
 
+      circles.exit()
+        .attr('fill-opacity', 0)
+        .attr('r', 0)
+        .remove();
+
+
+      gAreaExit.selectAll('path')
+        .attr('stroke-opacity', 0)
+        .attr('fill-opacity', 0)
+        .remove();
 
 
       // update the areas
@@ -283,7 +267,7 @@ Bridle.StackedChart = function() {
         .duration(duration)
         .attr("transform", "translate(-25,0)")
 
-        .call(yAxis)
+      .call(yAxis)
 
       g.select(".y.axis.label")
         .attr("y", -45)
@@ -440,4 +424,4 @@ Bridle.StackedChart = function() {
   };
 
   return chart;
-}; 
+};
