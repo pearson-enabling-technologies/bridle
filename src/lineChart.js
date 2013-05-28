@@ -201,6 +201,10 @@ Bridle.LineChart = function() {
         });
       });
 
+      circles.exit()
+        .attr('fill-opacity', 0)
+        .attr('r', 0)
+        .remove();
 
       // update the lines
       g.selectAll('path.line')
