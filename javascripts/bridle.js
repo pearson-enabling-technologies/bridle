@@ -970,7 +970,7 @@ Bridle.LineChart = function() {
           })
 
       // add points
-      var points = gSeriesEnter.append("g")
+      var circles = gSeriesEnter.append("g")
         .attr("class", "circles")
         .selectAll('circle')
         .data(function(d) {
@@ -981,7 +981,7 @@ Bridle.LineChart = function() {
         })
 
       // add the points
-      var circlesEnter = points.enter();
+      var circlesEnter = circles.enter();
 
       circlesEnter.append('circle')
         .attr("opacity", 0.1)
