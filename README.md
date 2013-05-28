@@ -1,8 +1,8 @@
 Bridle 
 ======
-version 0.0.7
+version 0.0.8
 
-A [d3](https://github.com/mbostock/d3) reusable chart library. Bridle v0.0.1 includes a line chart, bar chart (with stacked or grouped modes), a stacked area chart and a sortable html table generator. Each chart works with an external legend module, which allows you to hide data series.
+A [d3](https://github.com/mbostock/d3) reusable chart library. Bridle v0.0.8 includes a line chart, bar chart (with stacked or grouped modes), a stacked area chart and a sortable html table generator. Each chart works with an external legend module, which allows you to hide data series.
 
 ## Installation
 
