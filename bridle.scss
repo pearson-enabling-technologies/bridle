@@ -54,41 +54,43 @@ svg.bridle {
    * Transitions
    */
 
-  .layerrects.hover rect {
-    transition: opacity 250ms linear;
-    -moz-transition: opacity 250ms linear;
-    -webkit-transition: opacity 250ms linear;
+  .hover {
 
-    transition-delay: 250ms;
-    -moz-transition-delay: 250ms;
-    -webkit-transition-delay: 250ms;
+    .layerrects rect {
+      transition: opacity 250ms linear;
+      -moz-transition: opacity 250ms linear;
+      -webkit-transition: opacity 250ms linear;
 
-    opacity: 1;
+      transition-delay: 250ms;
+      -moz-transition-delay: 250ms;
+      -webkit-transition-delay: 250ms;
+
+      opacity: 1;
+    }
+    .line {
+      transition: stroke-width 250ms linear;
+      -moz-transition: stroke-width 250ms linear;
+      -webkit-transition: stroke-width 250ms linear;
+
+      transition-delay: 250ms;
+      -moz-transition-delay: 250ms;
+      -webkit-transition-delay: 250ms;
+
+      stroke-width: 4;
+    }
+
+    .area {
+      transition: opacity 250ms linear;
+      -moz-transition: opacity 250ms linear;
+      -webkit-transition: opacity 250ms linear;
+
+      transition-delay: 250ms;
+      -moz-transition-delay: 250ms;
+      -webkit-transition-delay: 250ms;
+
+      opacity: 1;
+    }
   }
-  .line.hover {
-    transition: stroke-width 250ms linear;
-    -moz-transition: stroke-width 250ms linear;
-    -webkit-transition: stroke-width 250ms linear;
-
-    transition-delay: 250ms;
-    -moz-transition-delay: 250ms;
-    -webkit-transition-delay: 250ms;
-
-    stroke-width: 4;
-  }
-
-  .area.hover {
-    transition: opacity 250ms linear;
-    -moz-transition: opacity 250ms linear;
-    -webkit-transition: opacity 250ms linear;
-
-    transition-delay: 250ms;
-    -moz-transition-delay: 250ms;
-    -webkit-transition-delay: 250ms;
-
-    opacity: 1;
-  }
-
  
   /*//
   // Tables
