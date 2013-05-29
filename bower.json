@@ -25,7 +25,7 @@
       "name" : "Hubert Rogers",
       "email" : "hubert.rogers@gmail.com"
     }
-  ]
+  ],
   "repository" : {
     "type" : "git",
     "url" : "git@github.com:ptdavteam/bridle.git"
