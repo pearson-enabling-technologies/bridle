@@ -1,4 +1,4 @@
-// create global namespace
+/* A Line Chart */
 
 Bridle.LineChart = function() {
 
@@ -39,7 +39,7 @@ Bridle.LineChart = function() {
   function chart(selection) {
     selection.each(function(rawData) {
       var containerID = this;
-      data = rawData.filter(function(d) {
+      var data = rawData.filter(function(d) {
         return !d.disabled
       })
 
@@ -128,7 +128,7 @@ Bridle.LineChart = function() {
 
       // reasign the data to trigger addition/deletion and add
       // a series group per series in the data
-      var gSeries = g.select('.lines').selectAll('.series')
+      var gSeries = svg.select('.lines').selectAll('g.series')
         .data(function(d) {
             return d
           }, function(d) {
@@ -147,28 +147,42 @@ Bridle.LineChart = function() {
 
       var gSeriesEnter = gSeries.enter()
           .append('g')
-          .attr('class', 'series');
+          .attr('class', 'series')
+          .attr('id', function(d) {
+            return 'series_' + nameValue(d);
+          });
       
       // add paths
-      gSeriesEnter
-        .append("path")
+      var linePaths = gSeries.selectAll('path.line')
+        .data(function(d) { return [d.values]})
+      
+      linePaths.enter().append("path")
           .attr("class", "line")
           .attr("stroke-opacity", 0)
           .attr("d", function(d) {
-            return line(d.values);
+            return line(d);
           })
 
       // add points
-      var circles = gSeriesEnter.append("g")
-        .attr("class", "circles")
-        .selectAll('circle')
+      var circlesGroup = gSeries.selectAll("g.circles")
         .data(function(d) {
           d.values.forEach(function(v) {
             v.name = nameValue(d)
           });
-          return d.values
+          return [d.values];
         })
 
+
+      circlesGroup.enter()
+        .append('g')
+        .attr("class", "circles")
+
+      var circles = gSeries
+        .selectAll('circle')
+        .data(function(d) {
+          return d.values
+        })
+        
       // add the points
       var circlesEnter = circles.enter();
 
@@ -177,29 +191,29 @@ Bridle.LineChart = function() {
         .attr("class", "seriespoint")
         .attr('r', 0)
         .attr('cx', function(d) {
-        return xScale(xValue(d))
-      })
+          return xScale(xValue(d))
+        })
         .attr('cy', function(d) {
-        return yScale(yValue(d))
-      })
+          return yScale(yValue(d))
+        })
         .on('mouseover', function(d, i, j) {
-        dispatch.pointMouseover({
-          x: xValue(d),
-          y: yValue(d),
-          series: d.name,
-          pos: [xScale(xValue(d)), yScale(yValue(d))],
-          pointIndex: i,
-          seriesIndex: j
-        });
-      })
+          dispatch.pointMouseover({
+            x: xValue(d),
+            y: yValue(d),
+            series: d.name,
+            pos: [xScale(xValue(d)), yScale(yValue(d))],
+            pointIndex: i,
+            seriesIndex: j
+          });
+        })
         .on('mouseout', function(d) {
-        dispatch.pointMouseout({
-          // point: d,
-          // series: data[d.series],
-          // pointIndex: d.point,
-          // seriesIndex: d.series
+          dispatch.pointMouseout({
+            // point: d,
+            // series: data[d.series],
+            // pointIndex: d.point,
+            // seriesIndex: d.series
+          });
         });
-      });
 
       circles.exit()
         .attr('fill-opacity', 0)
@@ -207,21 +221,21 @@ Bridle.LineChart = function() {
         .remove();
 
       // update the lines
-      g.selectAll('path.line')
+      gSeries.selectAll('path.line')
         .attr("stroke", function(d, i) {
-          return colors(nameValue(d));
+          return colors(i);
         })
         .attr("fill", "none")
         .transition()
         .duration(duration)
         .attr("d", function(d) {
-          return line(d.values);
+          return line(d);
         })
         .attr("stroke-opacity", 1)
         .attr("stroke-width", 1.5);
 
       // update the circles
-      g.selectAll('circle.seriespoint')
+      gSeries.selectAll('circle.seriespoint')
         .transition()
         .duration(duration)
         .attr('r', 5)
@@ -247,8 +261,7 @@ Bridle.LineChart = function() {
       .transition()
         .duration(duration)
         .attr("transform", "translate(-25,0)")
-
-      .call(yAxis)
+        .call(yAxis)
 
       g.select(".y.axis.label")
         .attr("y", -45)
