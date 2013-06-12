@@ -874,6 +874,8 @@ Bridle.LineChart = function() {
         .range([0, width - margin.left - margin.right]);
 
 
+      var amt = xScale(xValue(data[0].values[1])) - xScale(xValue(data[0].values[0]));
+
       // X scale will fit all values from data[] within pixels 0-w
       //var x = d3.scale.linear().domain([0, data.length]).range([0, w]);
       // Y scale will fit values from 0-10 within pixels h-0 (Note the inverted domain for the y-scale: bigger is up!)
@@ -977,7 +979,6 @@ Bridle.LineChart = function() {
           .attr("stroke", function(d, i) {
             return colors(nameValue(d));
           })
-          .attr("clip-path", "url(#clip)")
           .attr("class", "line")
           .attr("stroke-opacity", 0)
           .attr("d", function(d) {
@@ -1051,17 +1052,15 @@ Bridle.LineChart = function() {
         .attr("d", function(d) {
           return line(d.values);
         })
-        .attr("transform", function(d) {
-            // transform to update nicely
-            var amt = xScale(xValue(d.values[1])) - xScale(xValue(d.values[0]));
-            return "translate(" + amt + ")";
-        })
+        .attr("clip-path", "url(#clip)")
         .transition()
         .duration(duration)
         .ease('linear')
         .attr("stroke-opacity", 1)
         .attr("stroke-width", 1.5)
-        .attr("transform", "translate(" + 0 + ")");
+        
+        
+        
 
       // update the circles
       gSeries.selectAll('circle.seriespoint')
@@ -1117,7 +1116,6 @@ Bridle.LineChart = function() {
         if (!data.filter(function(d) {
           return !d.disabled
         }).length) {
-          console.log("what does this do?")
           data.forEach(function(d) {
             d.disabled = false;
           });
