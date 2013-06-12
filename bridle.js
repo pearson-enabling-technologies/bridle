@@ -997,7 +997,9 @@ Bridle.LineChart = function() {
       var circles = gSeries
         .selectAll('circle')
         .data(function(d) {
-          return d.values
+          return d.values;
+        }, function(d) {
+          return d.z;
         });
         
       // add the points
@@ -1043,28 +1045,27 @@ Bridle.LineChart = function() {
             return colors(nameValue(d));
         })
         .attr("fill", "none")
-        .attr("transform", null)
         .attr("d", function(d) {
           return line(d.values);
         })
+        .attr("transform", function(d) {
+            // transform to update nicely
+
+            var amt = xScale(xValue(d.values[1])) - xScale(xValue(d.values[0]));
+            return "translate(" + amt + ")";
+        })
         .transition()
         .duration(duration)
+        .ease('linear')
         .attr("stroke-opacity", 1)
         .attr("stroke-width", 1.5)
-        // .transition()
-        //   .ease("linear")
-        //   .attr("transform", function(d) {
-        //     // transform to update nicely
-
-        //     var amt = xScale(xValue(d.values[1])) - xScale(xValue(d.values[0]));
-        //     return "translate(-" + amt + ")"; 
-
-        //   });
+        .attr("transform", "translate(0)");
 
       // update the circles
       gSeries.selectAll('circle.seriespoint')
         .transition()
         .duration(duration)
+        .ease('linear')
         .attr('r', 5)
         .attr('cx', function(d) {
           return xScale(xValue(d))
