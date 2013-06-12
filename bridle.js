@@ -910,10 +910,12 @@ Bridle.LineChart = function() {
       };
 
 
-
       // set up the scaffolding
       var svg = d3.select(this).selectAll("svg").data([data]);
       var gEnter = svg.enter().append("svg").attr("class", "bridle").append("g");
+      gEnter.append("defs").append("clipPath").attr("id", "clip").append("rect")
+        .attr("width", width - margin.left - margin.right)
+        .attr("height", height - margin.top - margin.bottom);
       gEnter.append("g").attr("class", "x axis");
       gEnter.append("g").attr("class", "y axis").append("text")
         .attr("transform", "rotate(-90)")
@@ -929,7 +931,7 @@ Bridle.LineChart = function() {
         .attr("class", "legend")
         .attr("transform", "translate(" + (width - margin.left - margin.right + 20) + "," + 0 + ")")
         .style("font-size", "12px");
-      gEnter.append("g").attr("class", "lines");
+      gEnter.append("g").attr("class", "lines")
 
       // update the outer dimensions
       svg.attr("width", width)
@@ -975,6 +977,7 @@ Bridle.LineChart = function() {
           .attr("stroke", function(d, i) {
             return colors(nameValue(d));
           })
+          .attr("clip-path", "url(#clip)")
           .attr("class", "line")
           .attr("stroke-opacity", 0)
           .attr("d", function(d) {
@@ -1050,7 +1053,6 @@ Bridle.LineChart = function() {
         })
         .attr("transform", function(d) {
             // transform to update nicely
-
             var amt = xScale(xValue(d.values[1])) - xScale(xValue(d.values[0]));
             return "translate(" + amt + ")";
         })
@@ -1059,7 +1061,7 @@ Bridle.LineChart = function() {
         .ease('linear')
         .attr("stroke-opacity", 1)
         .attr("stroke-width", 1.5)
-        .attr("transform", "translate(0)");
+        .attr("transform", "translate(" + 0 + ")");
 
       // update the circles
       gSeries.selectAll('circle.seriespoint')
