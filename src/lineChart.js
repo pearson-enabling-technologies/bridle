@@ -168,7 +168,6 @@ Bridle.LineChart = function() {
           .attr("stroke", function(d, i) {
             return colors(nameValue(d));
           })
-          .attr("transform", "translate(" + amt + ")")
           .attr("class", "line")
           .attr("stroke-opacity", 0)
           .attr("d", function(d) {
@@ -242,17 +241,13 @@ Bridle.LineChart = function() {
         .attr("d", function(d) {
           return line(d.values);
         })
-        .attr("transform", function(d) {
-            // transform to update nicely
-            return "translate(" + amt + ")";
-        })
         .attr("clip-path", "url(#clip)")
         .transition()
         .duration(duration)
         .ease('linear')
         .attr("stroke-opacity", 1)
         .attr("stroke-width", 1.5)
-        .attr("transform", "translate(0)")
+        
         
         
 
