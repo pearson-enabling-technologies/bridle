@@ -8,9 +8,18 @@ randomData = function(length) {
   return Array.apply(null, {length: length}).map(function(d, i) {
     return {
       "z" : new Date(startt + (daysms*i)).toISOString(),
-      "v" : 100*Math.random()
+      "v" : 50*Math.abs(Math.sin(startt + (daysms*i) + Math.random())/2)
     }
   });
+}
+
+// adds another row to the data
+addRandomRow = function(data) {
+  time = new Date(data[data.length-1].z).getTime()
+  data.push({
+      "z" : new Date(time + (daysms)).toISOString(),
+      "v" : 50*Math.abs(Math.sin(time + (daysms)+ Math.random())/2)
+    });
 }
 
 var series = ['apples', 'oranges', 'pears', 'kiwi']
@@ -18,7 +27,7 @@ var series = ['apples', 'oranges', 'pears', 'kiwi']
 var lineData = series.map(function(d) {
   return {
     'type' : d,
-    'values' : randomData(8)
+    'values' : randomData(10)
   };
 });
 
@@ -47,3 +56,18 @@ var line = Bridle.LineChart()
 d3.select('#line-chart')
   .datum(lineData)
   .call(line);
+
+
+setInterval(function() {
+  // we add a new data point and remove
+  // the first one
+  lineData.forEach(function(series) {
+    series.values.shift();
+    addRandomRow(series.values);
+  })
+
+  d3.select('#line-chart')
+  .datum(lineData)
+  .call(line);
+
+}, 5000)
