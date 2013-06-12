@@ -232,7 +232,12 @@ Bridle.LineChart = function() {
             return colors(nameValue(d));
         })
         .attr("fill", "none")
-        .attr("transform", null)
+        .attr("transform", function(d) {
+            // transform to update nicely
+
+            var amt = xScale(xValue(d.values[1])) - xScale(xValue(d.values[0]));
+            return "translate(-" + amt + ")"; )
+        });
         .attr("d", function(d) {
           return line(d.values);
         })
@@ -240,15 +245,7 @@ Bridle.LineChart = function() {
         .duration(duration)
         .attr("stroke-opacity", 1)
         .attr("stroke-width", 1.5)
-        // .transition()
-        //   .ease("linear")
-        //   .attr("transform", function(d) {
-        //     // transform to update nicely
-
-        //     var amt = xScale(xValue(d.values[1])) - xScale(xValue(d.values[0]));
-        //     return "translate(-" + amt + ")"; 
-
-        //   });
+        .attr("transform", null)
 
       // update the circles
       gSeries.selectAll('circle.seriespoint')
