@@ -133,16 +133,16 @@ Bridle.LineChart = function() {
             return d
           }, function(d) {
             return nameValue(d)
-          })
+        })
         .classed('hover', function(d) {
           return d.hover
-        })
+        });
 
       gSeries.exit()
         .transition()
         .duration(duration)
         .style('opacity', 0)
-        .remove()
+        .remove();
 
 
       var gSeriesEnter = gSeries.enter()
@@ -154,14 +154,19 @@ Bridle.LineChart = function() {
       
       // add paths
       var linePaths = gSeries.selectAll('path.line')
-        .data(function(d) { return [d.values]})
+        .data(function(d) { 
+          return [d];
+        });
       
       linePaths.enter().append("path")
+          .attr("stroke", function(d, i) {
+            return colors(nameValue(d));
+          })
           .attr("class", "line")
           .attr("stroke-opacity", 0)
           .attr("d", function(d) {
-            return line(d);
-          })
+            return line(d.values);
+          });
 
       // add points
       var circlesGroup = gSeries.selectAll("g.circles")
@@ -170,8 +175,7 @@ Bridle.LineChart = function() {
             v.name = nameValue(d)
           });
           return [d.values];
-        })
-
+        });
 
       circlesGroup.enter()
         .append('g')
@@ -181,7 +185,7 @@ Bridle.LineChart = function() {
         .selectAll('circle')
         .data(function(d) {
           return d.values
-        })
+        });
         
       // add the points
       var circlesEnter = circles.enter();
@@ -223,13 +227,13 @@ Bridle.LineChart = function() {
       // update the lines
       gSeries.selectAll('path.line')
         .attr("stroke", function(d, i) {
-          return colors(i);
+            return colors(nameValue(d));
         })
         .attr("fill", "none")
         .transition()
         .duration(duration)
         .attr("d", function(d) {
-          return line(d);
+          return line(d.values);
         })
         .attr("stroke-opacity", 1)
         .attr("stroke-width", 1.5);
