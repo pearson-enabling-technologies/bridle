@@ -248,7 +248,7 @@ Bridle.LineChart = function() {
         .ease('linear')
         .attr("stroke-opacity", 1)
         .attr("stroke-width", 1.5)
-        .attr("transform", "translate(0)");
+        .attr("transform", null);
 
       // update the circles
       gSeries.selectAll('circle.seriespoint')
