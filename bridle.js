@@ -813,6 +813,8 @@ Bridle.BarChart = function () {
 
 Bridle.LineChart = function() {
 
+  'use Strict'
+
   // define dimensions of graph
   var margin = {
     top: 50,
@@ -823,14 +825,14 @@ Bridle.LineChart = function() {
   var height = 400;
   var width = 1000;
   var xValue = function(d) {
-    return d.x
+    return d.x;
   };
   var yValue = function(d) {
-    return d.y
+    return d.y;
   };
   var nameValue = function(d) {
-    return d.name
-  }
+    return d.name;
+  };
   var title = 'Chart Title';
   var yAxisTitle = 'Axis Title';
   var duration = 1000;
@@ -988,7 +990,6 @@ Bridle.LineChart = function() {
           return [d.values];
         });
 
-
       circlesGroup.enter()
         .append('g')
         .attr("class", "circles")
@@ -1042,13 +1043,23 @@ Bridle.LineChart = function() {
             return colors(nameValue(d));
         })
         .attr("fill", "none")
-        .transition()
-        .duration(duration)
+        .attr("transform", null)
         .attr("d", function(d) {
           return line(d.values);
         })
+        .transition()
+        .duration(duration)
         .attr("stroke-opacity", 1)
-        .attr("stroke-width", 1.5);
+        .attr("stroke-width", 1.5)
+        // .transition()
+        //   .ease("linear")
+        //   .attr("transform", function(d) {
+        //     // transform to update nicely
+
+        //     var amt = xScale(xValue(d.values[1])) - xScale(xValue(d.values[0]));
+        //     return "translate(-" + amt + ")"; 
+
+        //   });
 
       // update the circles
       gSeries.selectAll('circle.seriespoint')
@@ -1069,6 +1080,9 @@ Bridle.LineChart = function() {
       // update the x-axis
       g.select(".x.axis")
         .attr("transform", "translate(0," + yScale.range()[0] + ")")
+        .transition()
+        .duration(duration)
+        .ease("linear")
         .call(xAxis);
 
       // update the y-axis
