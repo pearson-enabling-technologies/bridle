@@ -192,7 +192,7 @@ Bridle.LineChart = function() {
         .data(function(d) {
           return d.values;
         }, function(d) {
-          return d.z;
+          return xValue(d);
         });
         
       // add the points
