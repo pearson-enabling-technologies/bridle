@@ -267,6 +267,9 @@ Bridle.LineChart = function() {
       // update the x-axis
       g.select(".x.axis")
         .attr("transform", "translate(0," + yScale.range()[0] + ")")
+        .transition()
+        .duration(duration)
+        .ease("linear")
         .call(xAxis);
 
       // update the y-axis
