@@ -230,13 +230,23 @@ Bridle.LineChart = function() {
             return colors(nameValue(d));
         })
         .attr("fill", "none")
-        .transition()
-        .duration(duration)
+        .attr("transform", null)
         .attr("d", function(d) {
           return line(d.values);
         })
+        .transition()
+        .duration(duration)
         .attr("stroke-opacity", 1)
         .attr("stroke-width", 1.5);
+        .transition()
+          .ease("linear")
+          .attr("transform", function(d) {
+            // transform to update nicely
+            amt = xScale(xValue(d[1])) - xScale(xValue(d[0]));
+
+            return "translate(" + x(-amt) + ")"; 
+
+          });
 
       // update the circles
       gSeries.selectAll('circle.seriespoint')
