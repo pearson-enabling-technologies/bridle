@@ -8,3 +8,4 @@ title: Bridle Examples
 * [Stacked Area Chart](stackedArea.html)
 * [Table](table.html)
 * [Legend](legend.html)
+* [Bar Chart Categorical](barChartCategorical.html)
