@@ -57,7 +57,7 @@ Bridle.BarChartCategorical = function () {
       return toDate(xValue(b)) < toDate(xValue(a)) ? 1 : -1;
     };
     var dispatch = d3.dispatch('showTooltip', 'hideTooltip', "pointMouseover", "pointMouseout");
-
+ 
     function chart(selection) {
       selection.each(function(rawData) {
         var containerID = this;
