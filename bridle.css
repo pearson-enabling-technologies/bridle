@@ -69,7 +69,7 @@ table.bridle {
     width: 0;
     height: 0;
     vertical-align: top;
-    border-bottom: 4px solid #000000;
+    border-bottom: 4px solid black;
     border-right: 4px solid transparent;
     border-left: 4px solid transparent;
     content: "";
@@ -79,7 +79,7 @@ table.bridle {
     width: 0;
     height: 0;
     vertical-align: top;
-    border-top: 4px solid #000000;
+    border-top: 4px solid black;
     border-right: 4px solid transparent;
     border-left: 4px solid transparent;
     content: "";
@@ -89,7 +89,7 @@ div.bridle.tooltip {
   position: absolute;
   background-color: white;
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid #dddddd;
   font-family: Arial;
   font-size: 13px;
   transition: opacity 500ms linear;

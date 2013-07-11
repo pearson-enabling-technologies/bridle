@@ -25,7 +25,7 @@ Bridle.LineChart = function() {
   var title = 'Chart Title';
   var yAxisTitle = 'Axis Title';
   var duration = 1000;
-  var xScale = d3.time.scale.utc().nice();
+  var xScale = d3.time.scale.utc();
   var yScale = d3.scale.linear().nice();
   var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
   xAxis.tickSize(-height + margin.top + margin.bottom, 0); // get/set?
