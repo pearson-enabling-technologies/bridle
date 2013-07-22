@@ -35,7 +35,7 @@ Bridle.StackedChart = function() {
   var yAxisTitle = 'Axis Title';
   var duration = 1000;
   var legend = Bridle.LegendBox().nameAccessor(function(d) {
-    return nameValue(d)
+    return nameValue(d);
   });
   var dispatch = d3.dispatch('showTooltip', 'hideTooltip', "pointMouseover", "pointMouseout");
   // x accessor
