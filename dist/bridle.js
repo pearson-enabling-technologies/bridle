@@ -318,7 +318,7 @@ Bridle.BarChart = function () {
     var yAxisTitle = 'Axis Title';
     var duration = 1000;
     var legend = Bridle.LegendBox().nameAccessor(function(d) {
-      return nameValue
+      return nameValue(d);
     });
 
     var xScale = d3.scale.ordinal()
@@ -867,7 +867,7 @@ Bridle.BarChartCategorical = function () {
     var yAxisTitle = 'Axis Title';
     var duration = 1000;
     var legend = Bridle.LegendBox().nameAccessor(function(d) {
-      return nameValue
+      return nameValue(d);
     });
 
     var xScale = d3.scale.ordinal()
@@ -1892,7 +1892,7 @@ Bridle.StackedChart = function() {
   var yAxisTitle = 'Axis Title';
   var duration = 1000;
   var legend = Bridle.LegendBox().nameAccessor(function(d) {
-    return nameValue(d)
+    return nameValue(d);
   });
   var dispatch = d3.dispatch('showTooltip', 'hideTooltip', "pointMouseover", "pointMouseout");
   // x accessor
