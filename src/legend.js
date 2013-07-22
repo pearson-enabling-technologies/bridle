@@ -24,6 +24,9 @@ Bridle.LegendBox = function() {
     selection.each(function(data) {
 
       width = calculateWidth(data);
+      if (width < 200) {
+        width = 200;
+      }
 
       numData = data.length;
       // set up scaffolding
