@@ -6,8 +6,10 @@ var mountFolder = function (connect, dir) {
 
 module.exports = function(grunt) {
   // load all grunt tasks
-  require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
-
+  require('matchdep').filterDev('grunt-*').forEach(function(d) {
+    grunt.loadNpmTasks(d);
+  });
+  grunt.loadNpmTasks('grunt-contrib-clean');
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -16,7 +18,17 @@ module.exports = function(grunt) {
         separator: ';'
       },
       dist: {
-        src: ['src/**/*.js'],
+        src: [
+        'src/header.js',
+        'src/legend.js',
+        'src/tooltip.js',
+        'src/barChart.js',
+        'src/barChartCategorical.js',
+        'src/lineChart.js',
+        'src/stackedChart.js',
+        'src/table.js',
+        'src/footer.js'
+        ],
         dest: 'dist/<%= pkg.name %>.js'
       }
     },
@@ -32,9 +44,9 @@ module.exports = function(grunt) {
     },
     compass: {
         options: {
-            cssDir: '.tmp/styles',
-            sassDir: 'examples/styles',
-            javascriptsDir: '.tmp/src',
+            cssDir: 'dist/css',
+            sassDir: 'styles',
+            javascriptsDir: 'src',
             relativeAssets: true,
             force: true
         },
@@ -59,34 +71,20 @@ module.exports = function(grunt) {
           document: true
         }
       }
-    },
-    // watch: {
-    //     compass: {
-    //         files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
-    //         tasks: ['compass']
-    //     },
-    //     livereload: {
-    //         files: [
-    //             '<%= yeoman.app %>/*.html',
-    //             '{.tmp,<%= yeoman.app %>}/styles/{,*/}*.css',
-    //             '{.tmp,<%= yeoman.app %>}/scripts/{,*/}*.js',
-    //             '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp}'
-    //         ],
-    //         tasks: ['livereload']
-    //     }
-    // },    
+    },  
     watch: {
         compass: {
-            files: ['src/styles/{,*/}*.{scss,sass}'],
+            files: ['styles/{,*/}*.{scss,sass}'],
             tasks: ['compass']
         },
         livereload: {
-            files: [
-                '.tmp, src/**/*',
-                '.tmp, examples/**/*'
-            ],
-            tasks: ['livereload']
-        }      
+          files: [
+              'src/{,*/}*.js',
+              'examples/**/*'
+          ],
+          tasks: ['build']
+        }
+        
     },
     connect: {
       options: {
@@ -101,7 +99,7 @@ module.exports = function(grunt) {
               lrSnippet,
               mountFolder(connect, 'examples'),
               mountFolder(connect, '.tmp'),              
-              mountFolder(connect, 'src')
+              mountFolder(connect, 'dist')
             ];
           }
         }
@@ -135,15 +133,21 @@ module.exports = function(grunt) {
     },
     clean: {
         dist: ['.tmp', 'dist/*'],
-        server: '.tmp'
+        server: ['.tmp']
     }
-
   });
 
 
   grunt.registerTask('test', ['jshint', 'mocha']);
 
   grunt.registerTask('default', ['concat', 'uglify']);
+
+  grunt.registerTask('build', [
+    'clean:dist',
+    'compass',
+    'concat:dist',
+    'uglify'
+    ])
 
   grunt.registerTask('server', function (target) {
       if (target === 'dist') {
@@ -162,7 +166,8 @@ module.exports = function(grunt) {
       }
 
       grunt.task.run([
-          'clean:server',        
+          'clean:server',
+          'build',
           'compass:server',        
           'livereload-start',
           'connect:livereload',
