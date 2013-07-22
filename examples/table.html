@@ -1,0 +1,234 @@
+
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Stacked Area Chart</title>
+        <meta name="viewport" content="width=device-width">
+
+        <!-- syntax highlighting CSS -->
+        <link rel="stylesheet" href="../css/syntax.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="../css/main.css">
+
+        <!-- CSS for the graphs -->
+        <link rel="stylesheet" href="../css/bridle.css">
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script src="bridle.js"></script>
+        
+
+    </head>
+    <body>
+
+        <div class="container">
+          <div class="site">
+            <div class="header">
+              <h1 class="title"><a href="../">Bridle</a></h1>
+              <a class="extra" href="../">Home</a>
+              <a class="extra" href="../examples/">Examples</a>
+              <a class="extra" href="https://github.com/ptdavteam/bridle">Fork Project on Github</a>
+            </div>
+     
+                <h1 id='table'>Table</h1>
+<div id='table-chart'> </div>
+<p>A table chart that supports sorting. click on the headers to sort the table based on them.</p>
+
+<h2 id='code'>Code</h2>
+<div class='highlight'><pre><code class='javascript'><span class='c1'>// transform the data to a tabular form</span>
+<span class='kd'>var</span> <span class='nx'>tableData</span> <span class='o'>=</span> <span class='nx'>transform</span><span class='p'>(</span><span class='nx'>headers</span><span class='p'>,</span> <span class='nx'>rawData</span><span class='p'>)</span>
+
+
+<span class='c1'>// the table generator</span>
+<span class='kd'>var</span> <span class='nx'>table</span> <span class='o'>=</span> <span class='nx'>Bridle</span><span class='p'>.</span><span class='nx'>Table</span><span class='p'>()</span>
+
+<span class='c1'>// build the table</span>
+<span class='nx'>d3</span><span class='p'>.</span><span class='nx'>select</span><span class='p'>(</span><span class='s1'>&#39;#table-chart&#39;</span><span class='p'>)</span>
+  <span class='p'>.</span><span class='nx'>datum</span><span class='p'>(</span><span class='nx'>tableData</span><span class='p'>)</span>
+  <span class='p'>.</span><span class='nx'>call</span><span class='p'>(</span><span class='nx'>table</span><span class='p'>)</span>
+
+<span class='c1'>// a function to transform the data into a tabular form</span>
+<span class='kd'>function</span> <span class='nx'>transform</span> <span class='p'>(</span><span class='nx'>headers</span><span class='p'>,</span> <span class='nx'>data</span><span class='p'>)</span> <span class='p'>{</span>
+  <span class='kd'>var</span> <span class='nx'>rows</span> <span class='o'>=</span> <span class='nx'>data</span><span class='p'>.</span><span class='nx'>map</span><span class='p'>(</span><span class='kd'>function</span> <span class='p'>(</span><span class='nx'>d</span><span class='p'>)</span> <span class='p'>{</span>
+    <span class='k'>return</span> <span class='nx'>d</span><span class='p'>.</span><span class='nx'>values</span><span class='p'>.</span><span class='nx'>map</span> <span class='p'>(</span><span class='kd'>function</span> <span class='p'>(</span><span class='nx'>e</span><span class='p'>)</span> <span class='p'>{</span>
+      <span class='nx'>row</span> <span class='o'>=</span> <span class='p'>[</span><span class='nx'>d</span><span class='p'>.</span><span class='nx'>type</span><span class='p'>,</span> <span class='nx'>e</span><span class='p'>.</span><span class='nx'>z</span><span class='p'>,</span> <span class='nx'>e</span><span class='p'>.</span><span class='nx'>v</span><span class='p'>]</span>
+      <span class='k'>return</span> <span class='nx'>row</span>
+    <span class='p'>})</span>
+  <span class='p'>})</span>
+  <span class='kd'>var</span> <span class='nx'>merged</span> <span class='o'>=</span> <span class='p'>[].</span><span class='nx'>concat</span><span class='p'>.</span><span class='nx'>apply</span><span class='p'>([],</span> <span class='nx'>rows</span><span class='p'>);</span>
+  <span class='kd'>var</span> <span class='nx'>ret</span> <span class='o'>=</span> <span class='p'>{</span>
+    <span class='nx'>headers</span><span class='o'>:</span> <span class='nx'>headers</span><span class='p'>,</span>
+    <span class='nx'>rows</span><span class='o'>:</span> <span class='nx'>merged</span>
+  <span class='p'>}</span>
+  <span class='k'>return</span> <span class='nx'>ret</span><span class='p'>;</span>
+<span class='p'>}</span>
+</code></pre></div>
+<h2 id='data'>Data</h2>
+<div class='highlight'><pre><code class='javascript'><span class='kd'>var</span> <span class='nx'>rawData</span> <span class='o'>=</span> <span class='p'>[</span>
+  <span class='p'>{</span>
+    <span class='s2'>&quot;type&quot;</span><span class='o'>:</span> <span class='s2'>&quot;apples&quot;</span><span class='p'>,</span>
+    <span class='s2'>&quot;values&quot;</span><span class='o'>:</span> <span class='p'>[</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-01&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-02&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-03&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-04&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-05&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-06&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-07&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-08&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-09&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-10&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-11&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-12&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-13&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-14&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-15&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-16&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-17&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-18&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-19&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()}</span>
+    <span class='p'>]</span>
+  <span class='p'>},</span>
+  <span class='p'>{</span>  
+    <span class='s2'>&quot;type&quot;</span><span class='o'>:</span> <span class='s2'>&quot;oranges&quot;</span><span class='p'>,</span>
+    <span class='s2'>&quot;values&quot;</span><span class='o'>:</span> <span class='p'>[</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-01&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-02&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-03&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-04&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-05&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-06&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-07&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-08&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-09&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-10&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-11&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-12&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-13&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-14&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-15&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-16&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-17&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-18&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()},</span>
+      <span class='p'>{</span> <span class='s2'>&quot;z&quot;</span><span class='o'>:</span> <span class='s1'>&#39;2012-01-19&#39;</span><span class='p'>,</span> <span class='s2'>&quot;v&quot;</span><span class='o'>:</span>  <span class='mi'>100</span><span class='o'>*</span><span class='nb'>Math</span><span class='p'>.</span><span class='nx'>random</span><span class='p'>()}</span>
+    <span class='p'>]</span>
+  <span class='p'>}</span>
+<span class='p'>];</span>
+
+<span class='kd'>var</span> <span class='nx'>headers</span> <span class='o'>=</span> <span class='p'>[</span><span class='s1'>&#39;Fruit&#39;</span><span class='p'>,</span> <span class='s1'>&#39;Date&#39;</span><span class='p'>,</span> <span class='s1'>&#39;Sales&#39;</span><span class='p'>]</span>
+</code></pre></div><script type='text/javascript'>
+var rawData = [
+  {
+    "type": "apples",
+    "values": [
+      { "z": '2012-01-01', "v":  100*Math.random()},
+      { "z": '2012-01-02', "v":  100*Math.random()},
+      { "z": '2012-01-03', "v":  100*Math.random()},
+      { "z": '2012-01-04', "v":  100*Math.random()},
+      { "z": '2012-01-05', "v":  100*Math.random()},
+      { "z": '2012-01-06', "v":  100*Math.random()},
+      { "z": '2012-01-07', "v":  100*Math.random()},
+      { "z": '2012-01-08', "v":  100*Math.random()},
+      { "z": '2012-01-09', "v":  100*Math.random()},
+      { "z": '2012-01-10', "v":  100*Math.random()},
+      { "z": '2012-01-11', "v":  100*Math.random()},
+      { "z": '2012-01-12', "v":  100*Math.random()},
+      { "z": '2012-01-13', "v":  100*Math.random()},
+      { "z": '2012-01-14', "v":  100*Math.random()},
+      { "z": '2012-01-15', "v":  100*Math.random()},
+      { "z": '2012-01-16', "v":  100*Math.random()},
+      { "z": '2012-01-17', "v":  100*Math.random()},
+      { "z": '2012-01-18', "v":  100*Math.random()},
+      { "z": '2012-01-19', "v":  100*Math.random()}
+    ]
+  },
+  {  
+    "type": "oranges",
+    "values": [
+      { "z": '2012-01-01', "v":  100*Math.random()},
+      { "z": '2012-01-02', "v":  100*Math.random()},
+      { "z": '2012-01-03', "v":  100*Math.random()},
+      { "z": '2012-01-04', "v":  100*Math.random()},
+      { "z": '2012-01-05', "v":  100*Math.random()},
+      { "z": '2012-01-06', "v":  100*Math.random()},
+      { "z": '2012-01-07', "v":  100*Math.random()},
+      { "z": '2012-01-08', "v":  100*Math.random()},
+      { "z": '2012-01-09', "v":  100*Math.random()},
+      { "z": '2012-01-10', "v":  100*Math.random()},
+      { "z": '2012-01-11', "v":  100*Math.random()},
+      { "z": '2012-01-12', "v":  100*Math.random()},
+      { "z": '2012-01-13', "v":  100*Math.random()},
+      { "z": '2012-01-14', "v":  100*Math.random()},
+      { "z": '2012-01-15', "v":  100*Math.random()},
+      { "z": '2012-01-16', "v":  100*Math.random()},
+      { "z": '2012-01-17', "v":  100*Math.random()},
+      { "z": '2012-01-18', "v":  100*Math.random()},
+      { "z": '2012-01-19', "v":  100*Math.random()}
+    ]
+  }
+];
+
+var headers = ['Fruit', 'Date', 'Sales']
+
+// transform the data to a tabular form
+var tableData = transform(headers, rawData)
+
+
+// the table generator
+var table = Bridle.Table()
+
+// build the table
+d3.select('#table-chart')
+  .datum(tableData)
+  .call(table)
+
+// a function to transform the data into a tabular form
+function transform (headers, data) {
+  var rows = data.map(function (d) {
+    return d.values.map (function (e) {
+      row = [d.type, e.z, e.v]
+      return row
+    })
+  })
+  var merged = [].concat.apply([], rows);
+  var ret = {
+    headers: headers,
+    rows: merged
+  }
+  return ret;
+}
+
+</script>
+
+
+
+
+
+
+
+            <div class="footer">
+              <div class="contact">
+                <p>
+                  Copyright 2013 - Pearson Technology<br />
+                  Data Analytics and Visualisation Team<br />
+                  pearson.davteam@gmail.com
+                </p>
+              </div>
+              <div class="contact">
+                <p>
+                  Built by<br />
+                  <a href="https://twitter.com/hubert_rogers">Hubert Rogers</a> and <a href="https://twitter.com/radiodario">Dario Villanueva</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /container -->
+
+
+    </body>
+</html>

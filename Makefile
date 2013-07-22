@@ -5,6 +5,7 @@ JS_FILES = \
 					src/barChart.js \
 					src/lineChart.js \
 					src/stackedChart.js \
+					src/barChartCategorical.js \
 					src/table.js \
 					src/footer.js \
 

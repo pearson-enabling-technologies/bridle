@@ -22,6 +22,9 @@ Bridle.LegendBox = function() {
 
   function chart(selection) {
     selection.each(function(data) {
+
+      width = calculateWidth(data);
+
       numData = data.length;
       // set up scaffolding
       var svg = d3.select(this).selectAll("svg").data([data]);
@@ -120,6 +123,30 @@ Bridle.LegendBox = function() {
 
     })
   }
+
+  function calculateWidth(data) {
+    var maxLen = 0;
+    var maxStr = '';
+
+    // find the longest name
+    data.forEach(function(d, i) {
+      if (nameAccessor(d).length > maxLen) {
+        maxLen = nameAccessor(d).length;
+        maxStr = nameAccessor(d);
+      }
+    });
+
+    // we create a text element, and then
+    // get the bounding box 
+    // var el = document.createElement('svg')
+    // d3.select(el).append('svg:text').text(maxStr)
+    // var text = d3.select(el).select('text').node();
+    // var lenght = text.getComputedTextLength();
+    // window.textNode = text;
+    var w = maxLen * 12; // a good approximation?
+    return w;
+  }
+
 
   chart.dispatch = dispatch;
 

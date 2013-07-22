@@ -23,7 +23,7 @@ Bridle.StackedChart = function() {
   var offset = 'zero';
   var order = 'default';
   var interpolate = 'linear';
-  var xScale = d3.time.scale.utc().nice();
+  var xScale = d3.time.scale.utc();
   var yScale = d3.scale.linear().nice();
   var colors = d3.scale.category10();
   var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
@@ -35,7 +35,7 @@ Bridle.StackedChart = function() {
   var yAxisTitle = 'Axis Title';
   var duration = 1000;
   var legend = Bridle.LegendBox().nameAccessor(function(d) {
-    return nameValue(d)
+    return nameValue(d);
   });
   var dispatch = d3.dispatch('showTooltip', 'hideTooltip', "pointMouseover", "pointMouseout");
   // x accessor

@@ -56,17 +56,19 @@ svg.bridle {
 
   .hover {
 
-    .layerrects rect {
-      transition: opacity 250ms linear;
-      -moz-transition: opacity 250ms linear;
-      -webkit-transition: opacity 250ms linear;
+    rect {
+        transition: opacity 250ms linear;
+        -moz-transition: opacity 250ms linear;
+        -webkit-transition: opacity 250ms linear;
 
-      transition-delay: 250ms;
-      -moz-transition-delay: 250ms;
-      -webkit-transition-delay: 250ms;
-
-      opacity: 1;
+        transition-delay: 250ms;
+        -moz-transition-delay: 250ms;
+        -webkit-transition-delay: 250ms;
+        stroke: #333;
+        stroke-width: 1;
+        fill-opacity: 1;
     }
+
     .line {
       transition: stroke-width 250ms linear;
       -moz-transition: stroke-width 250ms linear;
@@ -89,6 +91,9 @@ svg.bridle {
       -webkit-transition-delay: 250ms;
 
       opacity: 1;
+      stroke-width:1;
+      stroke:#333;
+      fill-opacity: 1;
     }
   }
  

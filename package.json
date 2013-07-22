@@ -1,0 +1,45 @@
+{
+  "name": "bridle",
+  "version": "0.0.12",
+  "description": "A repository of reusable charts built with d3",
+  "main": "bridle.js",
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-concurrent": "~0.2.0",
+    "grunt-contrib-clean": "~0.4.1",
+    "grunt-contrib-compass": "~0.2.0",
+    "grunt-contrib-connect": "~0.3.0",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-livereload": "~0.1.2",
+    "grunt-contrib-jshint": "~0.5.4",
+    "grunt-mocha-phantomjs": "~0.2.8",
+    "grunt-contrib-uglify": "~0.2.1",
+    "sass": "~0.5.0",
+    "matchdep": "~0.1.2",
+    "grunt-open": "~0.2.0",
+    "uglify-js": "~2.3.6",
+    "grunt-contrib-watch": "~0.4.4",
+    "grunt-usemin": "~0.1.12"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ptdavteam/bridle.git"
+  },
+  "keywords": [
+    "d3",
+    "charts",
+    "reusable",
+    "graphs"
+  ],
+  "author": "Dario Villanueva, Hubert Rogers",
+  "license": "Apache",
+  "readmeFilename": "README.md",
+  "gitHead": "549f5fe6d32fd107fb019884bdc8dccc3092707d"
+}

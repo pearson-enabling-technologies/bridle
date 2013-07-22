@@ -25,7 +25,7 @@ Bridle.LineChart = function() {
   var title = 'Chart Title';
   var yAxisTitle = 'Axis Title';
   var duration = 1000;
-  var xScale = d3.time.scale.utc().nice();
+  var xScale = d3.time.scale.utc();
   var yScale = d3.scale.linear().nice();
   var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
   xAxis.tickSize(-height + margin.top + margin.bottom, 0); // get/set?
@@ -131,6 +131,10 @@ Bridle.LineChart = function() {
       // update the inner dimensions
       var g = svg.select("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      svg.select('defs').select('clippath').select('rect')
+        .attr("width", width - margin.left - margin.right)
+        .attr("height", height - margin.top - margin.bottom);
 
       // reasign the data to trigger addition/deletion and add
       // a series group per series in the data
