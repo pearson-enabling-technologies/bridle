@@ -29,7 +29,7 @@ Bridle.BarChartCategorical = function () {
     var yAxisTitle = 'Axis Title';
     var duration = 1000;
     var legend = Bridle.LegendBox().nameAccessor(function(d) {
-      return nameValue
+      return nameValue(d);
     });
 
     var xScale = d3.scale.ordinal()
