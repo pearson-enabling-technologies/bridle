@@ -9,7 +9,7 @@ Bridle.LineChart = function() {
     top: 50,
     bottom: 30,
     left: 100,
-    right: 100
+    right: 30
   };
   var height = 400;
   var width = 1000;
@@ -40,6 +40,9 @@ Bridle.LineChart = function() {
 
   function chart(selection) {
     selection.each(function(rawData) {
+
+      var legendWidth = legend.calculateWidth(rawData);
+
       var containerID = this;
       var data = rawData.filter(function(d) {
         return !d.disabled
@@ -60,7 +63,7 @@ Bridle.LineChart = function() {
 
       xScale
         .domain([d3.min(minDates), d3.max(maxDates)])
-        .range([0, width - margin.left - margin.right]);
+        .range([0, width - (margin.right + legendWidth)]);
 
 
       var amt = xScale(xValue(data[0].values[1])) - xScale(xValue(data[0].values[0]));
@@ -105,7 +108,7 @@ Bridle.LineChart = function() {
       var svg = d3.select(this).selectAll("svg").data([data]);
       var gEnter = svg.enter().append("svg").attr("class", "bridle").append("g");
       gEnter.append("defs").append("clipPath").attr("id", "clip").append("rect")
-        .attr("width", width - margin.left - margin.right)
+        .attr("width", width - (margin.right + legendWidth))
         .attr("height", height - margin.top - margin.bottom);
       gEnter.append("g").attr("class", "x axis");
       gEnter.append("g").attr("class", "y axis").append("text")
@@ -120,7 +123,7 @@ Bridle.LineChart = function() {
         .attr("transform", "translate(" + (width - margin.left - margin.right + 20) / 2 + "," + (-margin.top) + ")");
       gEnter.append("g")
         .attr("class", "legend")
-        .attr("transform", "translate(" + (width - margin.left - margin.right + 20) + "," + 0 + ")")
+        .attr("transform", "translate(" + (width - (margin.right + legendWidth) + 20) + "," + 0 + ")")
         .style("font-size", "12px");
       gEnter.append("g").attr("class", "lines")
 
@@ -133,7 +136,7 @@ Bridle.LineChart = function() {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
       svg.select('defs').select('clippath').select('rect')
-        .attr("width", width - margin.left - margin.right)
+        .attr("width", width - (margin.right + legendWidth))
         .attr("height", height - margin.top - margin.bottom);
 
       // reasign the data to trigger addition/deletion and add

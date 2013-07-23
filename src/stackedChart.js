@@ -58,6 +58,10 @@ Bridle.StackedChart = function() {
 
   function chart(selection) {
     selection.each(function(rawData) {
+
+
+
+
       var containerID = this;
       data = rawData.filter(function(d) {
         return !d.disabled
@@ -74,10 +78,11 @@ Bridle.StackedChart = function() {
         .y(yValue)
       (data); // we pass the data as context
 
+      var legendWidth = legend.calculateWidth(data);
 
       // setup the scales
       // x scale
-      xScale.range([0, width - margin.left - margin.right]);
+      xScale.range([0, width - (margin.right + legendWidth)]);
 
       // get max and min date(s)
       var maxDates = data.map(function(d) {
@@ -126,7 +131,7 @@ Bridle.StackedChart = function() {
         .attr("transform", "translate(" + (width - margin.left - margin.right + 20) / 2 + "," + (-margin.top) + ")");
       gEnter.append("g")
         .attr("class", "legend")
-        .attr("transform", "translate(" + (width - margin.left - margin.right + 20) + "," + 0 + ")")
+        .attr("transform", "translate(" + (width - (margin.right + legendWidth) + 20) + "," + 0 + ")")
         .style("font-size", "12px");
       gEnter.append("g").attr("class", "areas");
 
