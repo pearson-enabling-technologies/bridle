@@ -147,6 +147,9 @@ Bridle.LegendBox = function() {
     // var lenght = text.getComputedTextLength();
     // window.textNode = text;
     var w = maxLen * 5; // a good approximation?
+
+    if (w < 200) w = 200;
+
     return w;
   }
 
