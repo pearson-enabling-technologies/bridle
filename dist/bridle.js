@@ -152,6 +152,9 @@ Bridle.LegendBox = function() {
     // var lenght = text.getComputedTextLength();
     // window.textNode = text;
     var w = maxLen * 5; // a good approximation?
+
+    if (w < 200) w = 200;
+
     return w;
   }
 
@@ -375,7 +378,7 @@ Bridle.BarChart = function () {
         xScale.domain(data[0].values.map(function(d) {
           return xValue(d);
         }))
-          .rangeRoundBands([0, width - (margin.left + margin.right + legendWidth)], 0.1);
+          .rangeRoundBands([0, width - (margin.right + legendWidth)], 0.1);
 
         // how many data points are there in each layer on average 
         var avgDataPoints = function() {
