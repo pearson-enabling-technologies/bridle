@@ -146,10 +146,11 @@ Bridle.LegendBox = function() {
     // var text = d3.select(el).select('text').node();
     // var lenght = text.getComputedTextLength();
     // window.textNode = text;
-    var w = maxLen * 12; // a good approximation?
+    var w = maxLen * 5; // a good approximation?
     return w;
   }
 
+  chart.calculateWidth = calculateWidth;
 
   chart.dispatch = dispatch;
 

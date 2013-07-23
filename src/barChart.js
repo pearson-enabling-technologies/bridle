@@ -76,11 +76,13 @@ Bridle.BarChart = function () {
           .y(yValue)
         (data); // we pass the data as context
 
+        var legendWidth = legend.calculateWidth(data);
+
         // set up scales and axes
         xScale.domain(data[0].values.map(function(d) {
           return xValue(d);
         }))
-          .rangeRoundBands([0, width - margin.left - margin.right], 0.1);
+          .rangeRoundBands([0, width - (margin.right + legendWidth)], 0.1);
 
         // how many data points are there in each layer on average 
         var avgDataPoints = function() {
@@ -159,7 +161,7 @@ Bridle.BarChart = function () {
           .attr("transform", "translate(" + (width - margin.left - margin.right + 20) / 2 + "," + (-margin.top) + ")");
         gEnter.append("g")
           .attr("class", "legend")
-          .attr("transform", "translate(" + (width - margin.left - margin.right + 20) + "," + 0 + ")")
+          .attr("transform", "translate(" + (width - (margin.right + legendWidth) + 20) + "," + 0 + ")")
           .style("font-size", "12px");
 
         // update the outer dimensions

@@ -151,10 +151,11 @@ Bridle.LegendBox = function() {
     // var text = d3.select(el).select('text').node();
     // var lenght = text.getComputedTextLength();
     // window.textNode = text;
-    var w = maxLen * 12; // a good approximation?
+    var w = maxLen * 5; // a good approximation?
     return w;
   }
 
+  chart.calculateWidth = calculateWidth;
 
   chart.dispatch = dispatch;
 
@@ -368,11 +369,13 @@ Bridle.BarChart = function () {
           .y(yValue)
         (data); // we pass the data as context
 
+        var legendWidth = legend.calculateWidth(data);
+
         // set up scales and axes
         xScale.domain(data[0].values.map(function(d) {
           return xValue(d);
         }))
-          .rangeRoundBands([0, width - margin.left - margin.right], 0.1);
+          .rangeRoundBands([0, width - (margin.right + legendWidth)], 0.1);
 
         // how many data points are there in each layer on average 
         var avgDataPoints = function() {
@@ -451,7 +454,7 @@ Bridle.BarChart = function () {
           .attr("transform", "translate(" + (width - margin.left - margin.right + 20) / 2 + "," + (-margin.top) + ")");
         gEnter.append("g")
           .attr("class", "legend")
-          .attr("transform", "translate(" + (width - margin.left - margin.right + 20) + "," + 0 + ")")
+          .attr("transform", "translate(" + (width - (margin.right + legendWidth) + 20) + "," + 0 + ")")
           .style("font-size", "12px");
 
         // update the outer dimensions
@@ -922,12 +925,14 @@ Bridle.BarChartCategorical = function () {
           .y(yValue)
         (data); // we pass the data as context
 
+        var legendWidth = legend.calculateWidth(data);
+        
         // set up scales and axes
         xScale.domain(data[0].values.map(function(d) {
           console.log(d, xValue(d), xValue)
           return xValue(d);
         }))
-          .rangeRoundBands([0, width - margin.left - margin.right], 0.1);
+          .rangeRoundBands([0, width - (margin.right + legendWidth)], 0.1);
 
         // how many data points are there in each layer on average 
         var avgDataPoints = function() {
@@ -1006,7 +1011,7 @@ Bridle.BarChartCategorical = function () {
           .attr("transform", "translate(" + (width - margin.left - margin.right + 20) / 2 + "," + (-margin.top) + ")");
         gEnter.append("g")
           .attr("class", "legend")
-          .attr("transform", "translate(" + (width - margin.left - margin.right + 20) + "," + 0 + ")")
+          .attr("transform", "translate(" + (width - (margin.right + legendWidth) + 20) + "," + 0 + ")")
           .style("font-size", "12px");
 
         // update the outer dimensions
@@ -1404,7 +1409,7 @@ Bridle.LineChart = function() {
     top: 50,
     bottom: 30,
     left: 100,
-    right: 100
+    right: 30
   };
   var height = 400;
   var width = 1000;
@@ -1435,6 +1440,9 @@ Bridle.LineChart = function() {
 
   function chart(selection) {
     selection.each(function(rawData) {
+
+      var legendWidth = legend.calculateWidth(rawData);
+
       var containerID = this;
       var data = rawData.filter(function(d) {
         return !d.disabled
@@ -1455,7 +1463,7 @@ Bridle.LineChart = function() {
 
       xScale
         .domain([d3.min(minDates), d3.max(maxDates)])
-        .range([0, width - margin.left - margin.right]);
+        .range([0, width - (margin.right + legendWidth)]);
 
 
       var amt = xScale(xValue(data[0].values[1])) - xScale(xValue(data[0].values[0]));
@@ -1500,7 +1508,7 @@ Bridle.LineChart = function() {
       var svg = d3.select(this).selectAll("svg").data([data]);
       var gEnter = svg.enter().append("svg").attr("class", "bridle").append("g");
       gEnter.append("defs").append("clipPath").attr("id", "clip").append("rect")
-        .attr("width", width - margin.left - margin.right)
+        .attr("width", width - (margin.right + legendWidth))
         .attr("height", height - margin.top - margin.bottom);
       gEnter.append("g").attr("class", "x axis");
       gEnter.append("g").attr("class", "y axis").append("text")
@@ -1515,7 +1523,7 @@ Bridle.LineChart = function() {
         .attr("transform", "translate(" + (width - margin.left - margin.right + 20) / 2 + "," + (-margin.top) + ")");
       gEnter.append("g")
         .attr("class", "legend")
-        .attr("transform", "translate(" + (width - margin.left - margin.right + 20) + "," + 0 + ")")
+        .attr("transform", "translate(" + (width - (margin.right + legendWidth) + 20) + "," + 0 + ")")
         .style("font-size", "12px");
       gEnter.append("g").attr("class", "lines")
 
@@ -1528,7 +1536,7 @@ Bridle.LineChart = function() {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
       svg.select('defs').select('clippath').select('rect')
-        .attr("width", width - margin.left - margin.right)
+        .attr("width", width - (margin.right + legendWidth))
         .attr("height", height - margin.top - margin.bottom);
 
       // reasign the data to trigger addition/deletion and add
@@ -1918,6 +1926,10 @@ Bridle.StackedChart = function() {
 
   function chart(selection) {
     selection.each(function(rawData) {
+
+
+
+
       var containerID = this;
       data = rawData.filter(function(d) {
         return !d.disabled
@@ -1934,10 +1946,11 @@ Bridle.StackedChart = function() {
         .y(yValue)
       (data); // we pass the data as context
 
+      var legendWidth = legend.calculateWidth(data);
 
       // setup the scales
       // x scale
-      xScale.range([0, width - margin.left - margin.right]);
+      xScale.range([0, width - (margin.right + legendWidth)]);
 
       // get max and min date(s)
       var maxDates = data.map(function(d) {
@@ -1986,7 +1999,7 @@ Bridle.StackedChart = function() {
         .attr("transform", "translate(" + (width - margin.left - margin.right + 20) / 2 + "," + (-margin.top) + ")");
       gEnter.append("g")
         .attr("class", "legend")
-        .attr("transform", "translate(" + (width - margin.left - margin.right + 20) + "," + 0 + ")")
+        .attr("transform", "translate(" + (width - (margin.right + legendWidth) + 20) + "," + 0 + ")")
         .style("font-size", "12px");
       gEnter.append("g").attr("class", "areas");
 
