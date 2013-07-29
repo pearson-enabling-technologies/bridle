@@ -1,0 +1,285 @@
+
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Bar Chart</title>
+        <meta name="viewport" content="width=device-width">
+
+        <!-- syntax highlighting CSS -->
+        <link rel="stylesheet" href="css/syntax.css">
+
+        <!-- Custom CSS -->
+        <link rel="stylesheet" href="css/main.css">
+
+        <!-- CSS for the graphs -->
+        <link rel="stylesheet" href="css/bridle.css">
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script src="bridle.js"></script>
+        
+
+    </head>
+    <body>
+
+        <div class="container">
+          <div class="site">
+            <div class="header">
+              <h1 class="title"><a href="../">Bridle</a></h1>
+              <a class="extra" href="../">Home</a>
+              <a class="extra" href="../examples/">Examples</a>
+              <a class="extra" href="https://github.com/ptdavteam/bridle">Fork Project on Github</a>
+            </div>
+     
+                <h1 id='bar_chart'>Bar Chart</h1>
+<div class='chartContainer' id='bar-chart'> </div>
+<p>A stacked bar chart with transitions and categories. Click on the legend circles to hide/show categories.</p>
+<script type='text/javascript'>
+var barData = [
+  {
+    "type": "MyGrammarLab Elementary",
+    "values": [
+      {
+        "term": "Grammar for KET",
+        "count": 9803,
+        "total_count": 9789,
+        "min": 0,
+        "max": 100,
+        "total": 756260,
+        "mean": 77.25610378996834
+      },
+      {
+        "term": "Module 1 Using nouns",
+        "count": 81927,
+        "total_count": 81786,
+        "min": 0,
+        "max": 100,
+        "total": 6734610,
+        "mean": 82.34428875357641
+      },
+      {
+        "term": "Module 10 Conditionals",
+        "count": 6691,
+        "total_count": 6684,
+        "min": 0,
+        "max": 100,
+        "total": 561040,
+        "mean": 83.9377618192699
+      },
+      {
+        "term": "Module 11 Word order and sentence patterns",
+        "count": 7144,
+        "total_count": 7134,
+        "min": 0,
+        "max": 100,
+        "total": 578745,
+        "mean": 81.12489486963835
+      },
+      {
+        "term": "Module 12 Questions",
+        "count": 10982,
+        "total_count": 10954,
+        "min": 0,
+        "max": 100,
+        "total": 906665,
+        "mean": 82.77022092386343
+      },
+      {
+        "term": "Module 13 Verbs with <i>-ing</i>&nbsp forms and infinitives",
+        "count": 5063,
+        "total_count": 5058,
+        "min": 0,
+        "max": 100,
+        "total": 400573,
+        "mean": 79.19592724396995
+      },
+      {
+        "term": "Module 14 Reported statements and indirect questions",
+        "count": 5765,
+        "total_count": 5759,
+        "min": 0,
+        "max": 100,
+        "total": 459262,
+        "mean": 79.74683104705679
+      },
+      {
+        "term": "Module 15 Relative clauses",
+        "count": 6038,
+        "total_count": 6030,
+        "min": 0,
+        "max": 100,
+        "total": 500589,
+        "mean": 83.01641791044776
+      },
+      {
+        "term": "Module 16 Linking words",
+        "count": 4102,
+        "total_count": 4097,
+        "min": 0,
+        "max": 100,
+        "total": 335541,
+        "mean": 81.89919453258481
+      },
+      {
+        "term": "Module 17 Passive forms",
+        "count": 7378,
+        "total_count": 7370,
+        "min": 0,
+        "max": 100,
+        "total": 621514,
+        "mean": 84.33025780189959
+      },
+      {
+        "term": "Module 18 Words that go together",
+        "count": 8672,
+        "total_count": 8663,
+        "min": 0,
+        "max": 100,
+        "total": 662389,
+        "mean": 76.46184924391089
+      },
+      {
+        "term": "Module 19 Forming words",
+        "count": 2664,
+        "total_count": 2662,
+        "min": 0,
+        "max": 100,
+        "total": 228936,
+        "mean": 86.0015026296018
+      },
+      {
+        "term": "Module 2 Pronouns and possessives",
+        "count": 29494,
+        "total_count": 29426,
+        "min": 0,
+        "max": 100,
+        "total": 2322288,
+        "mean": 78.91959491606063
+      },
+      {
+        "term": "Module 20 Spoken English",
+        "count": 580,
+        "total_count": 577,
+        "min": 0,
+        "max": 100,
+        "total": 49038,
+        "mean": 84.98786828422877
+      },
+      {
+        "term": "Module 3 Prepositions",
+        "count": 23297,
+        "total_count": 23259,
+        "min": 0,
+        "max": 100,
+        "total": 1776791,
+        "mean": 76.39154735801195
+      },
+      {
+        "term": "Module 4 Adjectives and adverbs",
+        "count": 25689,
+        "total_count": 25637,
+        "min": 0,
+        "max": 100,
+        "total": 2131980,
+        "mean": 83.16027616335765
+      },
+      {
+        "term": "Module 5 Present tenses",
+        "count": 44001,
+        "total_count": 43926,
+        "min": 0,
+        "max": 100,
+        "total": 3651588,
+        "mean": 83.13044666029231
+      },
+      {
+        "term": "Module 6 Past tenses",
+        "count": 23262,
+        "total_count": 23212,
+        "min": 0,
+        "max": 100,
+        "total": 1878941,
+        "mean": 80.94696708599001
+      },
+      {
+        "term": "Module 7 Present perfect",
+        "count": 20863,
+        "total_count": 20822,
+        "min": 0,
+        "max": 100,
+        "total": 1667336,
+        "mean": 80.07568917491115
+      },
+      {
+        "term": "Module 8 Future forms",
+        "count": 11452,
+        "total_count": 11438,
+        "min": 0,
+        "max": 100,
+        "total": 896918,
+        "mean": 78.4156321035146
+      },
+      {
+        "term": "Module 9 Modal verbs",
+        "count": 15461,
+        "total_count": 15436,
+        "min": 0,
+        "max": 100,
+        "total": 1289699,
+        "mean": 83.55137341280124
+      }
+    ]
+  }
+];
+
+var bar = Bridle.BarChartCategorical()
+  .duration(1000) 
+  .mode("stacked")
+  .width(700)
+  .title("Apples or Oranges?")
+  .yAxisTitle("Label your axes")
+  .margin({top:50, bottom:100, left:100, right:200})
+  .legend(Bridle.LegendBox().height(100).nameAccessor(function(d) {return d.type}))
+  .xValue(function (d) {
+    var term = d.term;
+    var match = term.match(/Module\s[\d]{1,2}/);
+    if (match) {
+      return match[0];
+    } else {
+      return term;
+    }
+  })
+  .yValue(function (d) {return d.mean})
+  .nameValue(function(d) {return d.type});
+
+d3.select('#bar-chart')
+  .datum(barData)
+  .call(bar);
+</script>
+
+
+            <div class="footer">
+              <div class="contact">
+                <p>
+                  Copyright 2013 - Pearson Technology<br />
+                  Data Analytics and Visualisation Team<br />
+                  pearson.davteam@gmail.com
+                </p>
+              </div>
+              <div class="contact">
+                <p>
+                  Built by<br />
+                  <a href="https://twitter.com/hubert_rogers">Hubert Rogers</a> and <a href="https://twitter.com/radiodario">Dario Villanueva</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div> <!-- /container -->
+
+
+    </body>
+</html>
