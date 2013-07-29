@@ -152,6 +152,9 @@ Bridle.LegendBox = function() {
     // var lenght = text.getComputedTextLength();
     // window.textNode = text;
     var w = maxLen * 5; // a good approximation?
+
+    if (w < 200) w = 200;
+
     return w;
   }
 
@@ -1427,10 +1430,10 @@ Bridle.LineChart = function() {
   var duration = 1000;
   var xScale = d3.time.scale.utc();
   var yScale = d3.scale.linear().nice();
-  var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+  var xAxis = d3.svg.axis().orient("bottom");
   xAxis.tickSize(-height + margin.top + margin.bottom, 0); // get/set?
   xAxis.tickSubdivide(true); // get/set?
-  var yAxis = d3.svg.axis().scale(yScale).orient("left");
+  var yAxis = d3.svg.axis().orient("left");
   var colors = d3.scale.category10();
   var legend = Bridle.LegendBox().nameAccessor(function(d) {
     return nameValue(d)
@@ -1440,6 +1443,9 @@ Bridle.LineChart = function() {
 
   function chart(selection) {
     selection.each(function(rawData) {
+
+      xAxis.scale(xScale);
+      yAxis.scale(yScale);
 
       var legendWidth = legend.calculateWidth(rawData);
 
@@ -1810,17 +1816,30 @@ Bridle.LineChart = function() {
     return chart;
   };
 
+  chart.xScale = function(_) {
+    if (!arguments.length) return xScale;
+    xScale = _;
+    return chart;
+  };
+
+  chart.yScale = function(_) {
+    if (!arguments.length) return yScale;
+    yScale = _;
+    return chart;
+  };
+
   chart.xAxis = function(_) {
     if (!arguments.length) return xAxis;
     xAxis = _;
     return chart;
-  }
+  };
+
 
   chart.yAxis = function(_) {
     if (!arguments.length) return yAxis;
     yAxis = _;
     return chart;
-  }
+  };
 
   chart.yAxisTitle = function(_) {
     if (!arguments.length) return yAxisTitle;
@@ -1894,8 +1913,8 @@ Bridle.StackedChart = function() {
   var xScale = d3.time.scale.utc();
   var yScale = d3.scale.linear().nice();
   var colors = d3.scale.category10();
-  var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
-  var yAxis = d3.svg.axis().scale(yScale).orient("left");
+  var xAxis = d3.svg.axis().orient("bottom");
+  var yAxis = d3.svg.axis().orient("left");
   xAxis.tickSize(-height + margin.top + margin.bottom, 0); // get/set?
   xAxis.tickSubdivide(true); // get/set?
   var area = d3.svg.area().interpolate(interpolate).x(X).y0(Y0).y1(Y1);
@@ -1927,7 +1946,8 @@ Bridle.StackedChart = function() {
   function chart(selection) {
     selection.each(function(rawData) {
 
-
+      xAxis.scale(xScale)
+      yAxis.scale(yScale)
 
 
       var containerID = this;
@@ -2241,6 +2261,17 @@ Bridle.StackedChart = function() {
     title = _;
     return chart;
   };
+
+  chart.xScale = function(_) {
+    if (!arguments.length) return xScale;
+    xScale = _;
+    return chart;
+  };
+
+  chart.yScale = function(_) {
+    if (!arguments.length) return yScale;
+    return chart;
+  }
 
   chart.xAxis = function(_) {
     if (!arguments.length) return xAxis;
