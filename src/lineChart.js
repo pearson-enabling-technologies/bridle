@@ -27,10 +27,10 @@ Bridle.LineChart = function() {
   var duration = 1000;
   var xScale = d3.time.scale.utc();
   var yScale = d3.scale.linear().nice();
-  var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+  var xAxis = d3.svg.axis().orient("bottom");
   xAxis.tickSize(-height + margin.top + margin.bottom, 0); // get/set?
   xAxis.tickSubdivide(true); // get/set?
-  var yAxis = d3.svg.axis().scale(yScale).orient("left");
+  var yAxis = d3.svg.axis().orient("left");
   var colors = d3.scale.category10();
   var legend = Bridle.LegendBox().nameAccessor(function(d) {
     return nameValue(d)
@@ -40,6 +40,9 @@ Bridle.LineChart = function() {
 
   function chart(selection) {
     selection.each(function(rawData) {
+
+      xAxis.scale(xScale);
+      yAxis.scale(yScale);
 
       var legendWidth = legend.calculateWidth(rawData);
 
