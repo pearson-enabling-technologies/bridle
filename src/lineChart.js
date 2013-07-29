@@ -35,6 +35,10 @@ Bridle.LineChart = function() {
   var legend = Bridle.LegendBox().nameAccessor(function(d) {
     return nameValue(d)
   });
+  // formatter for tooltip
+  var formatterX = d3.time.format("%Y-%m-%d");
+  var formatterY = d3.format(".02f");
+
   var dispatch = d3.dispatch('showTooltip', 'hideTooltip', "pointMouseover", "pointMouseout");
 
 
@@ -197,7 +201,7 @@ Bridle.LineChart = function() {
         .append('g')
         .attr("class", "circles")
 
-      var circles = gSeries
+      var circles = gSeries.select('g.circles')
         .selectAll('circle')
         .data(function(d) {
           return d.values;
@@ -335,10 +339,8 @@ Bridle.LineChart = function() {
 
       dispatch.on('pointMouseover.tooltip', function(e) {
         var offset = $(containerID).offset(), // { left: 0, top: 0 }
-          left = e.pos[0] + offset.left + margin.left,
-          top = e.pos[1] + offset.top + margin.top,
-          formatterX = d3.time.format("%Y-%m-%d")
-          formatterY = d3.format(".02f");
+            left = e.pos[0] + offset.left + margin.left,
+            top = e.pos[1] + offset.top + margin.top;
 
         var content = '<h3>' + e.series + '</h3>' +
           '<p>' +
@@ -431,7 +433,6 @@ Bridle.LineChart = function() {
     return chart;
   };
 
-
   chart.yAxis = function(_) {
     if (!arguments.length) return yAxis;
     yAxis = _;
@@ -465,6 +466,18 @@ Bridle.LineChart = function() {
   chart.yValue = function(_) {
     if (!arguments.length) return yValue;
     yValue = _;
+    return chart;
+  }
+
+  chart.formatterX = function(_) {
+    if (!arguments.length) return formatterX;
+    formatterX = _;
+    return chart;
+  }
+
+  chart.formatterY = function(_) {
+    if (!arguments.length) return formatterY;
+    formatterY = _;
     return chart;
   }
 

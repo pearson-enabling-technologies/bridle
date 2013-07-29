@@ -1438,6 +1438,10 @@ Bridle.LineChart = function() {
   var legend = Bridle.LegendBox().nameAccessor(function(d) {
     return nameValue(d)
   });
+  // formatter for tooltip
+  var formatterX = d3.time.format("%Y-%m-%d");
+  var formatterY = d3.format(".02f");
+
   var dispatch = d3.dispatch('showTooltip', 'hideTooltip', "pointMouseover", "pointMouseout");
 
 
@@ -1600,7 +1604,7 @@ Bridle.LineChart = function() {
         .append('g')
         .attr("class", "circles")
 
-      var circles = gSeries
+      var circles = gSeries.select('g.circles')
         .selectAll('circle')
         .data(function(d) {
           return d.values;
@@ -1738,10 +1742,8 @@ Bridle.LineChart = function() {
 
       dispatch.on('pointMouseover.tooltip', function(e) {
         var offset = $(containerID).offset(), // { left: 0, top: 0 }
-          left = e.pos[0] + offset.left + margin.left,
-          top = e.pos[1] + offset.top + margin.top,
-          formatterX = d3.time.format("%Y-%m-%d")
-          formatterY = d3.format(".02f");
+            left = e.pos[0] + offset.left + margin.left,
+            top = e.pos[1] + offset.top + margin.top;
 
         var content = '<h3>' + e.series + '</h3>' +
           '<p>' +
@@ -1834,7 +1836,6 @@ Bridle.LineChart = function() {
     return chart;
   };
 
-
   chart.yAxis = function(_) {
     if (!arguments.length) return yAxis;
     yAxis = _;
@@ -1868,6 +1869,18 @@ Bridle.LineChart = function() {
   chart.yValue = function(_) {
     if (!arguments.length) return yValue;
     yValue = _;
+    return chart;
+  }
+
+  chart.formatterX = function(_) {
+    if (!arguments.length) return formatterX;
+    formatterX = _;
+    return chart;
+  }
+
+  chart.formatterY = function(_) {
+    if (!arguments.length) return formatterY;
+    formatterY = _;
     return chart;
   }
 
@@ -1926,7 +1939,6 @@ Bridle.StackedChart = function() {
   });
   var dispatch = d3.dispatch('showTooltip', 'hideTooltip', "pointMouseover", "pointMouseout");
   // x accessor
-
   function X(d) {
     return xScale(xValue(d));
   };
@@ -1942,6 +1954,10 @@ Bridle.StackedChart = function() {
   function Y1(d) {
     return yScale(d.y0 + d.y);
   };
+
+
+  var formatterX = d3.time.format("%Y-%m-%d");
+  var formatterY = d3.format(".02f");
 
   function chart(selection) {
     selection.each(function(rawData) {
@@ -2022,6 +2038,7 @@ Bridle.StackedChart = function() {
         .attr("transform", "translate(" + (width - (margin.right + legendWidth) + 20) + "," + 0 + ")")
         .style("font-size", "12px");
       gEnter.append("g").attr("class", "areas");
+      gEnter.append("g").attr("class", "circles");
 
 
       // update the outer dimensions
@@ -2035,12 +2052,12 @@ Bridle.StackedChart = function() {
       // reasign the data to trigger addition/deletion
       var gArea = g.select('.areas').selectAll('g.area')
         .data(function(d) {
-          return d
+          return d;
         }, function(d) {
-          return nameValue(d)
+          return nameValue(d);
         })
         .classed('hover', function(d) {
-          return d.hover
+          return d.hover;
         })
 
       // when the area enters
@@ -2061,8 +2078,24 @@ Bridle.StackedChart = function() {
       // and add a group of points and 
       // assign data to trigger circle
       // addition
-      var circles = gAreaEnter.append("g")
+      var gCircles = g.select('.circles')
+        .selectAll('g.seriespoints')
+        .data(function(d) {
+          return d;
+        }, function(d) {
+          return nameValue(d);
+        })
+        .classed('hover', function(d) {
+          return d.hover;
+        })
+
+      gCircles.enter()
+        .append("g")
         .attr('class', 'seriespoints')
+
+       gCircles.exit().remove();
+
+      var circles = gCircles
         .selectAll('circle')
         .data(function(d) {
           d.values.forEach(function(v) {
@@ -2070,6 +2103,7 @@ Bridle.StackedChart = function() {
           });
           return d.values
         })
+
 
        var circlesEnter = circles.enter().append('circle')
         .attr("fill-opacity", 0.1)
@@ -2203,9 +2237,7 @@ Bridle.StackedChart = function() {
       dispatch.on('pointMouseover.tooltip', function(e) {
         var offset = $(containerID).offset(), // { left: 0, top: 0 }
           left = e.pos[0] + offset.left + margin.left,
-          top = e.pos[1] + offset.top + margin.top,
-          formatterX = d3.time.format("%Y-%m-%d")
-          formatterY = d3.format(".02f");
+          top = e.pos[1] + offset.top + margin.top;
 
         var content = '<h3>' + e.series + '</h3>' +
           '<p>' +
@@ -2308,6 +2340,18 @@ Bridle.StackedChart = function() {
     xValue = _;
     return chart;
   };
+
+  chart.formatterX = function(_) {
+    if (!arguments.length) return formatterX;
+    formatterX = _;
+    return chart;
+  }
+
+  chart.formatterY = function(_) {
+    if (!arguments.length) return formatterY;
+    formatterY = _;
+    return chart;
+  }
 
   chart.yValue = function(_) {
     if (!arguments.length) return yValue;
