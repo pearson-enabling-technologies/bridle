@@ -82,11 +82,12 @@ var stacked = Bridle.StackedChart()
 .legend(Bridle.LegendBox().height(100).nameAccessor(function(d) {return d.type}))
 .margin({top:50, bottom:30, left:100, right:200})
 .xScale(d3.scale.linear())
+.formatterX(d3.format(".0d"))
 .xValue(function (d) {
-  return new Date (d.z)
+  return d.z;
 })
 .yValue(function (d) {
-  return d.v
+  return d.v;
 })
 .nameValue(function (d) {
   return d.type
