@@ -4,7 +4,7 @@ Bridle.BarChartCategorical = function () {
     var mode = "stacked";
     var margin = {
       top: 50,
-      bottom: 100,
+      bottom: 150,
       left: 100,
       right: 100
     };
@@ -125,7 +125,7 @@ Bridle.BarChartCategorical = function () {
           return layer.values.length
         });
 
-        yScale.range([height - margin.top - margin.bottom, 0]);
+        yScale.range([height - (margin.top + margin.bottom), 0]);
 
         if (mode === "stacked") yScale.domain([0, yStackMax])
         else yScale.domain([0, yGroupMax]);
@@ -281,13 +281,20 @@ Bridle.BarChartCategorical = function () {
         g.select(".x.axis")
           .attr("transform", "translate(0," + yScale.range()[0] + ")")
           .call(xAxis)
-        // .selectAll("text") 
-        // .style("text-anchor", "end")
-        // .attr("dx", "-.8em")
-        // .attr("dy", ".15em")
-        // .attr("transform", function(d) {
-        //     return "rotate(-65)" 
-        //     });
+        .selectAll("text")
+        .text(function(d) {
+          if (d.length > 20) {
+            return d.slice(0,19) + '…'
+          } else {
+            return d;
+          }
+        })
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", function(d) {
+            return "rotate(-45)" 
+            });
 
         // update the y-axis
         g.select(".y.axis")
