@@ -1,6 +1,6 @@
 {
   "name": "bridle",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "A repository of reusable charts built with d3",
   "main": "bridle.js",
   "directories": {
