@@ -26,6 +26,7 @@ module.exports = function(grunt) {
         'src/barChartCategorical.js',
         'src/lineChart.js',
         'src/stackedChart.js',
+        'src/spiderChart.js',
         'src/table.js',
         'src/footer.js'
         ],
