@@ -3,78 +3,7 @@
 // create global namespace
 var Bridle = window.Bridle || {};
 
-/*****
- * Really simple tooltip implementation, stolen from nvtooltip
- *****/
-
-Bridle.tooltip = {
-
-  show: function(pos, content, gravity, dist) {
-    var container = $('<div class="bridle tooltip">');
-
-    gravity = gravity || 's';
-    dist = dist || 20;
-
-    container
-      .html(content)
-      .css({left: -1000, top: -1000, opacity: 0})
-      .appendTo('body');
-
-    var height = container.height() + parseInt(container.css('padding-top'))  + parseInt(container.css('padding-bottom')),
-        width = container.width() + parseInt(container.css('padding-left'))  + parseInt(container.css('padding-right')),
-        windowWidth = $(window).width(),
-        windowHeight = $(window).height(),
-        scrollTop = $('body').scrollTop(),  //TODO: also adjust horizontal scroll
-        left, top;
-
-
-    //TODO: implement other gravities
-    switch (gravity) {
-      case 'e':
-      case 'w':
-      case 'n':
-        left = pos[0] - (width / 2);
-        top = pos[1] + dist;
-        if (left < 0) left = 5;
-        if (left + width > windowWidth) left = windowWidth - width - 5;
-        if (scrollTop + windowHeight < top + height) top = pos[1] - height - dist;
-        break;
-      case 's':
-        left = pos[0] - (width / 2);
-        top = pos[1] - height - dist;
-        if (left < 0) left = 5;
-        if (left + width > windowWidth) left = windowWidth - width - 5;
-        if (scrollTop > top) top = pos[1] + dist;
-        break;
-    }
-
-    container
-        .css({
-          left: left,
-          top: top,
-          opacity: 1
-        });
-  },
-
-  cleanup : function() {
-    var tooltips = $('.bridle.tooltip');
-
-    // remove right away, but delay the show with css
-    tooltips.css({
-        'transition-delay': '0 !important',
-        '-moz-transition-delay': '0 !important',
-        '-webkit-transition-delay': '0 !important'
-    });
-
-    tooltips.css('opacity',0);
-
-    setTimeout(function() {
-      tooltips.remove()
-    }, 500);
-  }
-
-}
-// The legend box
+;// The legend box
 Bridle.LegendBox = function() {
   var margin = {
     top: 5,
@@ -98,6 +27,12 @@ Bridle.LegendBox = function() {
 
   function chart(selection) {
     selection.each(function(data) {
+
+      width = calculateWidth(data);
+      if (width < 200) {
+        width = 200;
+      }
+
       numData = data.length;
       // set up scaffolding
       var svg = d3.select(this).selectAll("svg").data([data]);
@@ -197,6 +132,34 @@ Bridle.LegendBox = function() {
     })
   }
 
+  function calculateWidth(data) {
+    var maxLen = 0;
+    var maxStr = '';
+
+    // find the longest name
+    data.forEach(function(d, i) {
+      if (nameAccessor(d).length > maxLen) {
+        maxLen = nameAccessor(d).length;
+        maxStr = nameAccessor(d);
+      }
+    });
+
+    // we create a text element, and then
+    // get the bounding box 
+    // var el = document.createElement('svg')
+    // d3.select(el).append('svg:text').text(maxStr)
+    // var text = d3.select(el).select('text').node();
+    // var lenght = text.getComputedTextLength();
+    // window.textNode = text;
+    var w = maxLen * 5; // a good approximation?
+
+    if (w < 200) w = 200;
+
+    return w;
+  }
+
+  chart.calculateWidth = calculateWidth;
+
   chart.dispatch = dispatch;
 
   chart.margin = function(_) {
@@ -260,7 +223,78 @@ Bridle.LegendBox = function() {
 
   return chart;
 };
-// a Bar chart
+;/*****
+ * Really simple tooltip implementation, stolen from nvtooltip
+ *****/
+
+Bridle.tooltip = {
+
+  show: function(pos, content, gravity, dist) {
+    var container = $('<div class="bridle tooltip">');
+
+    gravity = gravity || 's';
+    dist = dist || 20;
+
+    container
+      .html(content)
+      .css({left: -1000, top: -1000, opacity: 0})
+      .appendTo('body');
+
+    var height = container.height() + parseInt(container.css('padding-top'))  + parseInt(container.css('padding-bottom')),
+        width = container.width() + parseInt(container.css('padding-left'))  + parseInt(container.css('padding-right')),
+        windowWidth = $(window).width(),
+        windowHeight = $(window).height(),
+        scrollTop = $('body').scrollTop(),  //TODO: also adjust horizontal scroll
+        left, top;
+
+
+    //TODO: implement other gravities
+    switch (gravity) {
+      case 'e':
+      case 'w':
+      case 'n':
+        left = pos[0] - (width / 2);
+        top = pos[1] + dist;
+        if (left < 0) left = 5;
+        if (left + width > windowWidth) left = windowWidth - width - 5;
+        if (scrollTop + windowHeight < top + height) top = pos[1] - height - dist;
+        break;
+      case 's':
+        left = pos[0] - (width / 2);
+        top = pos[1] - height - dist;
+        if (left < 0) left = 5;
+        if (left + width > windowWidth) left = windowWidth - width - 5;
+        if (scrollTop > top) top = pos[1] + dist;
+        break;
+    }
+
+    container
+        .css({
+          left: left,
+          top: top,
+          opacity: 1
+        });
+  },
+
+  cleanup : function() {
+    var tooltips = $('.bridle.tooltip');
+
+    // remove right away, but delay the show with css
+    tooltips.css({
+        'transition-delay': '0 !important',
+        '-moz-transition-delay': '0 !important',
+        '-webkit-transition-delay': '0 !important'
+    });
+
+    tooltips.css('opacity',0);
+
+    setTimeout(function() {
+      tooltips.remove()
+    }, 500);
+  }
+
+}
+;// a Bar chart
 Bridle.BarChart = function () {
 
     var mode = "stacked";
@@ -291,7 +325,7 @@ Bridle.BarChart = function () {
     var yAxisTitle = 'Axis Title';
     var duration = 1000;
     var legend = Bridle.LegendBox().nameAccessor(function(d) {
-      return nameValue
+      return nameValue(d);
     });
 
     var xScale = d3.scale.ordinal()
@@ -338,11 +372,13 @@ Bridle.BarChart = function () {
           .y(yValue)
         (data); // we pass the data as context
 
+        var legendWidth = legend.calculateWidth(data);
+
         // set up scales and axes
         xScale.domain(data[0].values.map(function(d) {
           return xValue(d);
         }))
-          .rangeRoundBands([0, width - margin.left - margin.right], 0.1);
+          .rangeRoundBands([0, width - (margin.right + legendWidth)], 0.1);
 
         // how many data points are there in each layer on average 
         var avgDataPoints = function() {
@@ -421,7 +457,7 @@ Bridle.BarChart = function () {
           .attr("transform", "translate(" + (width - margin.left - margin.right + 20) / 2 + "," + (-margin.top) + ")");
         gEnter.append("g")
           .attr("class", "legend")
-          .attr("transform", "translate(" + (width - margin.left - margin.right + 20) + "," + 0 + ")")
+          .attr("transform", "translate(" + (width - (margin.right + legendWidth) + 20) + "," + 0 + ")")
           .style("font-size", "12px");
 
         // update the outer dimensions
@@ -809,7 +845,570 @@ Bridle.BarChart = function () {
 
     return chart;
   };
-  /* A Line Chart */
+  ;// a Bar chart
+Bridle.BarChartCategorical = function () {
+
+    var mode = "stacked";
+    var margin = {
+      top: 50,
+      bottom: 150,
+      left: 100,
+      right: 100
+    };
+    var height = 400;
+    var width = 1000;
+    var xValue = function(d) {
+      return d.x;
+    };
+    var yValue = function(d) {
+      return d.y;
+    };
+    var nameValue = function(d) {
+      return d.name;
+    }
+    var offset = 'zero';
+    var order = 'default';
+    var yScale = d3.scale.linear();
+    var colors = d3.scale.category10();
+
+    var yAxis = d3.svg.axis().scale(yScale).orient("left");
+    var title = 'Chart Title';
+    var yAxisTitle = 'Axis Title';
+    var duration = 1000;
+    var legend = Bridle.LegendBox().nameAccessor(function(d) {
+      return nameValue(d);
+    });
+
+    var xScale = d3.scale.ordinal()
+    var xAxis = d3.svg.axis()
+      .scale(xScale)
+      .tickSize(5)
+      .orient("bottom");
+
+    // var tickFormat = d3.time.format("%Y-%m-%d");
+    var xAxisFontSize = 10;
+    var yAxisFontSize = 10;
+
+    var formatterX = function (d) {
+      return d;
+    }
+    var formatterY = d3.format(".02f");
+
+    function toDate(e) {
+      return new Date(e);
+    }
+    var sortByDateDesc = function(a, b) {
+      return toDate(xValue(a)) > toDate(xValue(b)) ? 1 : -1;
+    };
+    var sortByDateAsc = function(a, b) {
+      return toDate(xValue(b)) < toDate(xValue(a)) ? 1 : -1;
+    };
+    var dispatch = d3.dispatch('showTooltip', 'hideTooltip', "pointMouseover", "pointMouseout");
+ 
+    function chart(selection) {
+      selection.each(function(rawData) {
+        var containerID = this;
+        // preserve rawData variable (needed to control updates of legend module)
+        var data = rawData.filter(function(d) {
+          return !d.disabled
+        })
+        // //sort the data points in each layer
+        // data.forEach(function(layer) {
+        //   layer.values.sort(sortByDateDesc)
+        // });
+
+        // convert the data to an appropriate representation
+        data = d3.layout.stack()
+          .offset(offset)
+          .order(order)
+          .values(function(d) {
+          return d.values
+        })
+          .x(xValue)
+          .y(yValue)
+        (data); // we pass the data as context
+
+        var legendWidth = legend.calculateWidth(data);
+        
+        // set up scales and axes
+        xScale.domain(data[0].values.map(function(d) {
+          console.log(d, xValue(d), xValue)
+          return xValue(d);
+        }))
+          .rangeRoundBands([0, width - (margin.right + legendWidth)], 0.1);
+
+        // how many data points are there in each layer on average 
+        var avgDataPoints = function() {
+          var sumPoints = 0;
+          data.forEach(function(layer) {
+            sumPoints += layer.values.length;
+          });
+          // console.log("THIS", sumPoints, data.length, sumPoints / data.length)
+          return (sumPoints / data.length);
+        }
+
+        // xAxis
+        //   .tickValues(xScale.domain().filter(function(d, i) {
+        //   var nthLabel = Math.ceil(200 / (width / avgDataPoints()));
+        //   // console.log(nthLabel)
+        //   return !(i % nthLabel);
+        // }))
+
+        var yGroupMax = d3.max(data, function(layer) {
+          return d3.max(layer.values, function(d) {
+            return d.y;
+          });
+        })
+
+        var yStackMax = d3.max(data, function(layer) {
+          return d3.max(layer.values, function(d) {
+            return d.y0 + d.y;
+          });
+        });
+
+        var numLayers = data.length;
+
+        var maxLayerLength = d3.max(data, function(layer) {
+          return layer.values.length
+        });
+
+        yScale.range([height - (margin.top + margin.bottom), 0]);
+
+        if (mode === "stacked") yScale.domain([0, yStackMax])
+        else yScale.domain([0, yGroupMax]);
+
+
+        // functions for rect attributes depending on stacked/group mode
+        var xScaleMode = function(d, i, j) {
+          if (mode === "stacked") return xScale(xValue(d));
+          else return xScale(xValue(d)) + xScale.rangeBand() / numLayers * j;
+        }
+        var yScaleMode = function(d) {
+          if (mode === "stacked") return yScale(d.y0 + d.y);
+          else return yScale(d.y);
+        }
+        var heightMode = function(d) {
+          if (mode === "stacked") return yScale(d.y0) - yScale(d.y0 + d.y);
+          else return height - yScale(d.y) - margin.top - margin.bottom;
+        }
+        var widthMode = function() {
+          if (mode === "stacked") return xScale.rangeBand();
+          else return xScale.rangeBand() / numLayers;
+        }
+
+        // set up the scaffolding
+        // note: enter only fires if data is empty
+        var svg = d3.select(containerID).selectAll("svg").data([data]);
+        var gEnter = svg.enter().append("svg").attr("class", "bridle").append("g");
+        gEnter.append("g").attr("class", "rects");
+        gEnter.append("g").attr("class", "x axis");
+        gEnter.append("g").attr("class", "y axis").append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 6)
+          .attr("dy", ".72em")
+          .attr("class", "y axis label")
+          .attr("text-anchor", "middle");
+        gEnter.append("svg:text").attr("class", "chartTitle label")
+          .attr("text-anchor", "middle")
+          .attr("dy", "1em")
+          .attr("transform", "translate(" + (width - margin.left - margin.right + 20) / 2 + "," + (-margin.top) + ")");
+        gEnter.append("g")
+          .attr("class", "legend")
+          .attr("transform", "translate(" + (width - (margin.right + legendWidth) + 20) + "," + 0 + ")")
+          .style("font-size", "12px");
+
+        // update the outer dimensions
+        svg.attr("width", width)
+          .attr("height", height)
+
+        // update the inner dimensions
+        var g = svg.select("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        // reasign the data to trigger points
+        // specify a key function based on *name*, 
+        // so that entering/exiting works properly when filters are triggered
+        var gLayer = g.select('.rects').selectAll('g.layerrects')
+          .data(function(d) {
+          return d
+        }, function(d) {
+          return nameValue(d)
+        })
+          .classed('hover', function(d) {
+          return d.hover
+        })
+
+        gLayer
+        .exit()
+        .transition()
+        .duration(duration)
+        .style('stroke-opacity', 1e-6)
+        .style('fill-opacity', 1e-6)
+        .remove();
+
+        var gLayerEnter = gLayer.enter();
+
+        // update entering rects
+        var gRects = gLayerEnter.append("g").attr("class", "layerrects")
+          .attr("fill", function(d, i) {
+          return colors(nameValue(d));
+        })
+          .selectAll('g.rect')
+          .data(function(d) {
+          d.values.forEach(function(v) {
+            v.name = nameValue(d)
+          });
+          return d.values
+        })
+
+        gRects.exit()
+        .transition()
+        .duration(duration)
+        .style('stroke-opacity', 1e-6)
+        .style('fill-opacity', 1e-6)        
+          .remove();
+
+        var rectsEnter = gRects.enter().append("g").attr("class", "rect");
+
+        rectsEnter.append('rect')
+          .attr("opacity", 0.1)
+          .attr("x", function(d, i, j) {
+          return xScaleMode(d, i, j)
+        })
+          .attr("y", function(d) {
+          return height - margin.top - margin.bottom
+        })
+          .attr("width", function() {
+          return widthMode();
+        })
+          .attr("height", 0)
+          .on('mouseover', function(d, i, j) {
+          dispatch.pointMouseover({
+            x: xValue(d),
+            y: yValue(d),
+            series: d.name,
+            pos: [xScale(xValue(d)), yScaleMode(d)],
+            pointIndex: i,
+            seriesIndex: j
+          });
+        })
+          .on('mouseout', function(d) {
+          dispatch.pointMouseout({
+            // point: d,
+            // series: data[d.series],
+            // pointIndex: d.point,
+            // seriesIndex: d.series
+          });
+        });
+
+        // update the chillin rects
+        g.selectAll('g.layerrects').selectAll('g.rect')
+          .select("rect")
+          .transition()
+          .duration(duration)
+          .attr("opacity", 0.9)
+          .attr("y", function(d) {
+          return yScaleMode(d)
+        })
+          .attr("height", function(d) {
+          return heightMode(d)
+        })
+          .attr("width", function() {
+          return widthMode();
+        })
+          .attr("x", function(d, i, j) {
+          return xScaleMode(d, i, j)
+        })
+
+        // update the title
+        g.select("text.chartTitle")
+          .text(title)
+
+        // update the x-axis
+        g.select(".x.axis")
+          .attr("transform", "translate(0," + yScale.range()[0] + ")")
+          .call(xAxis)
+        .selectAll("text")
+        .text(function(d) {
+          if (d.length > 20) {
+            return d.slice(0,19) + '…'
+          } else {
+            return d;
+          }
+        })
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", function(d) {
+            return "rotate(-45)" 
+            });
+
+        // update the y-axis
+        g.select(".y.axis")
+        //.attr("transform", "translate(")
+        .transition()
+          .duration(duration)
+          .attr("transform", "translate(-25,0)")
+
+          .call(yAxis)
+
+        g.select(".y.axis.label")
+          .attr("y", -45)
+          .attr("x", (-height + margin.top + margin.bottom) / 2)
+          .attr("dy", ".1em")
+          .text(yAxisTitle);
+
+        // handle change from/to stacked/grouped
+        d3.selectAll("input").on("change", change);
+
+        function change() {
+          console.log("mode change")
+          if (this.value === "grouped") {
+            mode = "grouped";
+            yScale.domain([0, yGroupMax]);
+            transitionGrouped();
+          } else {
+            mode = "stacked";
+            yScale.domain([0, yStackMax]);
+            transitionStacked();
+          }
+        }
+
+
+        // transition to grouped layout
+        function transitionGrouped() {
+          // update the y-axis
+          g.select(".y.axis")
+          //.attr("transform", "translate(")
+          .transition()
+            .duration(duration)
+            .attr("transform", "translate(-25,0)")
+
+            .call(yAxis)
+
+          g.selectAll('g.layerrects').selectAll('rect')
+            .transition()
+            .duration(500)
+            .delay(function(d, i) {
+            return i * 10;
+          })
+            .attr("x", function(d, i, j) {
+            // console.log(d,i,j)
+            return xScale(xValue(d)) + xScale.rangeBand() / numLayers * j;
+
+          })
+            .attr("width", xScale.rangeBand() / numLayers)
+            .transition()
+            .attr("y", function(d) {
+            return yScale(d.y);
+          })
+            .attr("height", function(d) {
+            return height - yScale(d.y) - margin.top - margin.bottom;
+          });
+        }
+
+        //transition to stacked layout
+        function transitionStacked() {
+
+          // update the y-axis
+          g.select(".y.axis")
+          //.attr("transform", "translate(")
+          .transition()
+            .duration(duration)
+            .attr("transform", "translate(-25,0)")
+
+            .call(yAxis)
+
+          g.selectAll('g.layerrects').selectAll('rect')
+            .transition()
+            .duration(500)
+            .delay(function(d, i) {
+            return i * 10;
+          })
+            .attr("y", function(d) {
+            return yScale(d.y0 + d.y);
+          })
+            .attr("height", function(d) {
+            return yScale(d.y0) - yScale(d.y0 + d.y);
+          })
+            .transition()
+            .attr("x", function(d) {
+            return xScale(xValue(d));
+          })
+            .attr("width", xScale.rangeBand());
+        }
+
+        // update the legend only if the data has changed
+        if (legend.numData() != rawData.length) {
+          // update the legend
+          g.select('.legend')
+            .datum(data)
+            .call(legend);
+        }
+
+        // listen for click events from the legend module, 
+        // filter the relevant data series
+        legend.dispatch.on('legendClick', function(d, i) {
+          d.disabled = !d.disabled;
+
+          if (!data.filter(function(d) {
+            return !d.disabled
+          }).length) {
+            data.forEach(function(d) {
+              d.disabled = false;
+            });
+          }
+
+          selection.call(chart)
+        });
+
+        // listen for mouseover events from legend module
+        // flag 'hover' on data series
+        legend.dispatch.on('legendMouseover', function(d, i) {
+          d.hover = true;
+          selection.call(chart)
+        });
+
+        // listen for mouseout events from legend module
+        // remove 'hover' from data series
+        legend.dispatch.on('legendMouseout', function(d, i) {
+          d.hover = false;
+          selection.call(chart)
+        });
+
+        // listen for mouseover events within this module
+        // (i.e. on rectangles) and show tooltip
+        dispatch.on('pointMouseover.tooltip', function(e) {
+          var offset = $(containerID).offset(), // { left: 0, top: 0 }
+            left = e.pos[0] + offset.left + margin.left,
+            top = e.pos[1] + offset.top + margin.top;
+
+
+          var content = '<h3>' + e.series + '</h3>' +
+            '<p>' +
+            '<span class="value">[' + formatterX(e.x) + ', ' + formatterY(e.y) + ']</span>' +
+            '</p>';
+
+          Bridle.tooltip.show([left, top], content);
+        });
+
+        // listen for mouseout events within this module
+        // hide tooltip
+        dispatch.on('pointMouseout.tooltip', function(e) {
+          Bridle.tooltip.cleanup();
+        });
+
+
+      })
+    }
+
+    chart.dispatch = dispatch;
+
+    chart.margin = function(_) {
+      if (!arguments.length) return margin;
+      margin = _;
+      return chart;
+    };
+
+    chart.width = function(_) {
+      if (!arguments.length) return width;
+      width = _;
+      return chart;
+    };
+
+    chart.height = function(_) {
+      if (!arguments.length) return height;
+      height = _;
+      return chart;
+    };
+
+    chart.value = function(_) {
+      if (!arguments.length) return value;
+      value = _;
+      return chart;
+    };
+
+    chart.label = function(_) {
+      if (!arguments.length) return label;
+      label = _;
+      return chart;
+    };
+
+    chart.title = function(_) {
+      if (!arguments.length) return title;
+      title = _;
+      return chart;
+    };
+
+    chart.xAxis = function(_) {
+      if (!arguments.length) return xAxis;
+      xAxis = _;
+      return chart;
+    };
+
+    chart.yAxis = function(_) {
+      if (!arguments.length) return yAxis;
+      yAxis = _;
+      return chart;
+    };
+
+    chart.yAxisTitle = function(_) {
+      if (!arguments.length) return yAxisTitle;
+      yAxisTitle = _;
+      return chart;
+    };
+
+    chart.duration = function(_) {
+      if (!arguments.length) return duration;
+      duration = _;
+      return chart;
+    };
+
+    // chart.tickFormat = function(_) {
+    //   if (!arguments.length) return tickFormat;
+    //   tickFormat = _;
+    //   return chart;
+    // };
+
+    chart.legend = function(_) {
+      if (!arguments.length) return legend;
+      legend = _;
+      return chart;
+    };
+
+    chart.xValue = function(_) {
+      if (!arguments.length) return xValue;
+      xValue = _;
+      return chart;
+    };
+
+    chart.yValue = function(_) {
+      if (!arguments.length) return yValue;
+      yValue = _;
+      return chart;
+    };
+
+    chart.nameValue = function(_) {
+      if (!arguments.length) return nameValue;
+      nameValue = _;
+      return chart;
+    };
+
+    chart.colors = function(_) {
+      if (!arguments.length) return colors;
+      colors = _;
+      return chart;
+    };
+    
+    chart.mode = function(_) {
+      if (!arguments.length) return mode;
+      mode = _;
+      return chart;
+    };
+
+    return chart;
+  };
+  ;/* A Line Chart */
 
 Bridle.LineChart = function() {
 
@@ -820,7 +1419,7 @@ Bridle.LineChart = function() {
     top: 50,
     bottom: 30,
     left: 100,
-    right: 100
+    right: 30
   };
   var height = 400;
   var width = 1000;
@@ -836,21 +1435,31 @@ Bridle.LineChart = function() {
   var title = 'Chart Title';
   var yAxisTitle = 'Axis Title';
   var duration = 1000;
-  var xScale = d3.time.scale.utc().nice();
+  var xScale = d3.time.scale.utc();
   var yScale = d3.scale.linear().nice();
-  var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+  var xAxis = d3.svg.axis().orient("bottom");
   xAxis.tickSize(-height + margin.top + margin.bottom, 0); // get/set?
   xAxis.tickSubdivide(true); // get/set?
-  var yAxis = d3.svg.axis().scale(yScale).orient("left");
+  var yAxis = d3.svg.axis().orient("left");
   var colors = d3.scale.category10();
   var legend = Bridle.LegendBox().nameAccessor(function(d) {
     return nameValue(d)
   });
+  // formatter for tooltip
+  var formatterX = d3.time.format("%Y-%m-%d");
+  var formatterY = d3.format(".02f");
+
   var dispatch = d3.dispatch('showTooltip', 'hideTooltip', "pointMouseover", "pointMouseout");
 
 
   function chart(selection) {
     selection.each(function(rawData) {
+
+      xAxis.scale(xScale);
+      yAxis.scale(yScale);
+
+      var legendWidth = legend.calculateWidth(rawData);
+
       var containerID = this;
       var data = rawData.filter(function(d) {
         return !d.disabled
@@ -871,7 +1480,7 @@ Bridle.LineChart = function() {
 
       xScale
         .domain([d3.min(minDates), d3.max(maxDates)])
-        .range([0, width - margin.left - margin.right]);
+        .range([0, width - (margin.right + legendWidth)]);
 
 
       var amt = xScale(xValue(data[0].values[1])) - xScale(xValue(data[0].values[0]));
@@ -916,7 +1525,7 @@ Bridle.LineChart = function() {
       var svg = d3.select(this).selectAll("svg").data([data]);
       var gEnter = svg.enter().append("svg").attr("class", "bridle").append("g");
       gEnter.append("defs").append("clipPath").attr("id", "clip").append("rect")
-        .attr("width", width - margin.left - margin.right)
+        .attr("width", width - (margin.right + legendWidth))
         .attr("height", height - margin.top - margin.bottom);
       gEnter.append("g").attr("class", "x axis");
       gEnter.append("g").attr("class", "y axis").append("text")
@@ -931,7 +1540,7 @@ Bridle.LineChart = function() {
         .attr("transform", "translate(" + (width - margin.left - margin.right + 20) / 2 + "," + (-margin.top) + ")");
       gEnter.append("g")
         .attr("class", "legend")
-        .attr("transform", "translate(" + (width - margin.left - margin.right + 20) + "," + 0 + ")")
+        .attr("transform", "translate(" + (width - (margin.right + legendWidth) + 20) + "," + 0 + ")")
         .style("font-size", "12px");
       gEnter.append("g").attr("class", "lines")
 
@@ -942,6 +1551,10 @@ Bridle.LineChart = function() {
       // update the inner dimensions
       var g = svg.select("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      svg.select('defs').select('clippath').select('rect')
+        .attr("width", width - (margin.right + legendWidth))
+        .attr("height", height - margin.top - margin.bottom);
 
       // reasign the data to trigger addition/deletion and add
       // a series group per series in the data
@@ -998,12 +1611,12 @@ Bridle.LineChart = function() {
         .append('g')
         .attr("class", "circles")
 
-      var circles = gSeries
+      var circles = gSeries.select('g.circles')
         .selectAll('circle')
         .data(function(d) {
           return d.values;
         }, function(d) {
-          return d.z;
+          return xValue(d);
         });
         
       // add the points
@@ -1136,10 +1749,8 @@ Bridle.LineChart = function() {
 
       dispatch.on('pointMouseover.tooltip', function(e) {
         var offset = $(containerID).offset(), // { left: 0, top: 0 }
-          left = e.pos[0] + offset.left + margin.left,
-          top = e.pos[1] + offset.top + margin.top,
-          formatterX = d3.time.format("%Y-%m-%d")
-          formatterY = d3.format(".02f");
+            left = e.pos[0] + offset.left + margin.left,
+            top = e.pos[1] + offset.top + margin.top;
 
         var content = '<h3>' + e.series + '</h3>' +
           '<p>' +
@@ -1214,17 +1825,29 @@ Bridle.LineChart = function() {
     return chart;
   };
 
+  chart.xScale = function(_) {
+    if (!arguments.length) return xScale;
+    xScale = _;
+    return chart;
+  };
+
+  chart.yScale = function(_) {
+    if (!arguments.length) return yScale;
+    yScale = _;
+    return chart;
+  };
+
   chart.xAxis = function(_) {
     if (!arguments.length) return xAxis;
     xAxis = _;
     return chart;
-  }
+  };
 
   chart.yAxis = function(_) {
     if (!arguments.length) return yAxis;
     yAxis = _;
     return chart;
-  }
+  };
 
   chart.yAxisTitle = function(_) {
     if (!arguments.length) return yAxisTitle;
@@ -1256,6 +1879,18 @@ Bridle.LineChart = function() {
     return chart;
   }
 
+  chart.formatterX = function(_) {
+    if (!arguments.length) return formatterX;
+    formatterX = _;
+    return chart;
+  }
+
+  chart.formatterY = function(_) {
+    if (!arguments.length) return formatterY;
+    formatterY = _;
+    return chart;
+  }
+
   chart.nameValue = function(_) {
     if (!arguments.length) return nameValue;
     nameValue = _;
@@ -1270,7 +1905,7 @@ Bridle.LineChart = function() {
 
   return chart;
 };
-// A stacked chart
+;// A stacked chart
 
 Bridle.StackedChart = function() {
 
@@ -1295,11 +1930,11 @@ Bridle.StackedChart = function() {
   var offset = 'zero';
   var order = 'default';
   var interpolate = 'linear';
-  var xScale = d3.time.scale.utc().nice();
+  var xScale = d3.time.scale.utc();
   var yScale = d3.scale.linear().nice();
   var colors = d3.scale.category10();
-  var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
-  var yAxis = d3.svg.axis().scale(yScale).orient("left");
+  var xAxis = d3.svg.axis().orient("bottom");
+  var yAxis = d3.svg.axis().orient("left");
   xAxis.tickSize(-height + margin.top + margin.bottom, 0); // get/set?
   xAxis.tickSubdivide(true); // get/set?
   var area = d3.svg.area().interpolate(interpolate).x(X).y0(Y0).y1(Y1);
@@ -1307,11 +1942,10 @@ Bridle.StackedChart = function() {
   var yAxisTitle = 'Axis Title';
   var duration = 1000;
   var legend = Bridle.LegendBox().nameAccessor(function(d) {
-    return nameValue(d)
+    return nameValue(d);
   });
   var dispatch = d3.dispatch('showTooltip', 'hideTooltip', "pointMouseover", "pointMouseout");
   // x accessor
-
   function X(d) {
     return xScale(xValue(d));
   };
@@ -1328,8 +1962,17 @@ Bridle.StackedChart = function() {
     return yScale(d.y0 + d.y);
   };
 
+
+  var formatterX = d3.time.format("%Y-%m-%d");
+  var formatterY = d3.format(".02f");
+
   function chart(selection) {
     selection.each(function(rawData) {
+
+      xAxis.scale(xScale)
+      yAxis.scale(yScale)
+
+
       var containerID = this;
       data = rawData.filter(function(d) {
         return !d.disabled
@@ -1346,10 +1989,11 @@ Bridle.StackedChart = function() {
         .y(yValue)
       (data); // we pass the data as context
 
+      var legendWidth = legend.calculateWidth(data);
 
       // setup the scales
       // x scale
-      xScale.range([0, width - margin.left - margin.right]);
+      xScale.range([0, width - (margin.right + legendWidth)]);
 
       // get max and min date(s)
       var maxDates = data.map(function(d) {
@@ -1398,9 +2042,10 @@ Bridle.StackedChart = function() {
         .attr("transform", "translate(" + (width - margin.left - margin.right + 20) / 2 + "," + (-margin.top) + ")");
       gEnter.append("g")
         .attr("class", "legend")
-        .attr("transform", "translate(" + (width - margin.left - margin.right + 20) + "," + 0 + ")")
+        .attr("transform", "translate(" + (width - (margin.right + legendWidth) + 20) + "," + 0 + ")")
         .style("font-size", "12px");
       gEnter.append("g").attr("class", "areas");
+      gEnter.append("g").attr("class", "circles");
 
 
       // update the outer dimensions
@@ -1414,12 +2059,12 @@ Bridle.StackedChart = function() {
       // reasign the data to trigger addition/deletion
       var gArea = g.select('.areas').selectAll('g.area')
         .data(function(d) {
-          return d
+          return d;
         }, function(d) {
-          return nameValue(d)
+          return nameValue(d);
         })
         .classed('hover', function(d) {
-          return d.hover
+          return d.hover;
         })
 
       // when the area enters
@@ -1440,8 +2085,24 @@ Bridle.StackedChart = function() {
       // and add a group of points and 
       // assign data to trigger circle
       // addition
-      var circles = gAreaEnter.append("g")
+      var gCircles = g.select('.circles')
+        .selectAll('g.seriespoints')
+        .data(function(d) {
+          return d;
+        }, function(d) {
+          return nameValue(d);
+        })
+        .classed('hover', function(d) {
+          return d.hover;
+        })
+
+      gCircles.enter()
+        .append("g")
         .attr('class', 'seriespoints')
+
+       gCircles.exit().remove();
+
+      var circles = gCircles
         .selectAll('circle')
         .data(function(d) {
           d.values.forEach(function(v) {
@@ -1449,6 +2110,7 @@ Bridle.StackedChart = function() {
           });
           return d.values
         })
+
 
        var circlesEnter = circles.enter().append('circle')
         .attr("fill-opacity", 0.1)
@@ -1582,9 +2244,7 @@ Bridle.StackedChart = function() {
       dispatch.on('pointMouseover.tooltip', function(e) {
         var offset = $(containerID).offset(), // { left: 0, top: 0 }
           left = e.pos[0] + offset.left + margin.left,
-          top = e.pos[1] + offset.top + margin.top,
-          formatterX = d3.time.format("%Y-%m-%d")
-          formatterY = d3.format(".02f");
+          top = e.pos[1] + offset.top + margin.top;
 
         var content = '<h3>' + e.series + '</h3>' +
           '<p>' +
@@ -1641,6 +2301,17 @@ Bridle.StackedChart = function() {
     return chart;
   };
 
+  chart.xScale = function(_) {
+    if (!arguments.length) return xScale;
+    xScale = _;
+    return chart;
+  };
+
+  chart.yScale = function(_) {
+    if (!arguments.length) return yScale;
+    return chart;
+  }
+
   chart.xAxis = function(_) {
     if (!arguments.length) return xAxis;
     xAxis = _;
@@ -1677,6 +2348,18 @@ Bridle.StackedChart = function() {
     return chart;
   };
 
+  chart.formatterX = function(_) {
+    if (!arguments.length) return formatterX;
+    formatterX = _;
+    return chart;
+  }
+
+  chart.formatterY = function(_) {
+    if (!arguments.length) return formatterY;
+    formatterY = _;
+    return chart;
+  }
+
   chart.yValue = function(_) {
     if (!arguments.length) return yValue;
     yValue = _;
@@ -1696,7 +2379,7 @@ Bridle.StackedChart = function() {
   };
 
   return chart;
-};// Table generator
+};;// Table generator
 Bridle.Table = function() {
 
   var numFormat = d3.format('.3f');
@@ -1906,7 +2589,7 @@ function merge(left,right,comparison)
 
   return chart;
 };
-// add support for amd
+;// add support for amd
 if (typeof window.define === "function" && window.define.amd) {
   window.define("bridle", ['jquery', 'd3'], function() {
     return Bridle;
