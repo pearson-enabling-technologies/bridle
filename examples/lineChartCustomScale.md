@@ -19,8 +19,9 @@ var line = Bridle.LineChart()
   .legend(Bridle.LegendBox().height(100).nameAccessor(function(d) {return d.type}))
   .margin({top:50, bottom:30, left:100, right:200})
   .xScale(d3.scale.linear())
+  .formatterX(d3.format(".0d"))
   .xValue(function (d) {
-    return new Date (d.z)
+    return d.z
   })
   .yValue(function (d) {
     return d.v
@@ -29,10 +30,11 @@ var line = Bridle.LineChart()
     return d.type
   });
 
-// render the chart
+
 d3.select('.chartContainer')
   .datum(lineData)
   .call(line);
+
 
 
 
@@ -157,8 +159,9 @@ var line = Bridle.LineChart()
   .legend(Bridle.LegendBox().height(100).nameAccessor(function(d) {return d.type}))
   .margin({top:50, bottom:30, left:100, right:200})
   .xScale(d3.scale.linear())
+  .formatterX(d3.format(".0d"))
   .xValue(function (d) {
-    return new Date (d.z)
+    return d.z
   })
   .yValue(function (d) {
     return d.v
@@ -171,5 +174,6 @@ var line = Bridle.LineChart()
 d3.select('.chartContainer')
   .datum(lineData)
   .call(line);
+
 
 </script>
