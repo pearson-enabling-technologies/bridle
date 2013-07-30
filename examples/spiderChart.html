@@ -1,9 +1,12 @@
+
+
+
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Bridle Examples</title>
+        <title>Stacked Area Chart</title>
         <meta name="viewport" content="width=device-width">
 
         <!-- syntax highlighting CSS -->
@@ -17,7 +20,7 @@
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
         <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-        <script src="../javascripts/bridle.js"></script>
+        <script src="bridle.js"></script>
         
 
     </head>
@@ -32,19 +35,35 @@
               <a class="extra" href="https://github.com/ptdavteam/bridle">Fork Project on Github</a>
             </div>
      
-                <h1 id='bridle_examples'>Bridle Examples</h1>
+                <h1 id='Spider'>Spider Chart</h1>
+                <div id='spider-chart'> </div>
+                <p>Spider charts are useful to display categorical data, and when used in small multiples, great for comparing multiple individuals, i.e. a class.</p>
+          <script>
+              var data =[[Math.random()*80 + 20, 'Math'], 
+                         [Math.random()*80 + 20, 'Physics'], 
+                         [Math.random()*80 + 20, 'Philosophy'], 
+                         [Math.random()*80 + 20, 'English'], 
+                         [Math.random()*80 + 20, 'History'], 
+                         [Math.random()*80 + 20, 'Computer Science']];
 
-<ul>
-<li><a href='lineChart.html'>Line Chart</a></li>
+              var chart = Bridle.spiderChart()
+                .width(800)
+                .height(600)
+                .title("Exam Results")
+                .subtitle("Exam results for Jane Doe")
+                .duration(1000);
 
-<li><a href='barChart.html'>Bar Chart</a></li>
+              d3.select('#spider-chart')
+                .datum(data)
+                .call(chart);
 
-<li><a href='stackedArea.html'>Stacked Area Chart</a></li>
+          </script>
 
-<li><a href='table.html'>Table</a></li>
 
-<li><a href='legend.html'>Legend</a></li>
-</ul>
+
+
+
+
 
             <div class="footer">
               <div class="contact">

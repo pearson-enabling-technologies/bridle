@@ -1,44 +1,59 @@
-// create global namespace
-var Bridle = window.Bridle || {};
+/* A Line Chart */
 
 Bridle.LineChart = function() {
+
+  'use Strict'
 
   // define dimensions of graph
   var margin = {
     top: 50,
     bottom: 30,
     left: 100,
-    right: 100
+    right: 30
   };
   var height = 400;
   var width = 1000;
   var xValue = function(d) {
-    return d.x
+    return d.x;
   };
   var yValue = function(d) {
-    return d.y
+    return d.y;
   };
   var nameValue = function(d) {
-    return d.name
-  }
+    return d.name;
+  };
   var title = 'Chart Title';
   var yAxisTitle = 'Axis Title';
   var duration = 1000;
-  var xScale = d3.time.scale.utc().nice();
+  var xScale = d3.time.scale.utc();
   var yScale = d3.scale.linear().nice();
-  var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
+  var xAxis = d3.svg.axis().orient("bottom");
   xAxis.tickSize(-height + margin.top + margin.bottom, 0); // get/set?
   xAxis.tickSubdivide(true); // get/set?
-  var yAxis = d3.svg.axis().scale(yScale).orient("left");
+  var yAxis = d3.svg.axis().orient("left");
   var colors = d3.scale.category10();
-  var legend = Bridle.LegendBox().nameAccessor(nameValue);
+  var legend = Bridle.LegendBox().nameAccessor(function(d) {
+    return nameValue(d)
+  });
+  // formatter for tooltip
+  var formatterX = d3.time.format("%Y-%m-%d");
+  var formatterY = d3.format(".02f");
+
   var dispatch = d3.dispatch('showTooltip', 'hideTooltip', "pointMouseover", "pointMouseout");
 
 
   function chart(selection) {
     selection.each(function(rawData) {
+
+      xAxis.scale(xScale);
+      yAxis.scale(yScale);
+
+      var legendWidth = legend.calculateWidth(rawData);
+
       var containerID = this;
-      data = rawData.filter(function(d) { return !d.disabled })
+      var data = rawData.filter(function(d) {
+        return !d.disabled
+      })
 
       // get max and min date(s)
       var maxDates = data.map(function(d) {
@@ -53,9 +68,12 @@ Bridle.LineChart = function() {
       });
 
 
-      xScale.domain([d3.min(minDates), d3.max(maxDates)])
-        .range([0, width - margin.left - margin.right]);
+      xScale
+        .domain([d3.min(minDates), d3.max(maxDates)])
+        .range([0, width - (margin.right + legendWidth)]);
 
+
+      var amt = xScale(xValue(data[0].values[1])) - xScale(xValue(data[0].values[0]));
 
       // X scale will fit all values from data[] within pixels 0-w
       //var x = d3.scale.linear().domain([0, data.length]).range([0, w]);
@@ -93,12 +111,12 @@ Bridle.LineChart = function() {
       };
 
 
-
       // set up the scaffolding
       var svg = d3.select(this).selectAll("svg").data([data]);
       var gEnter = svg.enter().append("svg").attr("class", "bridle").append("g");
-      gEnter.append("g").attr("class", "lines");
-      gEnter.append("g").attr("class", "points");
+      gEnter.append("defs").append("clipPath").attr("id", "clip").append("rect")
+        .attr("width", width - (margin.right + legendWidth))
+        .attr("height", height - margin.top - margin.bottom);
       gEnter.append("g").attr("class", "x axis");
       gEnter.append("g").attr("class", "y axis").append("text")
         .attr("transform", "rotate(-90)")
@@ -112,9 +130,9 @@ Bridle.LineChart = function() {
         .attr("transform", "translate(" + (width - margin.left - margin.right + 20) / 2 + "," + (-margin.top) + ")");
       gEnter.append("g")
         .attr("class", "legend")
-        .attr("transform", "translate(" + (width - margin.left - margin.right + 20) + "," + 0 + ")")
+        .attr("transform", "translate(" + (width - (margin.right + legendWidth) + 20) + "," + 0 + ")")
         .style("font-size", "12px");
-
+      gEnter.append("g").attr("class", "lines")
 
       // update the outer dimensions
       svg.attr("width", width)
@@ -124,80 +142,86 @@ Bridle.LineChart = function() {
       var g = svg.select("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-      // reasign the data to trigger addition/deletion
-      var gLine = g.select('.lines').selectAll('.line')
-          .data(function(d) {
-          return d
-        },function(d) {
-          return nameValue(d)
-        } )
-          .classed('hover', function(d) { 
-            return d.hover })     
+      svg.select('defs').select('clippath').select('rect')
+        .attr("width", width - (margin.right + legendWidth))
+        .attr("height", height - margin.top - margin.bottom);
 
-      gLine.exit()
-          // can't figure out why this transition seems to stop the line being removed.
-          // .transition()
-          // .duration(duration)
-          // .style('stroke-opacity', 1e-6)
-          .remove();
+      // reasign the data to trigger addition/deletion and add
+      // a series group per series in the data
+      var gSeries = svg.select('.lines').selectAll('g.series')
+        .data(function(d) {
+            return d
+          }, function(d) {
+            return nameValue(d)
+        })
+        .classed('hover', function(d) {
+          return d.hover
+        });
+
+      gSeries.exit()
+        .transition()
+        .duration(duration)
+        .style('opacity', 0)
+        .remove();
 
 
-      var gLineEnter = gLine.enter();
+      var gSeriesEnter = gSeries.enter()
+          .append('g')
+          .attr('class', 'series')
+          .attr('id', function(d) {
+            return 'series_' + nameValue(d);
+          });
+      
       // add paths
-      gLineEnter.append("path")
-        .attr("class", "line")
-        .attr("d", function(d) {
-        return line(d.values);
-      })
-
-      // reasign the data to trigger points
-      var gPoints = g.select('.points').selectAll('g.seriespoints')
-        .data(function(d) {
-        return d
-      });
-
-      gPoints.exit()
-          .transition()
-          .duration(duration)
-          .style('r', 0)
-          .style('opacity', 1e-6)      
-          .remove();
-
-      var gPointsEnter = gPoints.enter();
-
-
-
-      // update entering points
-      var gCircles = gPointsEnter.append("g").attr("class", "seriespoints")
-        .selectAll('g.circle')
-        .data(function(d) {
-        d.values.forEach(function(v) {
-          v.name = nameValue(d)
+      var linePaths = gSeries.selectAll('path.line')
+        .data(function(d) { 
+          return [d];
         });
-        return d.values
-      })
+      
+      linePaths.enter().append("path")
+          .attr("stroke", function(d, i) {
+            return colors(nameValue(d));
+          })
+          .attr("class", "line")
+          .attr("stroke-opacity", 0)
+          .attr("d", function(d) {
+            return line(d.values);
+          });
 
-      // update chilling points
-      gPoints.selectAll('g.circle')
+      // add points
+      var circlesGroup = gSeries.selectAll("g.circles")
         .data(function(d) {
-        d.values.forEach(function(v) {
-          v.name = nameValue(d)
+          d.values.forEach(function(v) {
+            v.name = nameValue(d)
+          });
+          return [d.values];
         });
-        return d.values
-      })
 
-      var circlesEnter = gCircles.enter().append("g").attr("class", "circle");
+      circlesGroup.enter()
+        .append('g')
+        .attr("class", "circles")
+
+      var circles = gSeries.select('g.circles')
+        .selectAll('circle')
+        .data(function(d) {
+          return d.values;
+        }, function(d) {
+          return xValue(d);
+        });
+        
+      // add the points
+      var circlesEnter = circles.enter();
 
       circlesEnter.append('circle')
         .attr("opacity", 0.1)
         .attr("class", "seriespoint")
         .attr('r', 0)
         .attr('cx', function(d) {
-        return xScale(xValue(d))
-      })
+          return xScale(xValue(d))
+        })
         .attr('cy', function(d) {
-        return yScale(yValue(d))
-      })
+          return yScale(yValue(d))
+        })
         .on('mouseover', function(d, i, j) {
           dispatch.pointMouseover({
             x: xValue(d),
@@ -217,32 +241,42 @@ Bridle.LineChart = function() {
           });
         });
 
+      circles.exit()
+        .attr('fill-opacity', 0)
+        .attr('r', 0)
+        .remove();
 
       // update the lines
-      g.selectAll('path.line')
+      gSeries.selectAll('path.line')
         .attr("stroke", function(d, i) {
-        return colors(nameValue(d));
-      })
+            return colors(nameValue(d));
+        })
         .attr("fill", "none")
+        .attr("d", function(d) {
+          return line(d.values);
+        })
+        .attr("clip-path", "url(#clip)")
         .transition()
         .duration(duration)
-        .attr("d", function(d) {
-        return line(d.values);
-      })
-        .attr("stroke-width", 1.5);
+        .ease('linear')
+        .attr("stroke-opacity", 1)
+        .attr("stroke-width", 1.5)
+        
+        
+        
 
       // update the circles
-      g.selectAll('g.circle')
-        .select('circle')
+      gSeries.selectAll('circle.seriespoint')
         .transition()
         .duration(duration)
+        .ease('linear')
         .attr('r', 5)
         .attr('cx', function(d) {
-        return xScale(xValue(d))
-      })
+          return xScale(xValue(d))
+        })
         .attr('cy', function(d) {
-        return yScale(yValue(d))
-      });
+          return yScale(yValue(d))
+        });
 
       // update the title
       g.select("text.chartTitle")
@@ -251,6 +285,9 @@ Bridle.LineChart = function() {
       // update the x-axis
       g.select(".x.axis")
         .attr("transform", "translate(0," + yScale.range()[0] + ")")
+        .transition()
+        .duration(duration)
+        .ease("linear")
         .call(xAxis);
 
       // update the y-axis
@@ -259,7 +296,6 @@ Bridle.LineChart = function() {
       .transition()
         .duration(duration)
         .attr("transform", "translate(-25,0)")
-
         .call(yAxis)
 
       g.select(".y.axis.label")
@@ -270,54 +306,53 @@ Bridle.LineChart = function() {
 
 
 
-        if (legend.numData() != rawData.length) {
-          // update the legend
-          g.select('.legend')
-            .datum(data)
-            .call(legend);
+      if (legend.numData() != rawData.length) {
+        // update the legend
+        g.select('.legend')
+          .datum(data)
+          .call(legend);
+      }
+
+      legend.dispatch.on('legendClick', function(d, i) {
+        d.disabled = !d.disabled;
+
+        if (!data.filter(function(d) {
+          return !d.disabled
+        }).length) {
+          data.forEach(function(d) {
+            d.disabled = false;
+          });
         }
-
-        legend.dispatch.on('legendClick', function(d, i) {
-          d.disabled = !d.disabled;
-
-          if (!data.filter(function(d) { return !d.disabled }).length) {
-            console.log("what does this do?")
-            data.forEach(function(d) {
-              d.disabled = false;
-            });
-          }
-          selection.call(chart)
-        });
+        selection.call(chart)
+      });
 
 
-        legend.dispatch.on('legendMouseover', function(d, i) {
-          d.hover = true;
-          selection.call(chart)
-        });
+      legend.dispatch.on('legendMouseover', function(d, i) {
+        d.hover = true;
+        selection.call(chart)
+      });
 
-        legend.dispatch.on('legendMouseout', function(d, i) {
-          d.hover = false;
-          selection.call(chart)
-        });
+      legend.dispatch.on('legendMouseout', function(d, i) {
+        d.hover = false;
+        selection.call(chart)
+      });
 
-        dispatch.on('pointMouseover.tooltip', function(e) {
-          var offset = $(containerID).offset(), // { left: 0, top: 0 }
-              left = e.pos[0] + offset.left + margin.left,
-              top = e.pos[1] + offset.top + margin.top,
-              formatterX = d3.time.format("%Y-%m-%d")
-              formatterY = d3.format(".02f");
+      dispatch.on('pointMouseover.tooltip', function(e) {
+        var offset = $(containerID).offset(), // { left: 0, top: 0 }
+            left = e.pos[0] + offset.left + margin.left,
+            top = e.pos[1] + offset.top + margin.top;
 
-          var content = '<h3>' + e.series + '</h3>' +
-                        '<p>' +
-                        '<span class="value">[' + formatterX(e.x) + ', ' + formatterY(e.y) + ']</span>' +
-                        '</p>';
+        var content = '<h3>' + e.series + '</h3>' +
+          '<p>' +
+          '<span class="value">[' + formatterX(e.x) + ', ' + formatterY(e.y) + ']</span>' +
+          '</p>';
 
-          nvtooltip.show([left, top], content);
-        });
+        Bridle.tooltip.show([left, top], content);
+      });
 
-        dispatch.on('pointMouseout.tooltip', function(e) {
-          nvtooltip.cleanup();
-        });    
+      dispatch.on('pointMouseout.tooltip', function(e) {
+        Bridle.tooltip.cleanup();
+      });
 
     });
 
@@ -380,17 +415,29 @@ Bridle.LineChart = function() {
     return chart;
   };
 
+  chart.xScale = function(_) {
+    if (!arguments.length) return xScale;
+    xScale = _;
+    return chart;
+  };
+
+  chart.yScale = function(_) {
+    if (!arguments.length) return yScale;
+    yScale = _;
+    return chart;
+  };
+
   chart.xAxis = function(_) {
     if (!arguments.length) return xAxis;
     xAxis = _;
     return chart;
-  }
+  };
 
   chart.yAxis = function(_) {
     if (!arguments.length) return yAxis;
     yAxis = _;
     return chart;
-  }
+  };
 
   chart.yAxisTitle = function(_) {
     if (!arguments.length) return yAxisTitle;
@@ -419,6 +466,18 @@ Bridle.LineChart = function() {
   chart.yValue = function(_) {
     if (!arguments.length) return yValue;
     yValue = _;
+    return chart;
+  }
+
+  chart.formatterX = function(_) {
+    if (!arguments.length) return formatterX;
+    formatterX = _;
+    return chart;
+  }
+
+  chart.formatterY = function(_) {
+    if (!arguments.length) return formatterY;
+    formatterY = _;
     return chart;
   }
 

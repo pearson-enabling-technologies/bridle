@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 lib-cov
 *.seed
 *.log
@@ -16,3 +17,7 @@ node_modules
 .DS_store
 .sass-cache
 .tmp
+twistd.*
+
+_site
+_layouts

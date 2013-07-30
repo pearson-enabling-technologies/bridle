@@ -1,0 +1,36 @@
+{
+  "name": "bridle",
+  "version": "0.2.1",
+  "description": "Library of reusable charts, graphs and tables written in d3, using the reusable chart style.",
+  "keywords": [
+    "d3",
+    "charts",
+    "graphs",
+    "reusable"
+  ],
+  "homepage" : "http://ptdavteam.github.io/bridle/",
+  "bugs" : "https://github.com/ptdavteam/bridle/issues",
+  "main": ["bridle.js", "bridle.css"],
+  "dependencies": {
+    "d3": "3.1.5",
+    "jquery": "*"
+  },
+  "authors" : [
+    {
+      "name" : "Dario Villanueva",
+      "email" : "dario.villanueva@gmail.com",
+      "url" : "http://alolo.co"
+    },
+    {
+      "name" : "Hubert Rogers",
+      "email" : "hubert.rogers@gmail.com"
+    }
+  ],
+  "repository" : {
+    "type" : "git",
+    "url" : "git@github.com:ptdavteam/bridle.git"
+  },
+  "licenses" : [{
+    "type" : "Apache"
+  }]
+}

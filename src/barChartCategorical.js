@@ -1,10 +1,10 @@
 // a Bar chart
-Bridle.BarChart = function () {
+Bridle.BarChartCategorical = function () {
 
     var mode = "stacked";
     var margin = {
       top: 50,
-      bottom: 100,
+      bottom: 150,
       left: 100,
       right: 100
     };
@@ -38,9 +38,14 @@ Bridle.BarChart = function () {
       .tickSize(5)
       .orient("bottom");
 
-    var tickFormat = d3.time.format("%Y-%m-%d");
+    // var tickFormat = d3.time.format("%Y-%m-%d");
     var xAxisFontSize = 10;
     var yAxisFontSize = 10;
+
+    var formatterX = function (d) {
+      return d;
+    }
+    var formatterY = d3.format(".02f");
 
     function toDate(e) {
       return new Date(e);
@@ -52,7 +57,7 @@ Bridle.BarChart = function () {
       return toDate(xValue(b)) < toDate(xValue(a)) ? 1 : -1;
     };
     var dispatch = d3.dispatch('showTooltip', 'hideTooltip', "pointMouseover", "pointMouseout");
-
+ 
     function chart(selection) {
       selection.each(function(rawData) {
         var containerID = this;
@@ -60,10 +65,10 @@ Bridle.BarChart = function () {
         var data = rawData.filter(function(d) {
           return !d.disabled
         })
-        //sort the data points in each layer
-        data.forEach(function(layer) {
-          layer.values.sort(sortByDateDesc)
-        });
+        // //sort the data points in each layer
+        // data.forEach(function(layer) {
+        //   layer.values.sort(sortByDateDesc)
+        // });
 
         // convert the data to an appropriate representation
         data = d3.layout.stack()
@@ -77,9 +82,10 @@ Bridle.BarChart = function () {
         (data); // we pass the data as context
 
         var legendWidth = legend.calculateWidth(data);
-
+        
         // set up scales and axes
         xScale.domain(data[0].values.map(function(d) {
+          console.log(d, xValue(d), xValue)
           return xValue(d);
         }))
           .rangeRoundBands([0, width - (margin.right + legendWidth)], 0.1);
@@ -94,12 +100,12 @@ Bridle.BarChart = function () {
           return (sumPoints / data.length);
         }
 
-        xAxis.tickFormat(tickFormat)
-          .tickValues(xScale.domain().filter(function(d, i) {
-          var nthLabel = Math.ceil(200 / (width / avgDataPoints()));
-          // console.log(nthLabel)
-          return !(i % nthLabel);
-        }))
+        // xAxis
+        //   .tickValues(xScale.domain().filter(function(d, i) {
+        //   var nthLabel = Math.ceil(200 / (width / avgDataPoints()));
+        //   // console.log(nthLabel)
+        //   return !(i % nthLabel);
+        // }))
 
         var yGroupMax = d3.max(data, function(layer) {
           return d3.max(layer.values, function(d) {
@@ -119,7 +125,7 @@ Bridle.BarChart = function () {
           return layer.values.length
         });
 
-        yScale.range([height - margin.top - margin.bottom, 0]);
+        yScale.range([height - (margin.top + margin.bottom), 0]);
 
         if (mode === "stacked") yScale.domain([0, yStackMax])
         else yScale.domain([0, yGroupMax]);
@@ -275,13 +281,20 @@ Bridle.BarChart = function () {
         g.select(".x.axis")
           .attr("transform", "translate(0," + yScale.range()[0] + ")")
           .call(xAxis)
-        // .selectAll("text") 
-        // .style("text-anchor", "end")
-        // .attr("dx", "-.8em")
-        // .attr("dy", ".15em")
-        // .attr("transform", function(d) {
-        //     return "rotate(-65)" 
-        //     });
+        .selectAll("text")
+        .text(function(d) {
+          if (d.length > 20) {
+            return d.slice(0,19) + '…'
+          } else {
+            return d;
+          }
+        })
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", function(d) {
+            return "rotate(-45)" 
+            });
 
         // update the y-axis
         g.select(".y.axis")
@@ -421,9 +434,8 @@ Bridle.BarChart = function () {
         dispatch.on('pointMouseover.tooltip', function(e) {
           var offset = $(containerID).offset(), // { left: 0, top: 0 }
             left = e.pos[0] + offset.left + margin.left,
-            top = e.pos[1] + offset.top + margin.top,
-            formatterX = d3.time.format("%Y-%m-%d")
-            formatterY = d3.format(".02f");
+            top = e.pos[1] + offset.top + margin.top;
+
 
           var content = '<h3>' + e.series + '</h3>' +
             '<p>' +
@@ -505,11 +517,11 @@ Bridle.BarChart = function () {
       return chart;
     };
 
-    chart.tickFormat = function(_) {
-      if (!arguments.length) return tickFormat;
-      tickFormat = _;
-      return chart;
-    };
+    // chart.tickFormat = function(_) {
+    //   if (!arguments.length) return tickFormat;
+    //   tickFormat = _;
+    //   return chart;
+    // };
 
     chart.legend = function(_) {
       if (!arguments.length) return legend;
