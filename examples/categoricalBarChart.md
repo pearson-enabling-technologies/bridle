@@ -93,7 +93,7 @@ var barData = [
         "mean": 82.77022092386343
       },
       {
-        "term": "Module 13 Verbs with <i>-ing</i>&nbsp forms and infinitives",
+        "term": "Module 13 Verbs with <i>-ing</i> forms and infinitives",
         "count": 5063,
         "total_count": 5058,
         "min": 0,
