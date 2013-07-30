@@ -9,4 +9,5 @@ title: Bridle Examples
 * [Table](table.html)
 * [Legend](legend.html)
 * [Line Chart with Custom Scale](lineChartCustomScale.html)
-* [Categorical Bar Chart](categoricalBarChart.html)
+* [Bar Chart Categorical](barChartCategorical.html) [Another Categorical bar chart](categoricalBarChart.html)
+
