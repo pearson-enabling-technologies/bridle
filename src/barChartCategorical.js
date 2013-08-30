@@ -85,7 +85,6 @@ Bridle.BarChartCategorical = function () {
         
         // set up scales and axes
         xScale.domain(data[0].values.map(function(d) {
-          console.log(d, xValue(d), xValue)
           return xValue(d);
         }))
           .rangeRoundBands([0, width - (margin.right + legendWidth)], 0.1);
