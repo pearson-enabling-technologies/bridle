@@ -39,7 +39,7 @@ Bridle.spiderChart = function () {
         }
       })
 
-      //console.log(data, scales.domain())
+      ////console.log(data, scales.domain())
       // select the svg element if it exists
       var svg = d3.select(this).selectAll("svg").data([data])
 
@@ -172,7 +172,7 @@ Bridle.spiderChart = function () {
     var max = scales.domain()[1] > 0 ? scales.domain()[1] : 1;
     var increase = max/ticks;
 
-    //console.log("building axis", length, ticks, min, max, increase)
+    ////console.log("building axis", length, ticks, min, max, increase)
     gridData = []
     for (var i = 0; i <= ticks; i++ ) {
       val = min + i*increase;

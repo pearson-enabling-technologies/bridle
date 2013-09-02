@@ -24,6 +24,7 @@ module.exports = function(grunt) {
         'src/tooltip.js',
         'src/barChart.js',
         'src/barChartCategorical.js',
+        'src/dualAxisChart.js',
         'src/lineChart.js',
         'src/stackedChart.js',
         'src/spiderChart.js',

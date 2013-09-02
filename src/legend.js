@@ -23,10 +23,6 @@ Bridle.LegendBox = function() {
   function chart(selection) {
     selection.each(function(data) {
 
-      width = calculateWidth(data);
-      if (width < 200) {
-        width = 200;
-      }
 
       numData = data.length;
       // set up scaffolding
@@ -66,9 +62,9 @@ Bridle.LegendBox = function() {
         .attr("class", "circle")
         .attr("cx", 0)
         .attr("cy",function(d,i) { 
-          // console.log(d,i)
+          // //console.log(d,i)
           return -0.25+"em"})
-        .attr("r","0.4em")
+        .attr("r", 5)
         .attr("stroke-width", 1)
         .attr("stroke", function(d, i) {
         return colors(i)
@@ -77,14 +73,28 @@ Bridle.LegendBox = function() {
         return colors(i)
       });
 
-      gLegendItemEnter.append("text")
+      gLegendItemEnter.append("foreignObject")
         .attr("class", "text")      
-        // .attr("y",function(d,i) { return +"em"})
-        .attr("x", xPadding)
+        .attr("y", "-0.85em")
+        .attr("x", 11)
+        .attr("width", width-11)
+        .style("overflow", "scroll")
+        .append('xhtml:body')
+        .append('p')
+        .attr("class", "bridle legend")
         .text(function(d) {
-          return nameAccessor(d)});
+          return nameAccessor(d)
+        })
+        // we need to set the parentHeight of the 
+        // foreignObject here!
+        .each(function(d) {
+          var h = this.getBoundingClientRect().height
+          d3.select(this.parentNode.parentNode).attr('height', h);
+        });
+
 
       gLegendItem.classed('disabled', function(d) { return d.disabled });
+      
       gLegendItem.exit()
         .remove();
 
@@ -93,24 +103,28 @@ Bridle.LegendBox = function() {
         xPos = 5,
         maxLength = 0;
       
+      
+
       gLegendItem
           .attr("opacity", 0)
           .attr('transform', function(d, i) {
-             var length = d3.select(this).select('text').node().getComputedTextLength() + 28;
+             
              if (length > maxLength) maxLength = length;
              yPos += newYpos;
 
              // if y has reached the vertical limit
-             if (yPos > height - margin.top - margin.bottom) {
-               yPos = 5;
-               xPos += maxLength;
-             }
+             // if (yPos > height - margin.top - margin.bottom) {
+             //   yPos = 5;
+             //   xPos += width;
+             // }
 
              // TO DO: handle horizonal limit cut-off remaining legendItems?
              // // if x has reached the horizontal limit
              // ...
 
-             newYpos = 20;
+             
+
+             newYpos = this.getBoundingClientRect().height + 5; // a bit of padding
 
              return 'translate(' + xPos + ',' + yPos + ')';
           })
@@ -126,34 +140,6 @@ Bridle.LegendBox = function() {
 
     })
   }
-
-  function calculateWidth(data) {
-    var maxLen = 0;
-    var maxStr = '';
-
-    // find the longest name
-    data.forEach(function(d, i) {
-      if (nameAccessor(d).length > maxLen) {
-        maxLen = nameAccessor(d).length;
-        maxStr = nameAccessor(d);
-      }
-    });
-
-    // we create a text element, and then
-    // get the bounding box 
-    // var el = document.createElement('svg')
-    // d3.select(el).append('svg:text').text(maxStr)
-    // var text = d3.select(el).select('text').node();
-    // var lenght = text.getComputedTextLength();
-    // window.textNode = text;
-    var w = maxLen * 5; // a good approximation?
-
-    if (w < 200) w = 200;
-
-    return w;
-  }
-
-  chart.calculateWidth = calculateWidth;
 
   chart.dispatch = dispatch;
 

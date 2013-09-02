@@ -81,8 +81,9 @@ Bridle.BarChartCategorical = function () {
           .y(yValue)
         (data); // we pass the data as context
 
-        var legendWidth = legend.calculateWidth(data);
-        
+        //var legendWidth = legend.calculateWidth(data);
+        var legendWidth = legend.width();
+        legend.height(height)
         // set up scales and axes
         xScale.domain(data[0].values.map(function(d) {
           return xValue(d);
@@ -95,14 +96,14 @@ Bridle.BarChartCategorical = function () {
           data.forEach(function(layer) {
             sumPoints += layer.values.length;
           });
-          // console.log("THIS", sumPoints, data.length, sumPoints / data.length)
+          // //console.log("THIS", sumPoints, data.length, sumPoints / data.length)
           return (sumPoints / data.length);
         }
 
         // xAxis
         //   .tickValues(xScale.domain().filter(function(d, i) {
         //   var nthLabel = Math.ceil(200 / (width / avgDataPoints()));
-        //   // console.log(nthLabel)
+        //   // //console.log(nthLabel)
         //   return !(i % nthLabel);
         // }))
 
@@ -314,7 +315,7 @@ Bridle.BarChartCategorical = function () {
         d3.selectAll("input").on("change", change);
 
         function change() {
-          console.log("mode change")
+          //console.log("mode change")
           if (this.value === "grouped") {
             mode = "grouped";
             yScale.domain([0, yGroupMax]);
@@ -345,7 +346,7 @@ Bridle.BarChartCategorical = function () {
             return i * 10;
           })
             .attr("x", function(d, i, j) {
-            // console.log(d,i,j)
+            // //console.log(d,i,j)
             return xScale(xValue(d)) + xScale.rangeBand() / numLayers * j;
 
           })

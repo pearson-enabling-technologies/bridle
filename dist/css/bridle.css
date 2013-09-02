@@ -11,53 +11,54 @@ svg.bridle {
 // --------------------------------------------------
 //*/
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\000033}}
-svg.bridle text {
-  fill: #333;
-}
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\000038}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\000036}}
 svg.bridle .x.axis line {
   stroke: #fff;
   stroke: lightgrey;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\0000313}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\0000311}}
 svg.bridle .x.axis .minor {
   stroke-opacity: .5;
   stroke-width: 0.5px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\0000318}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\0000316}}
 svg.bridle .x.axis .major {
   stroke-opacity: .5;
   stroke-width: 1px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\0000323}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\0000321}}
 svg.bridle .x.axis path {
   fill: none;
   display: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\0000327}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\0000325}}
 svg.bridle .x.axis text {
   font-size: 10px !important;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\0000331}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\0000329}}
 svg.bridle .y.axis line, svg.bridle .y.axis path {
   stroke: steelblue;
   stroke-width: 2;
   fill: none;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\0000337}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\0000335}}
 svg.bridle .y.axis .tick line {
   stroke-width: 1;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\0000345}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\0000343}}
 svg.bridle g.legend {
   font: 13px sans-serif;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\0000349}}
-svg.bridle .legendItem.disabled circle {
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\0000347}}
+svg.bridle g.legend .legendItem p {
+  margin: 0;
+  text-align: left;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\0000354}}
+svg.bridle g.legend .legendItem.disabled circle {
   fill-opacity: 0;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\0000359}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\0000371}}
 svg.bridle .hover rect {
   transition: opacity 250ms linear;
   -moz-transition: opacity 250ms linear;
@@ -69,7 +70,7 @@ svg.bridle .hover rect {
   stroke-width: 1;
   fill-opacity: 1;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\0000372}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\0000384}}
 svg.bridle .hover .line {
   transition: stroke-width 250ms linear;
   -moz-transition: stroke-width 250ms linear;
@@ -79,7 +80,7 @@ svg.bridle .hover .line {
   -webkit-transition-delay: 250ms;
   stroke-width: 4;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\0000384}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\0000396}}
 svg.bridle .hover .area {
   transition: opacity 250ms linear;
   -moz-transition: opacity 250ms linear;
@@ -93,15 +94,15 @@ svg.bridle .hover .area {
   fill-opacity: 1;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\00003108}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\00003120}}
 table.bridle {
   /* Caret for sorting */
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\00003109}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\00003121}}
 table.bridle tr {
   text-align: left;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\00003114}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\00003126}}
 table.bridle .asc {
   display: inline-block;
   width: 0;
@@ -113,7 +114,7 @@ table.bridle .asc {
   content: "";
   margin-left: 1em;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\00003125}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\00003137}}
 table.bridle .desc {
   display: inline-block;
   width: 0;
@@ -126,7 +127,7 @@ table.bridle .desc {
   margin-left: 1em;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\00003139}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\00003151}}
 div.bridle.tooltip {
   position: absolute;
   background-color: white;
@@ -146,19 +147,19 @@ div.bridle.tooltip {
   -moz-border-radius: 15px;
   border-radius: 15px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\00003164}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\00003176}}
 div.bridle.tooltip h3 {
   margin: 0;
   padding: 0;
   text-align: center;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\00003170}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\00003182}}
 div.bridle.tooltip p {
   margin: 0;
   padding: 0;
   text-align: center;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\00003176}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\00003188}}
 div.bridle.tooltip span {
   display: inline-block;
   margin: 2px 0;

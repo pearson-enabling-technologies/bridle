@@ -82,8 +82,9 @@ Bridle.StackedChart = function() {
         .y(yValue)
       (data); // we pass the data as context
 
-      var legendWidth = legend.calculateWidth(data);
-
+      var legendWidth = legend.width();
+      legend.height(height)
+      
       // setup the scales
       // x scale
       xScale.range([0, width - (margin.right + legendWidth)]);
