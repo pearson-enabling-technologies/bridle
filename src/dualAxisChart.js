@@ -182,7 +182,7 @@ Bridle.DualAxisChart = function () {
       gEnter.append('svg:text').attr('class', "chartTitle label")
         .attr("text-anchor", "middle")
         .attr("dy", "1em")
-        .attr("transform", "translate(" + (width - (margin.left + legendWidth )) / 2 + "," + (-margin.top) + ")");
+        .attr("transform", "translate(" + (width - (margin.left + legendWidth + margin.left)) / 2 + "," + (-margin.top) + ")");
 
       gEnter.append("g")
         .attr("class", "legend")
