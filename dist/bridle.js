@@ -1757,6 +1757,138 @@ Bridle.DualAxisChart = function () {
     return yRightScale(yRightValue(d));
   };
 
+  chart.margin = function(_) {
+    if (!arguments.length) return margin;
+    margin = _;
+    return chart;
+  };
+
+  chart.width = function(_) {
+    if (!arguments.length) return width;
+    width = _;
+    return chart;
+  };
+
+  chart.height = function(_) {
+    if (!arguments.length) return height;
+    height = _;
+    return chart;
+  };
+
+  chart.value = function(_) {
+    if (!arguments.length) return value;
+    value = _;
+    return chart;
+  };
+
+  chart.label = function(_) {
+    if (!arguments.length) return label;
+    label = _;
+    return chart;
+  };
+
+  chart.title = function(_) {
+    if (!arguments.length) return title;
+    title = _;
+    return chart;
+  };
+
+  chart.xScale = function(_) {
+    if (!arguments.length) return xScale;
+    xScale = _;
+    return chart;
+  };
+
+  chart.yLeftScale = function(_) {
+    if (!arguments.length) return yLeftScale;
+    yLeftScale = _;
+    return chart;
+  };
+
+  chart.yRightScale = function(_) {
+    if (!arguments.length) return yRightScale;
+    yRightScale = _;
+    return chart;
+  };
+
+  chart.xAxis = function(_) {
+    if (!arguments.length) return xAxis;
+    xAxis = _;
+    return chart;
+  };
+
+  chart.yAxis = function(_) {
+    if (!arguments.length) return yAxis;
+    yAxis = _;
+    return chart;
+  };
+
+  chart.yLeftAxisTitle = function(_) {
+    if (!arguments.length) return yLeftAxisTitle;
+    yLeftAxisTitle = _;
+    return chart;
+  };
+
+  chart.yRightAxisTitle = function(_) {
+    if (!arguments.length) return yRightAxisTitle;
+    yRightAxisTitle = _;
+    return chart;
+  };
+
+  chart.duration = function(_) {
+    if (!arguments.length) return duration;
+    duration = _;
+    return chart;
+  }
+
+  chart.legend = function(_) {
+    if (!arguments.length) return legend;
+    legend = _;
+    return chart;
+  }
+
+  chart.xValue = function(_) {
+    if (!arguments.length) return xValue;
+    xValue = _;
+    return chart;
+  }
+
+  chart.yLeftValue = function(_) {
+    if (!arguments.length) return yLeftValue;
+    yLeftValue = _;
+    return chart;
+  }
+
+  chart.yRightValue = function(_) {
+    if (!arguments.length) return yRightValue;
+    yRightValue = _;
+    return chart;
+  }
+
+  // chart.formatterX = function(_) {
+  //   if (!arguments.length) return formatterX;
+  //   formatterX = _;
+  //   return chart;
+  // }
+
+  // chart.formatterY = function(_) {
+  //   if (!arguments.length) return formatterY;
+  //   formatterY = _;
+  //   return chart;
+  // }
+
+  chart.nameValue = function(_) {
+    if (!arguments.length) return nameValue;
+    nameValue = _;
+    return chart;
+  }
+
+  chart.colors = function(_) {
+    if (!arguments.length) return colors;
+    colors = _;
+    return chart;
+  };
+
 
   return chart;
 
