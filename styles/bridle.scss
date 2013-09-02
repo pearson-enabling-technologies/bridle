@@ -1,8 +1,6 @@
 svg.bridle {
 
-  text {
-    fill: #333;
-  }
+
 
 
   .x.axis line {
@@ -44,11 +42,25 @@ svg.bridle {
 
   g.legend {
     font: 13px sans-serif;
+
+    .legendItem {
+      p {
+        margin: 0;
+        text-align: left;
+      }
+    }
+
+    .legendItem.disabled {
+      circle {
+        fill-opacity: 0;
+      }
+    }
+
   }
 
-  .legendItem.disabled circle {
-    fill-opacity: 0;
-  }
+  
+
+
 
   /********************
    * Transitions
