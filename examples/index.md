@@ -11,5 +11,6 @@ title: Bridle Examples
 * [Line Chart with Custom Scale](lineChartCustomScale.html)
 * [Bar Chart Categorical](barChartCategorical.html)
 * [Another Categorical Bar Chart](categoricalBarChart.html)
-* [Spider Charts](spiderChart.html)
+* [Spider Chart](spiderChart.html)
+* [Dual Axis Chart](dualAxisChart.html)
 
