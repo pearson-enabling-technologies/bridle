@@ -1485,6 +1485,11 @@ Bridle.DualAxisChart = function () {
   var yAxisFontSize = 10;
   
 
+  // formatter for tooltip
+  var formatterX = d3.time.format("%Y-%m-%d");
+  var formatterLeftY = d3.format(".02f");
+  var formatterRightY = d3.format(".02f");
+
   // titles
   var title = 'Chart Title';
   var yLeftAxisTitle = 'Left Axis Title';
@@ -1615,6 +1620,8 @@ Bridle.DualAxisChart = function () {
         .attr("y", height - margin.top - margin.bottom)
         .attr("height", 0)
         .attr("width", xScale.rangeBand())
+        .on('mouseover', mouseOverHandler)
+        .on('mouseout', mouseOutHandler)
         .transition()
         .duration(duration)
         .attr("y", function(d) {
@@ -1622,6 +1629,7 @@ Bridle.DualAxisChart = function () {
         })
         .attr("height", yRight)
         .attr("fill-opacity", 1)
+
 
       // THE LINE
       var lineSeries = svg.select(".lineSeries")
@@ -1653,6 +1661,8 @@ Bridle.DualAxisChart = function () {
 
       var circlesEnter = circles.enter();
 
+      var containerElement = this;
+
       circlesEnter.append('circle')
         .attr("opacity", 0)
         .attr('fill', colors(0))
@@ -1662,7 +1672,8 @@ Bridle.DualAxisChart = function () {
           return x(d) + xScale.rangeBand()/2
         })
         .attr("cy", yLeft)
-        // TO DO ADD MOUSEOVER MOUSEOUT HANDLERS
+        .on('mouseover', mouseOverHandler)
+        .on('mouseout', mouseOutHandler)
         .transition()
         .duration(duration)
         .attr("opacity", 1)
@@ -1731,6 +1742,49 @@ Bridle.DualAxisChart = function () {
         .datum(data.measures)
         .call(legend);
 
+      dispatch.on('pointMouseover.tooltip', function(e) {
+        var left = e.pos[0];
+        var top = e.pos[1];
+
+        var content = '<h3>' + formatterX(e.x) + '</h3><div>' +
+          '<span class="rightLabel">' + data.measures[0] + ':</span>' +
+          '<span class="rightVal">' + formatterRightY(e.yRight) + '</span>' +
+          '</div><div>' +
+          '<span class="leftLabel">' + data.measures[1] + ':</span>' +
+          '<span class="leftVal">' + formatterLeftY(e.yLeft) + '</span>' +
+          '</div>';
+
+        Bridle.tooltip.show([left, top], content);
+      });
+
+      dispatch.on('pointMouseout.tooltip', function(e) {
+        Bridle.tooltip.cleanup();
+      });
+
+    });
+  }
+
+  // showTooltip mouseOver handler
+  function mouseOverHandler(d, i, j) {
+    console.log(d)
+    var pos = d3.mouse(document.body)
+    dispatch.pointMouseover({
+      x: xValue(d),
+      pos: pos,
+      yLeft: yLeftValue(d),
+      yRight: yRightValue(d),
+      series: d.name,
+      pointIndex: i,
+      seriesIndex: j
+    });
+  }
+
+  function mouseOutHandler(d, i, j) {
+    dispatch.pointMouseout({
+      // point: d,
+      // series: data[d.series],
+      // pointIndex: d.point,
+      // seriesIndex: d.series
     });
   }
 
@@ -1865,17 +1919,17 @@ Bridle.DualAxisChart = function () {
     return chart;
   }
 
-  // chart.formatterX = function(_) {
-  //   if (!arguments.length) return formatterX;
-  //   formatterX = _;
-  //   return chart;
-  // }
+  chart.formatterX = function(_) {
+    if (!arguments.length) return formatterX;
+    formatterX = _;
+    return chart;
+  }
 
-  // chart.formatterY = function(_) {
-  //   if (!arguments.length) return formatterY;
-  //   formatterY = _;
-  //   return chart;
-  // }
+  chart.formatterY = function(_) {
+    if (!arguments.length) return formatterY;
+    formatterY = _;
+    return chart;
+  }
 
   chart.nameValue = function(_) {
     if (!arguments.length) return nameValue;
