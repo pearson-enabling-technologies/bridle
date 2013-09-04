@@ -171,7 +171,7 @@ Bridle.DualAxisChart = function () {
       gEnter.append('g').attr("class", "barSeries");
       gEnter.append('g').attr("class", "lineSeries")
             .append('g').attr("class", "circles");
-            
+
       gEnter.append('g').attr("class", "x axis");
       
       gEnter.append('g').attr("class", "y axis left")
@@ -411,9 +411,11 @@ Bridle.DualAxisChart = function () {
   function toDate(e) {
     return new Date(e);
   }
+
   var sortByDateDesc = function(a, b) {
     return toDate(xValue(a)) > toDate(xValue(b)) ? 1 : -1;
   };
+ 
   var sortByDateAsc = function(a, b) {
     return toDate(xValue(b)) < toDate(xValue(a)) ? 1 : -1;
   };
