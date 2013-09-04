@@ -265,7 +265,7 @@ Bridle.tooltip = {
   cleanup : function() {
     var tooltips = $('.bridle.tooltip');
 
-    // remove right away, but delay the show with css
+//    remove right away, but delay the show with css
     tooltips.css({
         'transition-delay': '0 !important',
         '-moz-transition-delay': '0 !important',
@@ -1428,6 +1428,8 @@ Dario.
 
 */
 
+var Bridle = Bridle || {};
+
 // dual axis chart
 Bridle.DualAxisChart = function () {
 
@@ -1442,14 +1444,14 @@ Bridle.DualAxisChart = function () {
   var width = 800;
 
   // accessors
-  var xValue = function(d) {
+  var xValue = function (d) {
     return new Date(d.z);
   };
   // we need two values
-  var yLeftValue = function(d) {
+  var yLeftValue = function (d) {
     return d.v;
   };
-  var yRightValue = function(d) {
+  var yRightValue = function (d) {
     return d.w;
   };
 
@@ -1457,13 +1459,13 @@ Bridle.DualAxisChart = function () {
   var offset = 'zero';
   var order = 'default';
   var duration = 1000;
-  
+
   // scales
   // left is for the line
   var yLeftScale = d3.scale.linear();
   // right is for the rects
   var yRightScale = d3.scale.linear();
-  
+
   var xScale = d3.scale.ordinal();
 
   var colors = d3.scale.category10();
@@ -1484,6 +1486,11 @@ Bridle.DualAxisChart = function () {
   var xAxisFontSize = 10; // do we really want this here?
   var yAxisFontSize = 10;
   
+
+  // formatter for tooltip
+  var formatterX = d3.time.format("%Y-%m-%d");
+  var formatterLeftY = d3.format(".02f");
+  var formatterRightY = d3.format(".02f");
 
   // titles
   var title = 'Chart Title';
@@ -1561,17 +1568,21 @@ Bridle.DualAxisChart = function () {
       var gEnter = svg.enter().append('svg').attr("class", "bridle").append("g");
 
       gEnter.append('g').attr("class", "barSeries");
-      gEnter.append('g').attr("class", "lineSeries");
+      gEnter.append('g').attr("class", "lineSeries")
+            .append('g').attr("class", "circles");
+
       gEnter.append('g').attr("class", "x axis");
       
-      gEnter.append('g').attr("class", "y axis left").append("text")
+      gEnter.append('g').attr("class", "y axis left")
+        .append("text")
         .attr('transform', "rotate(-90)")
         .attr('y', 6)
         .attr('dy', ".72em")
         .attr('class', "y axis left label")
         .attr('text-anchor', "middle");
 
-      gEnter.append('g').attr("class", "y axis right").append("text")
+      gEnter.append('g').attr("class", "y axis right")
+        .append("text")
         .attr('transform', "rotate(-90)")
         .attr('y', 6)
         .attr('dy', "1.72em")
@@ -1615,62 +1626,81 @@ Bridle.DualAxisChart = function () {
         .attr("y", height - margin.top - margin.bottom)
         .attr("height", 0)
         .attr("width", xScale.rangeBand())
+        .on('mouseover', mouseOverHandler)
+        .on('mouseout', mouseOutHandler)
+
+
+      barSeries.selectAll('rect')
         .transition()
         .duration(duration)
-        .attr("y", function(d) {
+        .attr("height", function(d) {
           return height - yRight(d) - margin.top - margin.bottom;
         })
-        .attr("height", yRight)
+        .attr("y", yRight)
         .attr("fill-opacity", 1)
+
 
       // THE LINE
       var lineSeries = svg.select(".lineSeries")
 
-      // line the path
       var linePath = lineSeries
+        .selectAll('path.line')
+        .data(function(d) {
+          return [d]
+        })
+
+
+      linePath.enter()
         .append('path')
         .attr('class', 'line')
         .attr('stroke', colors(0))
         .attr('stroke-opacity', 0)
         .attr('stroke-width', 1.5)
         .attr('fill', 'none')
-        .attr('d', function(d) {
-          return line(d.values);
-        })
         .transition()
         .duration(duration)
         .attr('stroke-opacity', 1)
 
-      // circles for datapoints
-      var gCircles = lineSeries
-        .append('g')
-        .attr("class", "circles")
+      linePath.exit()
+        .remove();
 
-      var circles = gCircles.selectAll('circle')
+      lineSeries.select('path')
+        .attr('d', function(d) {
+          return line(d.values);
+        })
+
+
+      // circles for datapoints
+      var circles = lineSeries.select('g.circles').selectAll('circle')
         .data(function(d) {
           return d.values;
         });
 
+
+
       var circlesEnter = circles.enter();
+
+      var containerElement = this;
 
       circlesEnter.append('circle')
         .attr("opacity", 0)
         .attr('fill', colors(0))
         .attr("class", "seriesPoint")
         .attr("r", 0)
+
+      circles
         .attr("cx", function(d) {
           return x(d) + xScale.rangeBand()/2
         })
         .attr("cy", yLeft)
-        // TO DO ADD MOUSEOVER MOUSEOUT HANDLERS
+        .on('mouseover', mouseOverHandler)
+        .on('mouseout', mouseOutHandler)
         .transition()
         .duration(duration)
         .attr("opacity", 1)
         .attr("r", 3)
 
       circles.exit()
-        .attr('fill-opacity', 0)
-        .attr('r', 0)
         .remove();
 
 
@@ -1731,6 +1761,48 @@ Bridle.DualAxisChart = function () {
         .datum(data.measures)
         .call(legend);
 
+      dispatch.on('pointMouseover.tooltip', function(e) {
+        var left = e.pos[0];
+        var top = e.pos[1];
+
+        var content = '<h3>' + formatterX(e.x) + '</h3><div class="rightValue">' +
+          '<div class="rightLabel">' + data.measures[0] + ':</div>' +
+          '<div class="rightVal">' + formatterRightY(e.yRight) + '</div>' +
+          '</div><div class="leftValue">' +
+          '<div class="leftLabel">' + data.measures[1] + ':</div>' +
+          '<div class="leftVal">' + formatterLeftY(e.yLeft) + '</div>' +
+          '</div>';
+
+        Bridle.tooltip.show([left, top], content);
+      });
+
+      dispatch.on('pointMouseout.tooltip', function(e) {
+        Bridle.tooltip.cleanup();
+      });
+
+    });
+  }
+
+  // showTooltip mouseOver handler
+  function mouseOverHandler(d, i, j) {
+    var pos = d3.mouse(document.body)
+    dispatch.pointMouseover({
+      x: xValue(d),
+      pos: pos,
+      yLeft: yLeftValue(d),
+      yRight: yRightValue(d),
+      series: d.name,
+      pointIndex: i,
+      seriesIndex: j
+    });
+  }
+
+  function mouseOutHandler(d, i, j) {
+    dispatch.pointMouseout({
+      // point: d,
+      // series: data[d.series],
+      // pointIndex: d.point,
+      // seriesIndex: d.series
     });
   }
 
@@ -1738,9 +1810,11 @@ Bridle.DualAxisChart = function () {
   function toDate(e) {
     return new Date(e);
   }
+
   var sortByDateDesc = function(a, b) {
     return toDate(xValue(a)) > toDate(xValue(b)) ? 1 : -1;
   };
+ 
   var sortByDateAsc = function(a, b) {
     return toDate(xValue(b)) < toDate(xValue(a)) ? 1 : -1;
   };
@@ -1865,17 +1939,17 @@ Bridle.DualAxisChart = function () {
     return chart;
   }
 
-  // chart.formatterX = function(_) {
-  //   if (!arguments.length) return formatterX;
-  //   formatterX = _;
-  //   return chart;
-  // }
+  chart.formatterX = function(_) {
+    if (!arguments.length) return formatterX;
+    formatterX = _;
+    return chart;
+  }
 
-  // chart.formatterY = function(_) {
-  //   if (!arguments.length) return formatterY;
-  //   formatterY = _;
-  //   return chart;
-  // }
+  chart.formatterY = function(_) {
+    if (!arguments.length) return formatterY;
+    formatterY = _;
+    return chart;
+  }
 
   chart.nameValue = function(_) {
     if (!arguments.length) return nameValue;
