@@ -29,6 +29,8 @@ Dario.
 
 */
 
+var Bridle = Bridle || {};
+
 // dual axis chart
 Bridle.DualAxisChart = function () {
 
@@ -43,14 +45,14 @@ Bridle.DualAxisChart = function () {
   var width = 800;
 
   // accessors
-  var xValue = function(d) {
+  var xValue = function (d) {
     return new Date(d.z);
   };
   // we need two values
-  var yLeftValue = function(d) {
+  var yLeftValue = function (d) {
     return d.v;
   };
-  var yRightValue = function(d) {
+  var yRightValue = function (d) {
     return d.w;
   };
 
@@ -58,13 +60,13 @@ Bridle.DualAxisChart = function () {
   var offset = 'zero';
   var order = 'default';
   var duration = 1000;
-  
+
   // scales
   // left is for the line
   var yLeftScale = d3.scale.linear();
   // right is for the rects
   var yRightScale = d3.scale.linear();
-  
+
   var xScale = d3.scale.ordinal();
 
   var colors = d3.scale.category10();
@@ -169,16 +171,19 @@ Bridle.DualAxisChart = function () {
       gEnter.append('g').attr("class", "barSeries");
       gEnter.append('g').attr("class", "lineSeries")
             .append('g').attr("class", "circles");
+            
       gEnter.append('g').attr("class", "x axis");
       
-      gEnter.append('g').attr("class", "y axis left").append("text")
+      gEnter.append('g').attr("class", "y axis left")
+        .append("text")
         .attr('transform', "rotate(-90)")
         .attr('y', 6)
         .attr('dy', ".72em")
         .attr('class', "y axis left label")
         .attr('text-anchor', "middle");
 
-      gEnter.append('g').attr("class", "y axis right").append("text")
+      gEnter.append('g').attr("class", "y axis right")
+        .append("text")
         .attr('transform', "rotate(-90)")
         .attr('y', 6)
         .attr('dy', "1.72em")
