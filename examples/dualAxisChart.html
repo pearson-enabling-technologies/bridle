@@ -39,8 +39,8 @@
 <div class='chartContainer' id='bar-chart'> </div>
 <p>A dual axis chart to display measurements with two different values.</p>
 <script type='text/javascript'>
-var chartData =
-  {
+var chartData = function() {
+  return {
     "type": "apples are apples they are a great fruits",
     "measures" : [
       "units",
@@ -69,13 +69,20 @@ var chartData =
     ]
   }
 ;
+};
 
 var dualAxisChart = Bridle.DualAxisChart()
 
+function drawChart() {
+  d3.select('#bar-chart')
+    .datum(chartData())
+    .call(dualAxisChart);
+  
+}
 
-d3.select('#bar-chart')
-  .datum(chartData)
-  .call(dualAxisChart);
+setInterval(drawChart, 1000);
+drawChart();
+
 </script>
 
 

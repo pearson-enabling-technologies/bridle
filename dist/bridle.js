@@ -1566,7 +1566,8 @@ Bridle.DualAxisChart = function () {
       var gEnter = svg.enter().append('svg').attr("class", "bridle").append("g");
 
       gEnter.append('g').attr("class", "barSeries");
-      gEnter.append('g').attr("class", "lineSeries");
+      gEnter.append('g').attr("class", "lineSeries")
+            .append('g').attr("class", "circles");
       gEnter.append('g').attr("class", "x axis");
       
       gEnter.append('g').attr("class", "y axis left").append("text")
@@ -1622,6 +1623,9 @@ Bridle.DualAxisChart = function () {
         .attr("width", xScale.rangeBand())
         .on('mouseover', mouseOverHandler)
         .on('mouseout', mouseOutHandler)
+
+
+      barSeries.selectAll('rect')
         .transition()
         .duration(duration)
         .attr("height", function(d) {
@@ -1634,30 +1638,40 @@ Bridle.DualAxisChart = function () {
       // THE LINE
       var lineSeries = svg.select(".lineSeries")
 
-      // line the path
       var linePath = lineSeries
+        .selectAll('path.line')
+        .data(function(d) {
+          return [d]
+        })
+
+
+      linePath.enter()
         .append('path')
         .attr('class', 'line')
         .attr('stroke', colors(0))
         .attr('stroke-opacity', 0)
         .attr('stroke-width', 1.5)
         .attr('fill', 'none')
-        .attr('d', function(d) {
-          return line(d.values);
-        })
         .transition()
         .duration(duration)
         .attr('stroke-opacity', 1)
 
-      // circles for datapoints
-      var gCircles = lineSeries
-        .append('g')
-        .attr("class", "circles")
+      linePath.exit()
+        .remove();
 
-      var circles = gCircles.selectAll('circle')
+      lineSeries.select('path')
+        .attr('d', function(d) {
+          return line(d.values);
+        })
+
+
+      // circles for datapoints
+      var circles = lineSeries.select('g.circles').selectAll('circle')
         .data(function(d) {
           return d.values;
         });
+
+
 
       var circlesEnter = circles.enter();
 
@@ -1668,6 +1682,8 @@ Bridle.DualAxisChart = function () {
         .attr('fill', colors(0))
         .attr("class", "seriesPoint")
         .attr("r", 0)
+
+      circles
         .attr("cx", function(d) {
           return x(d) + xScale.rangeBand()/2
         })
@@ -1680,8 +1696,6 @@ Bridle.DualAxisChart = function () {
         .attr("r", 3)
 
       circles.exit()
-        .attr('fill-opacity', 0)
-        .attr('r', 0)
         .remove();
 
 
