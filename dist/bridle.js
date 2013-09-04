@@ -265,7 +265,7 @@ Bridle.tooltip = {
   cleanup : function() {
     var tooltips = $('.bridle.tooltip');
 
-    // remove right away, but delay the show with css
+//    remove right away, but delay the show with css
     tooltips.css({
         'transition-delay': '0 !important',
         '-moz-transition-delay': '0 !important',
@@ -1624,10 +1624,10 @@ Bridle.DualAxisChart = function () {
         .on('mouseout', mouseOutHandler)
         .transition()
         .duration(duration)
-        .attr("y", function(d) {
+        .attr("height", function(d) {
           return height - yRight(d) - margin.top - margin.bottom;
         })
-        .attr("height", yRight)
+        .attr("y", yRight)
         .attr("fill-opacity", 1)
 
 
@@ -1746,12 +1746,12 @@ Bridle.DualAxisChart = function () {
         var left = e.pos[0];
         var top = e.pos[1];
 
-        var content = '<h3>' + formatterX(e.x) + '</h3><div>' +
-          '<span class="rightLabel">' + data.measures[0] + ':</span>' +
-          '<span class="rightVal">' + formatterRightY(e.yRight) + '</span>' +
-          '</div><div>' +
-          '<span class="leftLabel">' + data.measures[1] + ':</span>' +
-          '<span class="leftVal">' + formatterLeftY(e.yLeft) + '</span>' +
+        var content = '<h3>' + formatterX(e.x) + '</h3><div class="rightValue">' +
+          '<div class="rightLabel">' + data.measures[0] + ':</div>' +
+          '<div class="rightVal">' + formatterRightY(e.yRight) + '</div>' +
+          '</div><div class="leftValue">' +
+          '<div class="leftLabel">' + data.measures[1] + ':</div>' +
+          '<div class="leftVal">' + formatterLeftY(e.yLeft) + '</div>' +
           '</div>';
 
         Bridle.tooltip.show([left, top], content);
