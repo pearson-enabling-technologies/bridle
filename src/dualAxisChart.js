@@ -381,7 +381,6 @@ Bridle.DualAxisChart = function () {
 
   // showTooltip mouseOver handler
   function mouseOverHandler(d, i, j) {
-    console.log(d)
     var pos = d3.mouse(document.body)
     dispatch.pointMouseover({
       x: xValue(d),
