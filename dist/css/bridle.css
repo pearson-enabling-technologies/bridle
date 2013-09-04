@@ -133,6 +133,8 @@ div.bridle.tooltip {
   background-color: white;
   padding: 10px;
   border: 1px solid #ddd;
+  width: 150px;
+  height: 50px;
   font-family: Arial;
   font-size: 13px;
   transition: opacity 500ms linear;
@@ -147,19 +149,35 @@ div.bridle.tooltip {
   -moz-border-radius: 15px;
   border-radius: 15px;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\00003176}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\00003179}}
 div.bridle.tooltip h3 {
   margin: 0;
   padding: 0;
   text-align: center;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\00003182}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\00003185}}
 div.bridle.tooltip p {
   margin: 0;
   padding: 0;
   text-align: center;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\00003188}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\00003191}}
+div.bridle.tooltip .rightValue, div.bridle.tooltip .leftValue {
+  display: table;
+  width: 100%;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\00003196}}
+div.bridle.tooltip .leftLabel, div.bridle.tooltip .rightLabel {
+  display: table-cell;
+  text-align: left;
+  text-transform: capitalize;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\00003202}}
+div.bridle.tooltip .leftVal, div.bridle.tooltip .rightVal {
+  text-align: right;
+  display: table-cell;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/dario\/workspace\/bridle\/styles\/bridle\.scss}line{font-family:\00003208}}
 div.bridle.tooltip span {
   display: inline-block;
   margin: 2px 0;

@@ -154,6 +154,9 @@ div.bridle.tooltip {
   padding: 10px;
   border: 1px solid #ddd;
 
+  width: 150px;
+  height: 50px;
+
   font-family: Arial;
   font-size: 13px;
 
@@ -183,6 +186,23 @@ div.bridle.tooltip {
     margin: 0;
     padding: 0;
     text-align: center;
+  }
+
+  .rightValue, .leftValue {
+    display: table;
+    width: 100%;
+  }
+
+  .leftLabel,.rightLabel {
+    //float: left;
+    display: table-cell;
+    text-align: left;
+    text-transform: capitalize;
+  }
+  .leftVal,.rightVal {
+    //float: right;
+    text-align: right;
+    display: table-cell
   }
 
   span {
