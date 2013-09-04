@@ -54,7 +54,7 @@ Bridle.tooltip = {
   cleanup : function() {
     var tooltips = $('.bridle.tooltip');
 
-    // remove right away, but delay the show with css
+//    remove right away, but delay the show with css
     tooltips.css({
         'transition-delay': '0 !important',
         '-moz-transition-delay': '0 !important',
