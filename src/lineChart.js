@@ -48,7 +48,8 @@ Bridle.LineChart = function() {
       xAxis.scale(xScale);
       yAxis.scale(yScale);
 
-      var legendWidth = legend.calculateWidth(rawData);
+      var legendWidth = legend.width();
+      legend.height(height)
 
       var containerID = this;
       var data = rawData.filter(function(d) {

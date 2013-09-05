@@ -41,7 +41,7 @@
 <script type='text/javascript'>
 var barData = [
   {
-    "type": "MyGrammarLab Elementary",
+    "type": "MyGrammarLab Elementary thing that has a very long name",
     "values": [
       {
         "term": "Grammar for KET",
@@ -245,20 +245,54 @@ var bar = Bridle.BarChartCategorical()
   .margin({top:50, bottom:100, left:100, right:200})
   .legend(Bridle.LegendBox().height(100).nameAccessor(function(d) {return d.type}))
   .xValue(function (d) {
-    var term = d.term;
-    var match = term.match(/Module\s[\d]{1,2}/);
-    if (match) {
-      return match[0];
-    } else {
-      return term;
-    }
+      return d.term;
   })
   .yValue(function (d) {return d.mean})
   .nameValue(function(d) {return d.type});
 
 d3.select('#bar-chart')
   .datum(barData)
-  .call(bar);
+  .call(bar)
+//   .select('g.x.axis').selectAll('g.tick')
+//   .each(function(d) {
+//     d3.select(this).select('text')
+//       .on('mouseover', function(d) {
+//         var element = d3.select(this),
+//             start = 0,
+//             stop = 20;
+
+//         if ((d.length) > (start + stop)) {
+//           this._interval = setInterval(function() {
+//             var str = '';
+//             if (stop < start) {
+//               strA = d.slice(start, d.length)
+//               strB = d.slice(0, stop)
+//               str = strA + ' - ' + strB
+//               // d.start = 0;
+//               // d.stop = 20;
+//             } else {
+//               str = d.slice(start, stop);
+//             }
+//             element.text(str)
+//             start = ++start % d.length;
+//             stop = ++stop % d.length;    
+//           }, 200)
+          
+//         }
+
+//       })
+//       .on('mouseout', function(d) {
+//         clearInterval(this._interval);
+//         d3.select(this).text(bar.formatterX())
+//       })
+
+// })
+
+
+
+
+
+
 </script>
 
 

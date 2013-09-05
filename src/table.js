@@ -150,7 +150,7 @@ Bridle.Table = function() {
 
 function merge(left,right,comparison)
 {
-  // console.log(left, right, comparison)
+  // //console.log(left, right, comparison)
   var result = new Array();
   while((left.length > 0) && (right.length > 0))
   {

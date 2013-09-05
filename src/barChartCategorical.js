@@ -43,7 +43,11 @@ Bridle.BarChartCategorical = function () {
     var yAxisFontSize = 10;
 
     var formatterX = function (d) {
-      return d;
+      if (d.length > 20) {
+        return d.slice(0,19) + '…'
+      } else {
+        return d;
+      }
     }
     var formatterY = d3.format(".02f");
 
@@ -81,11 +85,11 @@ Bridle.BarChartCategorical = function () {
           .y(yValue)
         (data); // we pass the data as context
 
-        var legendWidth = legend.calculateWidth(data);
-        
+        //var legendWidth = legend.calculateWidth(data);
+        var legendWidth = legend.width();
+        legend.height(height)
         // set up scales and axes
         xScale.domain(data[0].values.map(function(d) {
-          console.log(d, xValue(d), xValue)
           return xValue(d);
         }))
           .rangeRoundBands([0, width - (margin.right + legendWidth)], 0.1);
@@ -96,14 +100,14 @@ Bridle.BarChartCategorical = function () {
           data.forEach(function(layer) {
             sumPoints += layer.values.length;
           });
-          // console.log("THIS", sumPoints, data.length, sumPoints / data.length)
+          // //console.log("THIS", sumPoints, data.length, sumPoints / data.length)
           return (sumPoints / data.length);
         }
 
         // xAxis
         //   .tickValues(xScale.domain().filter(function(d, i) {
         //   var nthLabel = Math.ceil(200 / (width / avgDataPoints()));
-        //   // console.log(nthLabel)
+        //   // //console.log(nthLabel)
         //   return !(i % nthLabel);
         // }))
 
@@ -282,19 +286,44 @@ Bridle.BarChartCategorical = function () {
           .attr("transform", "translate(0," + yScale.range()[0] + ")")
           .call(xAxis)
         .selectAll("text")
-        .text(function(d) {
-          if (d.length > 20) {
-            return d.slice(0,19) + '…'
-          } else {
-            return d;
-          }
-        })
+        .text(formatterX)
         .style("text-anchor", "end")
         .attr("dx", "-.8em")
         .attr("dy", ".15em")
         .attr("transform", function(d) {
             return "rotate(-45)" 
-            });
+            })
+        .on('mouseover', function(d) {
+          var element = d3.select(this),
+              start = 0,
+              stop = 20;
+
+          if ((d.length) > (start + stop)) {
+            this._interval = setInterval(function() {
+              var str = '';
+              if (stop < start) {
+                strA = d.slice(start, d.length)
+                strB = d.slice(0, stop)
+                str = strA + ' - ' + strB
+                // d.start = 0;
+                // d.stop = 20;
+              } else {
+                str = d.slice(start, stop);
+              }
+              element.text(str)
+              start = ++start % d.length;
+              stop = ++stop % d.length;    
+            }, 200)
+            
+          }
+
+        })
+        .on('mouseout', function(d) {
+          clearInterval(this._interval);
+          d3.select(this).text(formatterX);
+        })
+
+
 
         // update the y-axis
         g.select(".y.axis")
@@ -315,7 +344,7 @@ Bridle.BarChartCategorical = function () {
         d3.selectAll("input").on("change", change);
 
         function change() {
-          console.log("mode change")
+          //console.log("mode change")
           if (this.value === "grouped") {
             mode = "grouped";
             yScale.domain([0, yGroupMax]);
@@ -346,7 +375,7 @@ Bridle.BarChartCategorical = function () {
             return i * 10;
           })
             .attr("x", function(d, i, j) {
-            // console.log(d,i,j)
+            // //console.log(d,i,j)
             return xScale(xValue(d)) + xScale.rangeBand() / numLayers * j;
 
           })
@@ -517,11 +546,17 @@ Bridle.BarChartCategorical = function () {
       return chart;
     };
 
-    // chart.tickFormat = function(_) {
-    //   if (!arguments.length) return tickFormat;
-    //   tickFormat = _;
-    //   return chart;
-    // };
+    chart.formatterX = function(_) {
+      if (!arguments.length) return formatterX;
+      formatterX = _;
+      return chart;
+    };
+
+    chart.formatterY = function(_) {
+      if (!arguments.length) return formatterY;
+      formatterY = _;
+      return chart;
+    };
 
     chart.legend = function(_) {
       if (!arguments.length) return legend;
