@@ -1,6 +1,10 @@
 {
   "name": "bridle",
+<<<<<<< HEAD
   "version": "0.3.3",
+=======
+  "version": "0.3.4",
+>>>>>>> release/v0.3.4
   "description": "A repository of reusable charts built with d3",
   "main": "bridle.js",
   "directories": {
