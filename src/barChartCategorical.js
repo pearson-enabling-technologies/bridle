@@ -341,7 +341,7 @@ Bridle.BarChartCategorical = function () {
           .text(yAxisTitle);
 
         // handle change from/to stacked/grouped
-        d3.selectAll("input").on("change", change);
+        d3.selectAll("input.bridle.modeChanger").on("change", change);
 
         function change() {
           //console.log("mode change")

@@ -112,6 +112,7 @@ module.exports = function(grunt) {
             return [
               mountFolder(connect, '.tmp'),
               mountFolder(connect, 'src'),
+              mountFolder(connect, 'dist'),
               mountFolder(connect, 'test'),
               mountFolder(connect, 'node_modules')
             ];

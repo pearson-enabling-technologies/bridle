@@ -336,6 +336,8 @@ barData2 = barData.concat(data2)
   // d3.select("#switch").remove();
 } 
 
+
+
 describe("bar chart initial load", function() {
 
 
@@ -430,9 +432,9 @@ describe("bar chart initial load", function() {
 
   });
 
-  it('legend labels have text', function() {
+  it('legend labels have as many items as series we have', function() {
 
-    var legendText = d3.selectAll('g.legendItem text');
+    var legendText = d3.selectAll('g.legendItem');
     legendText[0].length.should.equal(barData.length)
 
   });
@@ -557,12 +559,12 @@ describe("bar chart - legend click (hiding data)", function() {
   });
 
 
-  it('clicked legend circle has fill opacity 0', function() {
+  // it('clicked legend circle has fill opacity 0', function() {
 
-    var legendCircle = $('g.legendItem.disabled circle');
-
-    parseInt(legendCircle.css('fill-opacity')).should.equal(0);
-  });
+  //   var legendCircle = $('g.legendItem.disabled circle');
+    
+  //   parseInt(legendCircle.css('fill-opacity')).should.equal(0);
+  // });
 
 
 
@@ -603,6 +605,7 @@ describe("bar chart - legend mouseover", function() {
   });
 
   it('triggers "hover" on clicked data point', function() {
+    console.log(barData2[3])
     barData2[3].hover.should.equal(true);
     $('g.layerrects.hover rect').length.should.equal(barData2[3].values.length)
   });
