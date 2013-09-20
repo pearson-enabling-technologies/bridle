@@ -53,10 +53,6 @@ and setters if you pass an argument:
 barChart.generator.title('Chart Demo Afterparty')
 ```
 
-### Legends
-All charts need a legend -
-
-
 ### Accessing the data
 You might have to tell bridle how to access your data. Each chart generator needs to know what is the X and Y values that you're plotting. Some generators might need to know more than that (i.e. the dual chart graph needs to know what you're plotting on the right, and what on the left). 
 
