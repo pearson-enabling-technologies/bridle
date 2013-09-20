@@ -4,7 +4,7 @@ version 0.3.4
 
 ![line chart example](https://dl.dropboxusercontent.com/u/68514/bridle_line_chart_ex.png "line chart example")
 
-A [d3](https://github.com/mbostock/d3) reusable chart library. Bridle includes a line chart, bar chart (with stacked or grouped modes), a stacked area chart and a sortable html table generator. Each chart works with an external legend module, which allows you to hide data series.
+A [d3](https://github.com/mbostock/d3) reusable chart library. Bridle includes a line chart, bar chart (with stacked or grouped modes), a stacked area chart and a sortable html table generator. 
 
 ## Installation
 
@@ -52,6 +52,11 @@ and setters if you pass an argument:
 ```javascript
 barChart.generator.title('Chart Demo Afterparty')
 ```
+
+### Legends
+All charts need a legend -
+
+
 ### Accessing the data
 You might have to tell bridle how to access your data. Each chart generator needs to know what is the X and Y values that you're plotting. Some generators might need to know more than that (i.e. the dual chart graph needs to know what you're plotting on the right, and what on the left). 
 
@@ -60,9 +65,9 @@ By default, bridle looks for an object like this:
 {
   "type": "apples",
   "values": [
-    { "x": '2012-01-01', "v":  100*Math.random()},
-    { "x": '2012-01-02', "v":  100*Math.random()},
-    { "x": '2012-01-03', "v":  100*Math.random()}
+    { "x": '2012-01-01', "y":  100*Math.random()},
+    { "x": '2012-01-02', "y":  100*Math.random()},
+    { "x": '2012-01-03', "y":  100*Math.random()}
   ]
 }
 ```
@@ -112,10 +117,7 @@ See the [Examples](http://pearson-enabling-technologies.github.io/bridle/example
 
 
 
-
-
 ```js
-
 var lineData = [
   {
     "type": "apples",
