@@ -300,7 +300,10 @@ Bridle.BarChart = function () {
     };
     var nameValue = function(d) {
       return d.name;
-    }
+    };
+    var values = function(d) {
+      return d.values;
+    };
     var offset = 'zero';
     var order = 'default';
     var yScale = d3.scale.linear();
@@ -344,16 +347,14 @@ Bridle.BarChart = function () {
         })
         //sort the data points in each layer
         data.forEach(function(layer) {
-          layer.values.sort(sortByDateDesc)
+          values(layer).sort(sortByDateDesc)
         });
 
         // convert the data to an appropriate representation
         data = d3.layout.stack()
           .offset(offset)
           .order(order)
-          .values(function(d) {
-          return d.values
-        })
+          .values(values)
           .x(xValue)
           .y(yValue)
         (data); // we pass the data as context
@@ -667,7 +668,7 @@ Bridle.BarChart = function () {
         if (legend.numData() != rawData.length) {
           // update the legend
           g.select('.legend')
-            .datum(data)
+            //.datum(data)
             .call(legend);
         }
 
@@ -817,6 +818,12 @@ Bridle.BarChart = function () {
     chart.nameValue = function(_) {
       if (!arguments.length) return nameValue;
       nameValue = _;
+      return chart;
+    };
+
+    chart.values = function(_) {
+      if (!arguments.length) return values;
+      values = _;
       return chart;
     };
 
