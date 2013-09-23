@@ -471,9 +471,16 @@ describe("Line Chart", function(){
       this.lineData2[3].disabled.should.equal(true);
     });
 
-    it('removes disabled series lines', function () {
+    it('Makes opacity of disabled series 0', function () {
       var series = d3.selectAll('g.series');
-      series[0].length.should.equal(this.lineData2.length - 1)   
+      for (var i = 0; i < series.length; i++) {
+        if (this.lineData2[i].disabled) {
+          parseInt($(series[i]).css("opacity")).should.equal(0)
+        } else {
+          parseInt($(series[i]).css("opacity")).should.equal(1)
+        }
+      }
+      //series[0].length.should.equal(this.lineData2.length - 1)   
     });
 
 

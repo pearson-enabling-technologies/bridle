@@ -116,8 +116,10 @@ Bridle.LineChart = function() {
       var svg = d3.select(this).selectAll("svg").data([data]);
       var gEnter = svg.enter().append("svg").attr("class", "bridle").append("g");
       gEnter.append("defs").append("clipPath").attr("id", "clip").append("rect")
-        .attr("width", width - (margin.right + legendWidth))
-        .attr("height", height - margin.top - margin.bottom);
+        .attr("x", 0)
+        .attr("y", -10)
+        .attr("width", xScale.range()[1]-xScale.range()[0])
+        .attr("height",(yScale.range()[0]-yScale.range()[1]) + 20)
       gEnter.append("g").attr("class", "x axis");
       gEnter.append("g").attr("class", "y axis").append("text")
         .attr("transform", "rotate(-90)")
@@ -133,7 +135,7 @@ Bridle.LineChart = function() {
         .attr("class", "legend")
         .attr("transform", "translate(" + (width - (margin.right + legendWidth) + 20) + "," + 0 + ")")
         .style("font-size", "12px");
-      gEnter.append("g").attr("class", "lines")
+      gEnter.append("g").attr("class", "lines").attr("clip-path", "url(#clip)")
 
       // update the outer dimensions
       svg.attr("width", width)
@@ -143,9 +145,7 @@ Bridle.LineChart = function() {
       var g = svg.select("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-      svg.select('defs').select('clippath').select('rect')
-        .attr("width", width - (margin.right + legendWidth))
-        .attr("height", height - margin.top - margin.bottom);
+      
 
       // reasign the data to trigger addition/deletion and add
       // a series group per series in the data
@@ -165,16 +165,15 @@ Bridle.LineChart = function() {
         .style('opacity', 0)
         .remove();
 
-      // update the dimensions
-      g.select("#clip rect")
-        .attr("width", xScale.range()[1]-xScale.range()[0])
-        .attr("height",yScale.range()[0]-yScale.range()[1])
-
 
       var gSeriesEnter = gSeries.enter()
           .append('g')
+          .attr("transform", function(d) {
+            var step = xScale(xValue(d.values[1]));
+            var str = "translate(" + step + ")";
+            return str;
+          })
           .attr('class', 'series')
-          .attr("clip-path", "url(#clip)")
           .attr('id', function(d) {
             return 'series_' + nameValue(d);
           });
@@ -247,11 +246,12 @@ Bridle.LineChart = function() {
         .attr('r', 0)
         .remove();
 
-      gSeries.attr("transform", function(d) {
-          var step = xScale(xValue(d.values[1]));
-          var str = "translate(" + step + ")";
-          return str;
-        })
+      gSeries
+        .attr("transform", function(d) {
+            var step = xScale(xValue(d.values[1]));
+            var str = "translate(" + step + ")";
+            return str;
+          })
         .transition()
         .duration(duration)
         .ease('linear')
@@ -272,16 +272,16 @@ Bridle.LineChart = function() {
 
       // update the circles
       gSeries.selectAll('circle.seriespoint')
-        .transition()
-        .duration(duration)
-        .ease('linear')
-        .attr('r', 5)
         .attr('cx', function(d) {
           return xScale(xValue(d))
         })
         .attr('cy', function(d) {
           return yScale(yValue(d))
-        });
+        })
+        .transition()
+        .duration(duration)
+        .ease('linear')
+        .attr('r', 5)
 
       // update the title
       g.select("text.chartTitle")
@@ -321,14 +321,24 @@ Bridle.LineChart = function() {
       legend.dispatch.on('legendClick', function(d, i) {
         d.disabled = !d.disabled;
 
-        if (!data.filter(function(d) {
-          return !d.disabled
-        }).length) {
-          data.forEach(function(d) {
-            d.disabled = false;
+        svg.selectAll('g.series')
+          .transition()
+          .duration(duration)
+          .attr("opacity", function(d) {
+            if (d.disabled) {
+              return 0;
+            }
+            return 1;
           });
-        }
-        selection.call(chart)
+
+        // if (!data.filter(function(d) {
+        //   return !d.disabled
+        // }).length) {
+        //   data.forEach(function(d) {
+        //     d.disabled = false;
+        //   });
+        // }
+        // selection.call(chart)
       });
 
       function updateHoveredLines() {
