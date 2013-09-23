@@ -1,6 +1,6 @@
 Bridle 
 ======
-version 0.3.4
+version 0.3.5
 
 ![line chart example](https://dl.dropboxusercontent.com/u/68514/bridle_line_chart_ex.png "line chart example")
 
