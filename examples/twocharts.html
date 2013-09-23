@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Bridle Examples</title>
+    <meta name="viewport" content="width=device-width">
+ 
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="css/syntax.css">
+ 
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/main.css">
+ 
+    <!-- CSS for the graphs -->
+    <link rel="stylesheet" href="css/bridle.css">
+ 
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="bridle.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="site">
+        <div class="header">
+          <h1 class="title"><a href="../">Bridle</a></h1>
+          <a class="extra" href="../">Home</a>
+          <a class="extra" href="../examples/">Examples</a>
+          <a class="extra" href="https://github.com/ptdavteam/bridle">Fork Project on Github</a>
+        </div>
+ 
+
+ 
+        <div class='chartContainer' id='bar-chart-time'> </div>
+        <div class='chartContainer' id='bar-chart-user'> </div>
+        <p>A stacked bar chart with transitions and categories. Click on the legend circles to hide/show categories.</p>
+        <script type='text/javascript'>
+  var barData = [
+    { 
+      "type": "apples", "values": [
+        { "z": '2012-01-01', "v": 100*Math.random()},
+        { "z": '2012-01-02', "v": 100*Math.random()},
+ 
+        { "z": '2012-01-03', "v": 100*Math.random()},
+ 
+        { "z": '2012-01-04', "v": 100*Math.random()},
+        { "z": '2012-01-05', "v": 100*Math.random()},
+        { "z": '2012-01-06', "v": 100*Math.random()},
+        { "z": '2012-01-07', "v": 100*Math.random()},
+        { "z": '2012-01-08', "v": 100*Math.random()},
+        { "z": '2012-01-09', "v": 100*Math.random()},
+        { "z": '2012-01-10', "v": 100*Math.random()},
+        { "z": '2012-01-11', "v": 100*Math.random()},
+        { "z": '2012-01-12', "v": 100*Math.random()},
+        { "z": '2012-01-13', "v": 100*Math.random()},
+        { "z": '2012-01-14', "v": 100*Math.random()},
+        { "z": '2012-01-15', "v": 100*Math.random()},
+        { "z": '2012-01-16', "v": 100*Math.random()},
+        { "z": '2012-01-17', "v": 100*Math.random()},
+        { "z": '2012-01-18', "v": 100*Math.random()},
+        { "z": '2012-01-19', "v": 100*Math.random()}
+      ]
+    },
+    {
+      "type": "oranges", "values": [
+        { "z": '2012-01-01', "v": 100*Math.random()},
+        { "z": '2012-01-02', "v": 100*Math.random()},
+ 
+        { "z": '2012-01-03', "v": 100*Math.random()},
+        { "z": '2012-01-04', "v": 100*Math.random()},
+        { "z": '2012-01-05', "v": 100*Math.random()},
+        { "z": '2012-01-06', "v": 100*Math.random()},
+        { "z": '2012-01-07', "v": 100*Math.random()},
+        { "z": '2012-01-08', "v": 100*Math.random()},
+        { "z": '2012-01-09', "v": 100*Math.random()},
+        { "z": '2012-01-10', "v": 100*Math.random()},
+        { "z": '2012-01-11', "v": 100*Math.random()},
+        { "z": '2012-01-12', "v": 100*Math.random()},
+        { "z": '2012-01-13', "v": 100*Math.random()},
+        { "z": '2012-01-14', "v": 100*Math.random()},
+        { "z": '2012-01-15', "v": 100*Math.random()},
+        { "z": '2012-01-16', "v": 100*Math.random()},
+        { "z": '2012-01-17', "v": 100*Math.random()},
+        { "z": '2012-01-18', "v": 100*Math.random()},
+        { "z": '2012-01-19', "v": 100*Math.random()}
+      ]
+    }
+  ];
+ 
+ 
+  // This will return a fresh generator.
+  // You could pass options to
+  // programatically change your generator
+  var barChart = function() {
+    return Bridle.BarChart()
+        .duration(1000)
+        .mode("stacked")
+        .width(700)
+        .title("Apples or Oranges?")
+        .yAxisTitle("Label your axes")
+        .margin(
+          {
+            top:50,
+            bottom:30,
+            left:100,
+            right:200
+          }
+        )
+        .xValue(function (d) {
+            return new Date (d.z)
+         })
+        .yValue(function (d) {
+            return d.v
+        })
+        .nameValue(function(d) {
+            return d.type
+        });
+  }
+
+
+
+    
+  d3.select('#bar-chart-time')
+    .datum(barData)
+    .call(barChart());
+ 
+
+
+  d3.select('#bar-chart-user')
+    .datum(barData)
+    .call(barChart());
+ 
+  </script>
+ 
+ 
+  <div class="footer">
+    <div class="contact">
+      <p>
+      Copyright 2013 - Pearson Technology<br />
+      Data Analytics and Visualisation Team<br />
+      pearson.davteam@gmail.com
+      </p>
+    </div>
+    <div class="contact">
+      <p>
+      Built by<br />
+      <a href="https://twitter.com/hubert_rogers">Hubert Rogers</a> and <a href="https://twitter.com/radiodario">Dario Villanueva</a>
+      </p>
+    </div>
+  </div>
+</div>
+    </div> <!-- /container -->
+ 
+ 
+  </body>
+</html>

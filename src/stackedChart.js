@@ -67,7 +67,7 @@ Bridle.StackedChart = function() {
 
 
       var containerID = this;
-      data = rawData.filter(function(d) {
+      var data = rawData.filter(function(d) {
         return !d.disabled
       })
 

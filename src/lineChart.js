@@ -116,8 +116,10 @@ Bridle.LineChart = function() {
       var svg = d3.select(this).selectAll("svg").data([data]);
       var gEnter = svg.enter().append("svg").attr("class", "bridle").append("g");
       gEnter.append("defs").append("clipPath").attr("id", "clip").append("rect")
-        .attr("width", width - (margin.right + legendWidth))
-        .attr("height", height - margin.top - margin.bottom);
+        .attr("x", 0)
+        .attr("y", -10)
+        .attr("width", xScale.range()[1]-xScale.range()[0])
+        .attr("height",(yScale.range()[0]-yScale.range()[1]) + 20)
       gEnter.append("g").attr("class", "x axis");
       gEnter.append("g").attr("class", "y axis").append("text")
         .attr("transform", "rotate(-90)")
@@ -133,7 +135,7 @@ Bridle.LineChart = function() {
         .attr("class", "legend")
         .attr("transform", "translate(" + (width - (margin.right + legendWidth) + 20) + "," + 0 + ")")
         .style("font-size", "12px");
-      gEnter.append("g").attr("class", "lines")
+      gEnter.append("g").attr("class", "lines").attr("clip-path", "url(#clip)")
 
       // update the outer dimensions
       svg.attr("width", width)
@@ -143,9 +145,7 @@ Bridle.LineChart = function() {
       var g = svg.select("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-      svg.select('defs').select('clippath').select('rect')
-        .attr("width", width - (margin.right + legendWidth))
-        .attr("height", height - margin.top - margin.bottom);
+      
 
       // reasign the data to trigger addition/deletion and add
       // a series group per series in the data
@@ -168,6 +168,11 @@ Bridle.LineChart = function() {
 
       var gSeriesEnter = gSeries.enter()
           .append('g')
+          .attr("transform", function(d) {
+            var step = xScale(xValue(d.values[1]));
+            var str = "translate(" + step + ")";
+            return str;
+          })
           .attr('class', 'series')
           .attr('id', function(d) {
             return 'series_' + nameValue(d);
@@ -217,12 +222,6 @@ Bridle.LineChart = function() {
         .attr("opacity", 0.1)
         .attr("class", "seriespoint")
         .attr('r', 0)
-        .attr('cx', function(d) {
-          return xScale(xValue(d))
-        })
-        .attr('cy', function(d) {
-          return yScale(yValue(d))
-        })
         .on('mouseover', function(d, i, j) {
           dispatch.pointMouseover({
             x: xValue(d),
@@ -247,6 +246,17 @@ Bridle.LineChart = function() {
         .attr('r', 0)
         .remove();
 
+      gSeries
+        .attr("transform", function(d) {
+            var step = xScale(xValue(d.values[1]));
+            var str = "translate(" + step + ")";
+            return str;
+          })
+        .transition()
+        .duration(duration)
+        .ease('linear')
+        .attr("transform", "null")
+
       // update the lines
       gSeries.selectAll('path.line')
         .attr("stroke", function(d, i) {
@@ -256,28 +266,22 @@ Bridle.LineChart = function() {
         .attr("d", function(d) {
           return line(d.values);
         })
-        .attr("clip-path", "url(#clip)")
-        .transition()
-        .duration(duration)
-        .ease('linear')
         .attr("stroke-opacity", 1)
         .attr("stroke-width", 1.5)
-        
-        
         
 
       // update the circles
       gSeries.selectAll('circle.seriespoint')
-        .transition()
-        .duration(duration)
-        .ease('linear')
-        .attr('r', 5)
         .attr('cx', function(d) {
           return xScale(xValue(d))
         })
         .attr('cy', function(d) {
           return yScale(yValue(d))
-        });
+        })
+        .transition()
+        .duration(duration)
+        .ease('linear')
+        .attr('r', 5)
 
       // update the title
       g.select("text.chartTitle")
@@ -317,25 +321,47 @@ Bridle.LineChart = function() {
       legend.dispatch.on('legendClick', function(d, i) {
         d.disabled = !d.disabled;
 
-        if (!data.filter(function(d) {
-          return !d.disabled
-        }).length) {
-          data.forEach(function(d) {
-            d.disabled = false;
+        svg.selectAll('g.series')
+          .transition()
+          .duration(duration)
+          .attr("opacity", function(d) {
+            if (d.disabled) {
+              return 0;
+            }
+            return 1;
           });
-        }
-        selection.call(chart)
+
+        // if (!data.filter(function(d) {
+        //   return !d.disabled
+        // }).length) {
+        //   data.forEach(function(d) {
+        //     d.disabled = false;
+        //   });
+        // }
+        // selection.call(chart)
       });
+
+      function updateHoveredLines() {
+        gSeries.selectAll('path.line')
+          .attr("stroke-width", function(d) {
+            if (d.hover) {
+              d3.select(this).attr("class", "line hover");
+              return "4"
+            }
+            d3.select(this).attr("class", "line");
+            return "1.5"
+          })
+      }
 
 
       legend.dispatch.on('legendMouseover', function(d, i) {
         d.hover = true;
-        selection.call(chart)
+        updateHoveredLines();
       });
 
       legend.dispatch.on('legendMouseout', function(d, i) {
         d.hover = false;
-        selection.call(chart)
+        updateHoveredLines();
       });
 
       dispatch.on('pointMouseover.tooltip', function(e) {

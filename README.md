@@ -1,8 +1,10 @@
 Bridle 
 ======
-version 0.3.4
+version 0.3.5
 
-A [d3](https://github.com/mbostock/d3) reusable chart library. Bridle includes a line chart, bar chart (with stacked or grouped modes), a stacked area chart and a sortable html table generator. Each chart works with an external legend module, which allows you to hide data series.
+![line chart example](https://dl.dropboxusercontent.com/u/68514/bridle_line_chart_ex.png "line chart example")
+
+A [d3](https://github.com/mbostock/d3) reusable chart library. Bridle includes a line chart, bar chart (with stacked or grouped modes), a stacked area chart and a sortable html table generator. 
 
 ## Installation
 
@@ -20,16 +22,98 @@ Bridle depends on d3.js and jquery. Make sure they are loaded before you load br
 Bridle comes with a minimal set of css classes to format the tooltips, and do some transitions. Load `bridle.css` on the head of your document to use.
 
 ## Usage
+While the documentation grows, I recommend becoming familiar with [d3 reusable chart idea](http://bost.ocks.org/mike/chart/). Then read through the code of one or two generators to get a better idea of the architecture of the library.
 
+### Chart generators
+Charts are created using any of the available chart generators (see `/src/`). All of Bridle's generators are functions that will return a generator object (we capitalise them to highlight that fact):
+
+```javascript
+var barChartGenerator = Bridle.BarChart()
+```
+That will create a new chart generator. You can now change it to generate the things you want:
+
+```javascript
+barChartGenerator.title('Chart Demo Party')
+  .height(100)
+  .width(300)
+```
+Each generator has the same basic api:
+* `.width()`, 
+* `.height()`
+* `.margin()`
+* `.title()`
+
+All these methods are both getters and setters. They act as getters if you call them without arguments:
+```javascript
+console.log(barChartGenerator.title())
+"Chart Title"  //the default value
+```
+and setters if you pass an argument:
+```javascript
+barChart.generator.title('Chart Demo Afterparty')
+```
+
+### Accessing the data
+You might have to tell bridle how to access your data. Each chart generator needs to know what is the X and Y values that you're plotting. Some generators might need to know more than that (i.e. the dual chart graph needs to know what you're plotting on the right, and what on the left). 
+
+By default, bridle looks for an object like this:
+```javascript
+{
+  "type": "apples",
+  "values": [
+    { "x": '2012-01-01', "y":  100*Math.random()},
+    { "x": '2012-01-02', "y":  100*Math.random()},
+    { "x": '2012-01-03', "y":  100*Math.random()}
+  ]
+}
+```
+
+But if your data doesn't look like this, you can always tell your bar chart generators where to find the data:
+
+```javascript
+{
+  "kind": "pears",
+  "measures": [
+    { "collectionDate": '2012-01-01', "taste":  100*Math.random()},
+    { "collectionDate": '2012-01-02', "taste":  100*Math.random()},
+    { "collectionDate": '2012-01-03', "taste":  100*Math.random()}
+  ]
+}
+barChart
+  // where to get the series name from
+  .nameValue(function(d) {
+      return d.kind;
+  })
+  // where to get the values from 
+  .values(function(d) {
+    return d.measures
+  })
+  // where to get it's x value from
+  .xValue(function(d) { 
+    return d.collectionDate;
+  })
+  // and where to get it's y value:
+  .yValue(function(d) {
+    return d.taste;
+  });
+```
+
+### Drawing your chart
+Once you create your chart generator, select an element from your document and attach data to it. then call the chart generator:
+
+```javascript
+d3.select('#elementid')
+  .datum(myData)
+  .call(barChart)
+```
+
+You could use this on your own `draw` or `render` method.
 
 See the [Examples](http://pearson-enabling-technologies.github.io/bridle/examples/) for more usage examples.
 
 
 
-![line chart example](https://dl.dropboxusercontent.com/u/68514/bridle_line_chart_ex.png "line chart example")
-
 ```js
-
 var lineData = [
   {
     "type": "apples",
