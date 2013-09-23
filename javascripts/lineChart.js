@@ -36,7 +36,7 @@ console.log (lineData)
 
 
 var line = Bridle.LineChart()
-  .duration(1000)
+  .duration(2000)
   .width(800)
   .title("Apples or Oranges?")
   .yAxisTitle("Label your axes")
@@ -62,7 +62,6 @@ setInterval(function() {
   // we add a new data point and remove
   // the first one
   lineData.forEach(function(series) {
-    series.values.shift();
     addRandomRow(series.values);
   })
 
@@ -70,4 +69,8 @@ setInterval(function() {
   .datum(lineData)
   .call(line);
 
-}, 5000)
+  lineData.forEach(function(series) {
+    series.values.shift();
+  })
+
+}, 2050)
