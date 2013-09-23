@@ -165,10 +165,16 @@ Bridle.LineChart = function() {
         .style('opacity', 0)
         .remove();
 
+      // update the dimensions
+      g.select("#clip rect")
+        .attr("width", xScale.range()[1]-xScale.range()[0])
+        .attr("height",yScale.range()[0]-yScale.range()[1])
+
 
       var gSeriesEnter = gSeries.enter()
           .append('g')
           .attr('class', 'series')
+          .attr("clip-path", "url(#clip)")
           .attr('id', function(d) {
             return 'series_' + nameValue(d);
           });
@@ -217,12 +223,6 @@ Bridle.LineChart = function() {
         .attr("opacity", 0.1)
         .attr("class", "seriespoint")
         .attr('r', 0)
-        .attr('cx', function(d) {
-          return xScale(xValue(d))
-        })
-        .attr('cy', function(d) {
-          return yScale(yValue(d))
-        })
         .on('mouseover', function(d, i, j) {
           dispatch.pointMouseover({
             x: xValue(d),
@@ -247,6 +247,16 @@ Bridle.LineChart = function() {
         .attr('r', 0)
         .remove();
 
+      gSeries.attr("transform", function(d) {
+          var step = xScale(xValue(d.values[1]));
+          var str = "translate(" + step + ")";
+          return str;
+        })
+        .transition()
+        .duration(duration)
+        .ease('linear')
+        .attr("transform", "null")
+
       // update the lines
       gSeries.selectAll('path.line')
         .attr("stroke", function(d, i) {
@@ -256,14 +266,8 @@ Bridle.LineChart = function() {
         .attr("d", function(d) {
           return line(d.values);
         })
-        .attr("clip-path", "url(#clip)")
-        .transition()
-        .duration(duration)
-        .ease('linear')
         .attr("stroke-opacity", 1)
         .attr("stroke-width", 1.5)
-        
-        
         
 
       // update the circles
@@ -327,15 +331,27 @@ Bridle.LineChart = function() {
         selection.call(chart)
       });
 
+      function updateHoveredLines() {
+        gSeries.selectAll('path.line')
+          .attr("stroke-width", function(d) {
+            if (d.hover) {
+              d3.select(this).attr("class", "line hover");
+              return "4"
+            }
+            d3.select(this).attr("class", "line");
+            return "1.5"
+          })
+      }
+
 
       legend.dispatch.on('legendMouseover', function(d, i) {
         d.hover = true;
-        selection.call(chart)
+        updateHoveredLines();
       });
 
       legend.dispatch.on('legendMouseout', function(d, i) {
         d.hover = false;
-        selection.call(chart)
+        updateHoveredLines();
       });
 
       dispatch.on('pointMouseover.tooltip', function(e) {

@@ -42,7 +42,8 @@ svg.bridle {
 
   g.legend {
     font: 13px sans-serif;
-
+    cursor: hand;
+    cursor: pointer;
     .legendItem {
       p {
         margin: 0;
