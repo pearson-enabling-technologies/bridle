@@ -219,7 +219,7 @@ Bridle.LineChart = function() {
       var circlesEnter = circles.enter();
 
       circlesEnter.append('circle')
-        .attr("opacity", 0.1)
+        .style("opacity", 0.1)
         .attr("class", "seriespoint")
         .attr('r', 0)
         .on('mouseover', function(d, i, j) {
@@ -371,7 +371,7 @@ Bridle.LineChart = function() {
 
         var content = '<h3>' + e.series + '</h3>' +
           '<p>' +
-          '<span class="value">[' + formatterX(e.x) + ', ' + formatterY(e.y) + ']</span>' +
+          '<span class="value">' + formatterX(e.x) + ': ' + formatterY(e.y) + '</span>' +
           '</p>';
 
         Bridle.tooltip.show([left, top], content);

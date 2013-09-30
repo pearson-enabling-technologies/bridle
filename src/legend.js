@@ -27,7 +27,7 @@ Bridle.LegendBox = function() {
       numData = data.length;
       // set up scaffolding
       var svg = d3.select(this).selectAll("svg").data([data]);
-      var gEnter = svg.enter().append("svg").attr('class', 'bridle').append("g")
+      var gEnter = svg.enter().append("svg").attr('class', 'bridle legend').append("g")
       gEnter.append("g").attr("class", 'legend');
 
       //update outer dimensions

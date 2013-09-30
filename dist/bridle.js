@@ -32,7 +32,7 @@ Bridle.LegendBox = function() {
       numData = data.length;
       // set up scaffolding
       var svg = d3.select(this).selectAll("svg").data([data]);
-      var gEnter = svg.enter().append("svg").attr('class', 'bridle').append("g")
+      var gEnter = svg.enter().append("svg").attr('class', 'bridle legend').append("g")
       gEnter.append("g").attr("class", 'legend');
 
       //update outer dimensions
@@ -221,10 +221,13 @@ Bridle.tooltip = {
     gravity = gravity || 's';
     dist = dist || 20;
 
+    // attach to the parent of the main bridle div
+    var bridleContainer = $('svg.bridle').closest('div').get(0);
+
     container
       .html(content)
       .css({left: -1000, top: -1000, opacity: 0})
-      .appendTo('body');
+      .appendTo(bridleContainer);
 
     var height = container.height() + parseInt(container.css('padding-top'))  + parseInt(container.css('padding-bottom')),
         width = container.width() + parseInt(container.css('padding-left'))  + parseInt(container.css('padding-right')),
@@ -232,6 +235,7 @@ Bridle.tooltip = {
         windowHeight = $(window).height(),
         scrollTop = $('body').scrollTop(),  //TODO: also adjust horizontal scroll
         left, top;
+
 
 
     //TODO: implement other gravities
@@ -251,6 +255,8 @@ Bridle.tooltip = {
         if (left < 0) left = 5;
         if (left + width > windowWidth) left = windowWidth - width - 5;
         if (scrollTop > top) top = pos[1] + dist;
+
+
         break;
     }
 
@@ -265,14 +271,14 @@ Bridle.tooltip = {
   cleanup : function() {
     var tooltips = $('.bridle.tooltip');
 
-//    remove right away, but delay the show with css
+    // remove right away, but delay the show with css
     tooltips.css({
         'transition-delay': '0 !important',
         '-moz-transition-delay': '0 !important',
         '-webkit-transition-delay': '0 !important'
     });
 
-    tooltips.css('opacity',0);
+    tooltips.css('opacity',0)
 
     setTimeout(function() {
       tooltips.remove()
@@ -2243,7 +2249,7 @@ Bridle.LineChart = function() {
       var circlesEnter = circles.enter();
 
       circlesEnter.append('circle')
-        .attr("opacity", 0.1)
+        .style("opacity", 0.1)
         .attr("class", "seriespoint")
         .attr('r', 0)
         .on('mouseover', function(d, i, j) {
@@ -2395,7 +2401,7 @@ Bridle.LineChart = function() {
 
         var content = '<h3>' + e.series + '</h3>' +
           '<p>' +
-          '<span class="value">[' + formatterX(e.x) + ', ' + formatterY(e.y) + ']</span>' +
+          '<span class="value">' + formatterX(e.x) + ': ' + formatterY(e.y) + '</span>' +
           '</p>';
 
         Bridle.tooltip.show([left, top], content);
