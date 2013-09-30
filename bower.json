@@ -1,6 +1,6 @@
 {
   "name": "bridle",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "Library of reusable charts, graphs and tables written in d3, using the reusable chart style.",
   "keywords": [
     "d3",

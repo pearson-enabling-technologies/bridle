@@ -594,7 +594,7 @@ describe("Line Chart", function(){
     it('tooltip shows correct text', function () {
       var tooltip = d3.select('.tooltip').html();    
       var yFormatted = d3.format(".02f")(this.lineData2[3].values[3].y)
-      tooltip.should.equal('<h3>kiwi</h3><p><span class="value">[2012-01-04, '+ yFormatted +']</span></p>')
+      tooltip.should.equal('<h3>kiwi</h3><p><span class="value">2012-01-04: '+ yFormatted +'</span></p>')
     });
 
     it('tooltip gets destroyed on mouseout', function (done) {

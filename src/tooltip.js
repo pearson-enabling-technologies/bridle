@@ -10,10 +10,13 @@ Bridle.tooltip = {
     gravity = gravity || 's';
     dist = dist || 20;
 
+    // attach to the parent of the main bridle div
+    var bridleContainer = $('svg.bridle').closest('div').get(0);
+
     container
       .html(content)
       .css({left: -1000, top: -1000, opacity: 0})
-      .appendTo('body');
+      .appendTo(bridleContainer);
 
     var height = container.height() + parseInt(container.css('padding-top'))  + parseInt(container.css('padding-bottom')),
         width = container.width() + parseInt(container.css('padding-left'))  + parseInt(container.css('padding-right')),
@@ -21,6 +24,7 @@ Bridle.tooltip = {
         windowHeight = $(window).height(),
         scrollTop = $('body').scrollTop(),  //TODO: also adjust horizontal scroll
         left, top;
+
 
 
     //TODO: implement other gravities
@@ -40,6 +44,8 @@ Bridle.tooltip = {
         if (left < 0) left = 5;
         if (left + width > windowWidth) left = windowWidth - width - 5;
         if (scrollTop > top) top = pos[1] + dist;
+
+
         break;
     }
 
@@ -54,14 +60,14 @@ Bridle.tooltip = {
   cleanup : function() {
     var tooltips = $('.bridle.tooltip');
 
-//    remove right away, but delay the show with css
+    // remove right away, but delay the show with css
     tooltips.css({
         'transition-delay': '0 !important',
         '-moz-transition-delay': '0 !important',
         '-webkit-transition-delay': '0 !important'
     });
 
-    tooltips.css('opacity',0);
+    tooltips.css('opacity',0)
 
     setTimeout(function() {
       tooltips.remove()
