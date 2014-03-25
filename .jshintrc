@@ -11,7 +11,6 @@
   "newcap"        : true,
   "noarg"         : true,
   "quotmark"      : "single",
-  "regexp"        : true,
   "undef"         : true,
   "unused"        : true,
   "strict"        : false,
@@ -25,12 +24,7 @@
   "maxcomplexity" : 5,
   "maxlen"        : 120,
   "globals"       : {
-    "angular" : true,
-    "$"       : true,
-    "moment"  : true,
-    "Spinner" : true,
-    "URL"     : true,
-    "d3"      : true,
-    "_"       : true
+    "d3"     : true,
+    "Bridle" : true
   }
 }
