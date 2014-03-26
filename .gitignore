@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 lib-cov
 *.seed
 *.log
@@ -18,6 +17,7 @@ node_modules
 .sass-cache
 .tmp
 twistd.*
+.idea
 
 _site
 _layouts
