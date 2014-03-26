@@ -23,7 +23,7 @@
   "maxdepth"      : 4,
   "maxcomplexity" : 5,
   "maxlen"        : 120,
-  "globals" : {
+  "globals"       : {
     "d3"     : true,
     "Bridle" : true
   }
