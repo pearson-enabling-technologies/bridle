@@ -43,6 +43,9 @@ Bridle.BarChart = function() {
 
   var tickFormat = d3.time.format('%Y-%m-%d');
 
+  var formatterX = d3.time.format('%Y-%m-%d');
+  var formatterY = d3.format('.02f');
+
   function toDate(e) {
     return new Date(e);
   }
@@ -428,9 +431,7 @@ Bridle.BarChart = function() {
       dispatch.on('pointMouseover.tooltip', function(e) {
         var offset = $(containerID).offset(), // { left: 0, top: 0 }
           left = e.pos[0] + offset.left + margin.left,
-          top = e.pos[1] + offset.top + margin.top,
-          formatterX = d3.time.format('%Y-%m-%d'),
-          formatterY = d3.format('.02f');
+          top = e.pos[1] + offset.top + margin.top;
 
         var content = '<h3>' + e.series + '</h3>' +
           '<p>' +
@@ -578,6 +579,18 @@ Bridle.BarChart = function() {
     mode = _;
     return chart;
   };
+
+  chart.formatterX = function(_) {
+    if (!arguments.length) return formatterX;
+    formatterX = _;
+    return chart;
+  }
+
+  chart.formatterY = function(_) {
+    if (!arguments.length) return formatterY;
+    formatterY = _;
+    return chart;
+  }
 
   return chart;
 };
