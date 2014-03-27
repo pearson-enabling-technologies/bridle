@@ -581,16 +581,20 @@ Bridle.BarChart = function() {
   };
 
   chart.formatterX = function(_) {
-    if (!arguments.length) return formatterX;
+    if (!arguments.length) {
+      return formatterX;
+    }
     formatterX = _;
     return chart;
-  }
+  };
 
   chart.formatterY = function(_) {
-    if (!arguments.length) return formatterY;
+    if (!arguments.length) {
+      return formatterY;
+    }
     formatterY = _;
     return chart;
-  }
+  };
 
   return chart;
 };
