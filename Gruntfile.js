@@ -52,7 +52,12 @@ module.exports = function(grunt) {
         relativeAssets : true,
         force          : true
       },
-      dist    : {},
+      dist    : {
+        options : {
+          debugInfo   : false,
+          outputStyle : 'compressed'
+        }
+      },
       server  : {
         options : {
           debugInfo : true
@@ -147,7 +152,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
-    'compass',
+    'compass:dist',
     'concat:dist',
     'uglify'
   ]);
