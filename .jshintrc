@@ -25,6 +25,7 @@
   "maxlen"        : 120,
   "globals"       : {
     "d3"     : true,
-    "Bridle" : true
+    "Bridle" : true,
+    "$"      : true
   }
 }
