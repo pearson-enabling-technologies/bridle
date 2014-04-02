@@ -181,23 +181,20 @@ To compile the `scss` file you'll need sass - just install it by running
 $ gem install sass
 ```
 
-now you can type `make` to build the js files and the css version of the library
+now you can type `grunt build` to build the js files and the css version of the library
 
-#### Makefile
-The concatenation happens on the makefile. If you're adding a new module, or a new visualisation, add it between `legendbox.js` and `footer.js`, then run `make`. This will concatenate the files inside `src` and create a new `bridle.js` and `bridle.min.js`
+#### Adding new charts
+The concatenation happens on the gruntfile. If you're adding a new module, or a new visualisation, add it between `legendbox.js` and `footer.js`, inside `initConfig.concat.dist`'s task
 
 
 #### Running tests
-At the moment the test are broken with mocha-phantomjs, you'll have to start a local server, i.e. with `twistd`:
+At the moment the test are broken with mocha-phantomjs, you'll have to run them in a browser:
 
 ```
 $ cd bridle
-$ twistd web --path . --port 8080
-$ open http://localhost:8080/test
+$ grunt server:test
 ```
 that will open a browser (if you're using mac os x) and run the mocha tests on the browser. 
-
-We're working to fix the headless tests asap.
 
 ## License
 
