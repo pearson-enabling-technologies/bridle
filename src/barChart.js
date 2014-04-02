@@ -34,6 +34,8 @@ Bridle.BarChart = function() {
   var legend = Bridle.LegendBox().nameAccessor(function(d) {
     return nameValue(d);
   });
+  // set legend's colors to be the same as for the chart
+  legend.colors(colors);
 
   var xScale = d3.scale.ordinal();
   var xAxis = d3.svg.axis()
@@ -392,7 +394,7 @@ Bridle.BarChart = function() {
       if (legend.numData() !== rawData.length) {
         // update the legend
         g.select('.legend')
-          //.datum(data)
+          .datum(rawData)
           .call(legend);
       }
 
@@ -598,4 +600,3 @@ Bridle.BarChart = function() {
 
   return chart;
 };
-  

@@ -35,6 +35,8 @@ Bridle.LineChart = function() {
   var legend = Bridle.LegendBox().nameAccessor(function(d) {
     return nameValue(d)
   });
+  // set legend's colors to be the same as for the chart
+  legend.colors(colors);
   // formatter for tooltip
   var formatterX = d3.time.format("%Y-%m-%d");
   var formatterY = d3.format(".02f");
@@ -314,7 +316,7 @@ Bridle.LineChart = function() {
       if (legend.numData() != rawData.length) {
         // update the legend
         g.select('.legend')
-          .datum(data)
+          .datum(rawData)
           .call(legend);
       }
 

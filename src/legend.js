@@ -69,10 +69,10 @@ Bridle.LegendBox = function() {
         .attr('r', 5)
         .attr('stroke-width', 1)
         .attr('stroke', function(d, i) {
-          return colors(i);
+          return colors(nameAccessor(d));
         })
         .attr('fill', function(d, i) {
-          return colors(i);
+          return colors(nameAccessor(d));
         });
 
       gLegendItemEnter.append('foreignObject')
