@@ -37,6 +37,8 @@ Bridle.StackedChart = function() {
   var legend = Bridle.LegendBox().nameAccessor(function(d) {
     return nameValue(d);
   });
+  // set legend's colors to be the same as for the chart
+  legend.colors(colors);
   var dispatch = d3.dispatch('showTooltip', 'hideTooltip', "pointMouseover", "pointMouseout");
   // x accessor
   function X(d) {
@@ -306,7 +308,7 @@ Bridle.StackedChart = function() {
       if (legend.numData() != rawData.length) {
         // update the legend
         g.select('.legend')
-          .datum(data)
+          .datum(rawData)
           .call(legend);
       }
 
