@@ -74,10 +74,10 @@ Bridle.LegendBox = function() {
         .attr('r', 5)
         .attr('stroke-width', 1)
         .attr('stroke', function(d, i) {
-          return colors(i);
+          return colors(nameAccessor(d));
         })
         .attr('fill', function(d, i) {
-          return colors(i);
+          return colors(nameAccessor(d));
         });
 
       gLegendItemEnter.append('foreignObject')
@@ -223,7 +223,7 @@ Bridle.LegendBox = function() {
 
 Bridle.tooltip = {
 
-  show: function(pos, content, gravity, dist) {
+  show : function(pos, content, gravity, dist) {
     var container = $('<div class="bridle tooltip">');
 
     gravity = gravity || 's';
@@ -234,17 +234,16 @@ Bridle.tooltip = {
 
     container
       .html(content)
-      .css({left: -1000, top: -1000, opacity: 0})
+      .css({left : -1000, top : -1000, opacity : 0})
       .appendTo(bridleContainer);
 
-    var height = container.height() + parseInt(container.css('padding-top'))  + parseInt(container.css('padding-bottom')),
-        width = container.width() + parseInt(container.css('padding-left'))  + parseInt(container.css('padding-right')),
-        windowWidth = $(window).width(),
-        windowHeight = $(window).height(),
-        scrollTop = $('body').scrollTop(),  //TODO: also adjust horizontal scroll
-        left, top;
-
-
+    var height =
+        container.height() + parseInt(container.css('padding-top')) + parseInt(container.css('padding-bottom')),
+      width = container.width() + parseInt(container.css('padding-left')) + parseInt(container.css('padding-right')),
+      windowWidth = $(window).width(),
+      windowHeight = $(window).height(),
+      scrollTop = $('body').scrollTop(),  //TODO: also adjust horizontal scroll
+      left, top;
 
     //TODO: implement other gravities
     switch (gravity) {
@@ -253,27 +252,38 @@ Bridle.tooltip = {
       case 'n':
         left = pos[0] - (width / 2);
         top = pos[1] + dist;
-        if (left < 0) left = 5;
-        if (left + width > windowWidth) left = windowWidth - width - 5;
-        if (scrollTop + windowHeight < top + height) top = pos[1] - height - dist;
+        if (left < 0) {
+          left = 5;
+        }
+        if (left + width > windowWidth) {
+          left = windowWidth - width - 5;
+        }
+        if (scrollTop + windowHeight < top + height) {
+          top = pos[1] - height - dist;
+        }
         break;
       case 's':
         left = pos[0] - (width / 2);
         top = pos[1] - height - dist;
-        if (left < 0) left = 5;
-        if (left + width > windowWidth) left = windowWidth - width - 5;
-        if (scrollTop > top) top = pos[1] + dist;
-
+        if (left < 0) {
+          left = 5;
+        }
+        if (left + width > windowWidth) {
+          left = windowWidth - width - 5;
+        }
+        if (scrollTop > top) {
+          top = pos[1] + dist;
+        }
 
         break;
     }
 
     container
-        .css({
-          left: left,
-          top: top,
-          opacity: 1
-        });
+      .css({
+        left    : left,
+        top     : top,
+        opacity : 1
+      });
   },
 
   cleanup : function() {
@@ -281,19 +291,19 @@ Bridle.tooltip = {
 
     // remove right away, but delay the show with css
     tooltips.css({
-        'transition-delay': '0 !important',
-        '-moz-transition-delay': '0 !important',
-        '-webkit-transition-delay': '0 !important'
+      'transition-delay'         : '0 !important',
+      '-moz-transition-delay'    : '0 !important',
+      '-webkit-transition-delay' : '0 !important'
     });
 
-    tooltips.css('opacity',0)
+    tooltips.css('opacity', 0);
 
     setTimeout(function() {
-      tooltips.remove()
+      tooltips.remove();
     }, 500);
   }
 
-}
+};
 ;// a Bar chart
 Bridle.BarChart = function() {
 
@@ -330,6 +340,8 @@ Bridle.BarChart = function() {
   var legend = Bridle.LegendBox().nameAccessor(function(d) {
     return nameValue(d);
   });
+  // set legend's colors to be the same as for the chart
+  legend.colors(colors);
 
   var xScale = d3.scale.ordinal();
   var xAxis = d3.svg.axis()
@@ -688,7 +700,7 @@ Bridle.BarChart = function() {
       if (legend.numData() !== rawData.length) {
         // update the legend
         g.select('.legend')
-          //.datum(data)
+          .datum(rawData)
           .call(legend);
       }
 
@@ -894,7 +906,7 @@ Bridle.BarChart = function() {
 
   return chart;
 };
-  ;// a Bar chart
+;// a Bar chart
 Bridle.BarChartCategorical = function () {
 
     var mode = "stacked";
@@ -2112,6 +2124,8 @@ Bridle.LineChart = function() {
   var legend = Bridle.LegendBox().nameAccessor(function(d) {
     return nameValue(d)
   });
+  // set legend's colors to be the same as for the chart
+  legend.colors(colors);
   // formatter for tooltip
   var formatterX = d3.time.format("%Y-%m-%d");
   var formatterY = d3.format(".02f");
@@ -2391,7 +2405,7 @@ Bridle.LineChart = function() {
       if (legend.numData() != rawData.length) {
         // update the legend
         g.select('.legend')
-          .datum(data)
+          .datum(rawData)
           .call(legend);
       }
 
@@ -2638,6 +2652,8 @@ Bridle.StackedChart = function() {
   var legend = Bridle.LegendBox().nameAccessor(function(d) {
     return nameValue(d);
   });
+  // set legend's colors to be the same as for the chart
+  legend.colors(colors);
   var dispatch = d3.dispatch('showTooltip', 'hideTooltip', "pointMouseover", "pointMouseout");
   // x accessor
   function X(d) {
@@ -2907,7 +2923,7 @@ Bridle.StackedChart = function() {
       if (legend.numData() != rawData.length) {
         // update the legend
         g.select('.legend')
-          .datum(data)
+          .datum(rawData)
           .call(legend);
       }
 
@@ -3074,7 +3090,8 @@ Bridle.StackedChart = function() {
   };
 
   return chart;
-};;/* a reusable spider chart */
+};
+;/* a reusable spider chart */
 Bridle.spiderChart = function () {
 
   // define the chart
