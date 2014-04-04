@@ -407,7 +407,6 @@ Bridle.BarChart = function() {
       xAxis.tickFormat(tickFormat)
         .tickValues(xScale.domain().filter(function(d, i) {
           var nthLabel = Math.ceil(200 / (width / avgDataPoints()));
-          // //console.log(nthLabel)
           return i % nthLabel === 0;
         }));
 
