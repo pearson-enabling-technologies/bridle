@@ -68,7 +68,6 @@ Bridle.LegendBox = function() {
         .attr('class', 'circle')
         .attr('cx', 0)
         .attr('cy', function() {
-          // //console.log(d,i)
           return -0.25 + 'em';
         })
         .attr('r', 5)
