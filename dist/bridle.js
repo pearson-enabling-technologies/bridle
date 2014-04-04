@@ -401,7 +401,6 @@ Bridle.BarChart = function() {
         data.forEach(function(layer) {
           sumPoints += layer.values.length;
         });
-        // //console.log('THIS', sumPoints, data.length, sumPoints / data.length)
         return (sumPoints / data.length);
       };
 
