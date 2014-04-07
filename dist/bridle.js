@@ -68,7 +68,6 @@ Bridle.LegendBox = function() {
         .attr('class', 'circle')
         .attr('cx', 0)
         .attr('cy', function() {
-          // //console.log(d,i)
           return -0.25 + 'em';
         })
         .attr('r', 5)
@@ -402,14 +401,12 @@ Bridle.BarChart = function() {
         data.forEach(function(layer) {
           sumPoints += layer.values.length;
         });
-        // //console.log('THIS', sumPoints, data.length, sumPoints / data.length)
         return (sumPoints / data.length);
       };
 
       xAxis.tickFormat(tickFormat)
         .tickValues(xScale.domain().filter(function(d, i) {
           var nthLabel = Math.ceil(200 / (width / avgDataPoints()));
-          // //console.log(nthLabel)
           return i % nthLabel === 0;
         }));
 
