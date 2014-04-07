@@ -306,7 +306,12 @@ Bridle.LineChart = function() {
 
       legend.dispatch.on('legendClick', function(d) {
         d.disabled = !d.disabled;
-
+        // disallow deactivating last active legend item
+        if (!data.some(function(d) {
+          return !d.disabled;
+        })) {
+          d.disabled = false;
+        }
         svg.selectAll('g.series')
           .transition()
           .duration(duration)
