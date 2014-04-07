@@ -77,7 +77,7 @@ Bridle.BarChart = function() {
         .values(values)
         .x(xValue)
         .y(yValue)
-        (data); // we pass the data as context
+      (data); // we pass the data as context
 
       var legendWidth = legend.width();
       // we set the height of the legend as the same as
@@ -86,8 +86,8 @@ Bridle.BarChart = function() {
 
       // set up scales and axes
       xScale.domain(data[0].values.map(function(d) {
-          return xValue(d);
-        }))
+        return xValue(d);
+      }))
         .rangeRoundBands([0, width - (margin.right + legendWidth)], 0.1);
 
       // how many data points are there in each layer on average 
@@ -129,7 +129,6 @@ Bridle.BarChart = function() {
       else {
         yScale.domain([0, yGroupMax]);
       }
-
 
       // functions for rect attributes depending on stacked/group mode
       var xScaleMode = function(d, i, j) {
@@ -402,6 +401,12 @@ Bridle.BarChart = function() {
       // filter the relevant data series
       legend.dispatch.on('legendClick', function(d) {
         d.disabled = !d.disabled;
+        // disallow deactivating last active legend item
+        if (!data.some(function(d) {
+          return !d.disabled;
+        })) {
+          d.disabled = false;
+        }
         selection.call(chart);
       });
 
