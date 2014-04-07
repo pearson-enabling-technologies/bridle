@@ -471,6 +471,8 @@ Bridle.StackedChart = function() {
   chart.colors = function(_) {
     if (!arguments.length) return colors;
     colors = _;
+    /* set the colors for the legend as well */
+    chart.legend().colors(colors);
     return chart;
   };
 

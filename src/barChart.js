@@ -402,15 +402,6 @@ Bridle.BarChart = function() {
       // filter the relevant data series
       legend.dispatch.on('legendClick', function(d) {
         d.disabled = !d.disabled;
-
-        if (!data.filter(function(d) {
-          return !d.disabled;
-        }).length) {
-          data.forEach(function(d) {
-            d.disabled = false;
-          });
-        }
-
         selection.call(chart);
       });
 
@@ -571,6 +562,8 @@ Bridle.BarChart = function() {
       return colors;
     }
     colors = _;
+    /* set the colors for the legend as well */
+    chart.legend().colors(colors);
     return chart;
   };
 
