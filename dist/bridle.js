@@ -3325,7 +3325,7 @@ Bridle.Table = function() {
   };
   var sortBy = "";
   var sortDesc = false;
-
+  var comparators = {};
   var unsortedData;
   var toggledColumn = false;
 
@@ -3347,10 +3347,11 @@ Bridle.Table = function() {
 
       // sort data if a column is specified
       // use merge sort algorithm because it is stable (preserves order) for equal values      
-      if (sortBy != "") {
+      if (sortBy !== "") {
         data.rows = merge_sort(data.rows, function (a,b) {
-          return compare(a[getIndex(sortBy)], b[getIndex(sortBy)])
-        })
+          var comparatorFn = comparators.hasOwnProperty(sortBy) ? comparators[sortBy] : compare;
+          return comparatorFn(a[getIndex(sortBy)], b[getIndex(sortBy)]) * (sortDesc ? 1 : -1);
+        });
       }
 
       // Select the table element, if it exists.
@@ -3487,9 +3488,6 @@ function merge(left,right,comparison)
       a = a.toLowerCase();
       b = b.toLowerCase();
     }
-    if (sortDesc === true) {
-      return a > b ? -1 : a == b ? 0 : 1;        
-    }
     return a > b ? 1 : a == b ? 0 : -1;
   }
 
@@ -3518,6 +3516,13 @@ function merge(left,right,comparison)
   chart.sortDesc = function(_) {
     if (!arguments.length) return sortDesc;
     sortDesc = _;
+    return chart;
+  };
+  chart.comparators = function(_) {
+    if (!arguments.length) {
+      return comparators;
+    }
+    comparators = _;
     return chart;
   };
 
