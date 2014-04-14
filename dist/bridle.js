@@ -3330,22 +3330,17 @@ Bridle.Table = function() {
   var sortDesc = false;
   var comparators = {};
   var accessors = {};
-  var unsortedData;
   var toggledColumn = false;
 
   function chart(selection) {
-    selection.each(function(data) {
+    selection.each(function(rawData) {
       var containerID = this;
-
-      // first time chart is called, or rows are appended/removed, do a hard clone of the unsorted data object to store
-      if (typeof unsortedData === 'undefined' || unsortedData.rows.length !== data.rows.length) {
-        unsortedData = $.extend(true, {}, data);
-      }
+      var data = $.extend(true, {}, rawData);
 
       // check whether a column has already been sorted twice, revert to unsorted data
       if (toggledColumn === true && sortBy === '') {
         toggledColumn = false;
-        data = unsortedData;
+        data = rawData;
       }
 
       // sort data if a column is specified
@@ -3353,7 +3348,7 @@ Bridle.Table = function() {
       if (sortBy !== '') {
         data.rows = mergeSort(data.rows, function(a, b) {
           var comparatorFn = comparators.hasOwnProperty(sortBy) ? comparators[sortBy] : compare;
-          return comparatorFn(a[getIndex(sortBy)], b[getIndex(sortBy)]) * (sortDesc ? 1 : -1);
+          return comparatorFn(a[getIndex(sortBy)], b[getIndex(sortBy)]) * (sortDesc ? -1 : 1);
         });
       }
 
@@ -3467,7 +3462,6 @@ Bridle.Table = function() {
   }
 
   function merge(left, right, comparison) {
-    // //console.log(left, right, comparison)
     var result = [];
     while ((left.length > 0) && (right.length > 0)) {
       if (comparison(left[0], right[0]) <= 0){
